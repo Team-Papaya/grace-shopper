@@ -17,9 +17,9 @@ const User = db.define('user', {
       return () => this.getDataValue('password')
     }
   },
-  passwordExpired: {
-    type: Sequelize.BOOLEAN,
-    defaultValue: false
+  passwordExpiry: {
+    type: Sequelize.DATE,
+    defaultValue: new Date(new Date().setFullYear(new Date().getFullYear() + 1))
   },
   salt: {
     type: Sequelize.STRING,
