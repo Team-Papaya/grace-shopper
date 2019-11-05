@@ -62,7 +62,8 @@ async function seed() {
     Order.create({status: 'pending'}),
     Order.create({status: 'purchased'})
   ])
-  const purchaseProfile = await Promise.all([
+  const orderProducts = await Promise.all([OrderProduct.create({quantity: 3})])
+  const purchaseProfiles = await Promise.all([
     PurchaseProfile.create({
       shipToAddress1: '404 W Superior',
       shipToCity: 'Chicago',
@@ -70,7 +71,7 @@ async function seed() {
       postalCode: '60666'
     })
   ])
-  const category = await Category.create({name: 'the only category'})
+  const categories = await Category.create({name: 'the only category'})
   const pricingHistory = await PricingHistory.create({
     price: 100,
     effectiveDate: Date.now()

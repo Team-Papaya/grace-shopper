@@ -25,6 +25,9 @@ const Product = db.define('product', {
     validate: {
       /* isUrl: true*/
     }
+  },
+  isAvailable: {
+    type: Sequelize.BOOLEAN
   }
 })
 
