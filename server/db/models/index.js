@@ -24,7 +24,7 @@ const Review = require('./review')
 //-------Associations--------//
 User.hasMany(PurchaseProfile)
 User.hasMany(Review)
-PurchaseProfile.hasOne(Order)
+PurchaseProfile.hasMany(Order)
 Order.belongsToMany(Product, {through: 'orderProduct'})
 Product.hasMany(Review)
 Product.belongsToMany(Category)
