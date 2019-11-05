@@ -15,7 +15,7 @@ const PurchaseProfile = db.define(
       type: Sequelize.STRING,
       allowNull: false,
       validate: {
-        isEmpty: false
+        notEmpty: true
       }
     },
     shipToAddress2: {
@@ -25,21 +25,21 @@ const PurchaseProfile = db.define(
       type: Sequelize.STRING,
       allowNull: false,
       validate: {
-        isEmpty: false
+        notEmpty: true
       }
     },
     shipToState: {
       type: Sequelize.STRING,
       allowNull: false,
       validate: {
-        isEmpty: false
+        notEmpty: true
       }
     },
     postalCode: {
       type: Sequelize.STRING,
       allowNull: false,
       validate: {
-        isEmpty: false
+        notEmpty: true
       }
     }
   },

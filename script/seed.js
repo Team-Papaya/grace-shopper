@@ -10,14 +10,14 @@ const {
   PricingHistory,
   Product,
   Review
-} = require('../server/db/index')
+} = require('../server/db/models/index')
 
 async function seed() {
   await db.sync({force: true})
   console.log('db synced!')
 
   const users = await Promise.all([
-    User.create({email: 'cody@email.com', password: '123'}),
+    User.create({email: 'cody@email.com', password: '123', username: 'MrCody'}),
     User.create({email: 'murphy@email.com', password: '123'})
   ])
   const products = await Promise.all([
@@ -43,8 +43,41 @@ async function seed() {
     })
   ])
 
+  const reviews = await Promise.all([
+    Review.create({
+      rating: 7
+    }),
+    Review.create({
+      rating: 7
+    }),
+    Review.create({
+      rating: 8
+    }),
+    Review.create({
+      rating: 9,
+      content: 'The best product ever made'
+    })
+  ])
+  const orders = await Promise.all([
+    Order.create({status: 'pending'}),
+    Order.create({status: 'purchased'})
+  ])
+  const purchaseProfile = await Promise.all([
+    PurchaseProfile.create({
+      shipToAddress1: '404 W Superior',
+      shipToCity: 'Chicago',
+      shipToState: 'IL',
+      postalCode: '60666'
+    })
+  ])
+  const category = await Category.create({name: 'the only category'})
+  const pricingHistory = await PricingHistory.create({
+    price: 100,
+    effectiveDate: Date.now()
+  })
+
   console.log(`seeded ${users.length} users`)
-  console.log(`seeded ${products.length} users`)
+  console.log(`seeded ${products.length} products`)
   console.log(`seeded successfully`)
 }
 

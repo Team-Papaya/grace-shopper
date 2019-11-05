@@ -25,9 +25,9 @@ const Review = require('./review')
 User.hasMany(PurchaseProfile)
 User.hasMany(Review)
 PurchaseProfile.hasMany(Order)
-Order.belongsToMany(Product, {through: 'orderProduct'})
+Order.belongsToMany(Product, {through: OrderProduct})
 Product.hasMany(Review)
-Product.belongsToMany(Category)
+Product.belongsToMany(Category, {through: 'ProductCategory'})
 Product.hasMany(PricingHistory)
 
 module.exports = {

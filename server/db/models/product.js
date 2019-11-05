@@ -23,7 +23,7 @@ const Product = db.define('product', {
     type: Sequelize.ARRAY(Sequelize.STRING),
     defaultValue: [],
     validate: {
-      isUrl: true
+      /* isUrl: true*/
     }
   }
 })

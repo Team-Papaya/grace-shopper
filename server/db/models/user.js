@@ -38,13 +38,24 @@ const User = db.define('user', {
     defaultValue: false
   },
   username: {
-    type: Sequelize.STRING
+    type: Sequelize.STRING,
+    allowNull: false,
+    validate: {
+      notEmpty: true
+    }
   },
   firstname: {
     type: Sequelize.STRING
   },
   lastname: {
     type: Sequelize.STRING
+  }
+})
+
+User.beforeValidate(userInstance => {
+  //onsole.log("THIS CONTEXT IS: ", this)
+  if (!userInstance.username) {
+    userInstance.username = userInstance.email.split('@')[0]
   }
 })
 
