@@ -62,7 +62,6 @@ async function seed() {
     Order.create({status: 'pending'}),
     Order.create({status: 'purchased'})
   ])
-  const orderProducts = await Promise.all([OrderProduct.create({quantity: 3})])
   const purchaseProfiles = await Promise.all([
     PurchaseProfile.create({
       shipToAddress1: '404 W Superior',
@@ -76,6 +75,19 @@ async function seed() {
     price: 100,
     effectiveDate: Date.now()
   })
+
+  //Arbitrary Associations
+  await Promise.all(
+    users[0].addReview(reviews[0]),
+    users[1].addReview(reviews[3]),
+    users[0].addPurchaseProfile(purchaseProfiles[0]),
+
+    orders[0].addProduct(products[2], {through: {quantity: 3}}),
+    products[0].addReview(reviews[3]),
+    products[1].addPricingHistory(pricingHistory[0]),
+    purchaseProfiles[0].addOrder(orders[0]),
+    products[2].addCategory(categories[0])
+  )
 
   console.log(`seeded ${users.length} users`)
   console.log(`seeded ${products.length} products`)
