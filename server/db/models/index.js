@@ -1,4 +1,6 @@
 const User = require('./user')
+const Order=require('./order')
+const PurchaseProfile=require('./purchaseProfile')
 
 /**
  * If we had any associations to make, this would be a great place to put them!
