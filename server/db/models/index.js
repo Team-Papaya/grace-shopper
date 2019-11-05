@@ -15,6 +15,11 @@ const PurchaseProfile=require('./purchaseProfile')
  * for example, we can say: const {User} = require('../db/models')
  * instead of: const User = require('../db/models/user')
  */
+User.hasMany(PurchaseProfile);
+PurchaseProfile.hasOne(Order);
+
 module.exports = {
-  User
+  User,
+  Order,
+  PurchaseProfile
 }
