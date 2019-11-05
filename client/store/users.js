@@ -1,17 +1,17 @@
 import axios from 'axios'
 
-const GET_USERS = 'GET_USERS'
+const SET_USERS = 'SET_USERS'
 
-const getUsers = users => ({
-  type: GET_USERS,
+const setUsers = users => ({
+  type: SET_USERS,
   users
 })
 
-export const getUsersThunk = () => async dispatch => {
+export const fetchUsers = () => async dispatch => {
   try {
     const response = await axios.get('/api/users')
     const users = response.data
-    dispatch(getUsers(users))
+    dispatch(setUsers(users))
   } catch (error) {
     console.error(error)
   }
@@ -19,7 +19,7 @@ export const getUsersThunk = () => async dispatch => {
 
 export const usersReducer = (state = [], action) => {
   switch (action.type) {
-    case GET_USERS:
+    case SET_USERS:
       return action.users
     default:
       return state

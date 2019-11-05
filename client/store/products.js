@@ -1,17 +1,17 @@
 import axios from 'axios'
 
-const GET_PRODUCTS = 'GET_PRODUCTS'
+const SET_PRODUCTS = 'SET_PRODUCTS'
 
-const getProducts = products => ({
-  type: GET_PRODUCTS,
+const setProducts = products => ({
+  type: SET_PRODUCTS,
   products
 })
 
-export const getProductsThunk = () => async dispatch => {
+export const fetchProducts = () => async dispatch => {
   try {
     const response = await axios.get(`/api/products`)
     const products = response.data
-    dispatch(getProducts(products))
+    dispatch(setProducts(products))
   } catch (error) {
     console.error(error)
   }
@@ -19,7 +19,7 @@ export const getProductsThunk = () => async dispatch => {
 
 const productsReducer = (state = [], action) => {
   switch (action.type) {
-    case GET_PRODUCTS:
+    case SET_PRODUCTS:
       return action.products
     default:
       return state
