@@ -30,7 +30,7 @@ const User = db.define('user', {
     unique: true
   },
   facebookId: {
-    type: Sequelize.String,
+    type: Sequelize.STRING,
     unique: true
   },
   isAdmin: {
@@ -38,8 +38,7 @@ const User = db.define('user', {
     defaultValue: false
   },
   username: {
-    type: Sequelize.STRING,
-
+    type: Sequelize.STRING
   },
   firstname: {
     type: Sequelize.STRING
