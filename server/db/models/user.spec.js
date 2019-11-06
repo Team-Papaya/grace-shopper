@@ -30,3 +30,5 @@ describe('User model', () => {
     }) // end describe('correctPassword')
   }) // end describe('instanceMethods')
 }) // end describe('User model')
+
+//the above is for authentication

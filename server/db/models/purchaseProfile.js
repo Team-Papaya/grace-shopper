@@ -1,6 +1,8 @@
 const db = require('../db')
 const Sequelize = require('sequelize')
 
+//we're missing the nullable userId in this model
+
 const PurchaseProfile = db.define(
   'purchaseprofile',
   {

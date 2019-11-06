@@ -21,10 +21,12 @@ const Product = db.define('product', {
   },
   imageUrl: {
     type: Sequelize.ARRAY(Sequelize.STRING),
-    defaultValue: [],
+    defaultValue: []
+    /*
     validate: {
-      /* isUrl: true*/
-    }
+       isUrl: true
+    },
+    */
   },
   isAvailable: {
     type: Sequelize.BOOLEAN
