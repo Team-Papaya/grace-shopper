@@ -11,7 +11,16 @@ const ProductCard = props => {
       <div>
         <div>{product.name}</div>
         <div>
-          Rating: {product.rating} ({product.reviews.length} reviews)
+          Price:{' '}
+          {product.pricingHistories.length
+            ? product.pricingHistories[0]
+            : 'No Price set for this product'}
+          Rating:{' '}
+          {product.reviews.reduce(
+            (acc, curr) => acc + curr.rating / product.reviews.length,
+            0
+          )}{' '}
+          ({product.reviews.length} reviews)
         </div>
       </div>
     </div>

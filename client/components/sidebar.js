@@ -1,6 +1,6 @@
 import React from 'react'
 
-import {fetchProducts} from '../store/products'
+//import {fetchProducts} from '../store/products'
 import {fetchCategories} from '../store/categories'
 import {connect} from 'react-redux'
 import {withRouter} from 'react-router-dom'

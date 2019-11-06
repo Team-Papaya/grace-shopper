@@ -4,7 +4,7 @@ import {ProductCard} from './'
 import {withRouter} from 'react-router-dom'
 import {fetchProducts} from '../store/products'
 
-const dummyProducts = [
+/*const dummyProducts = [
   {
     id: 1,
     name: 'Super Machine Gun Guy',
@@ -66,24 +66,36 @@ const dummyProducts = [
     price: 1599
   }
 ]
-
+*/
 class AllProducts extends React.Component {
   constructor() {
     super()
-    this.nextPage = this.nextPage.bind(this)
+    this.page = this.page.bind(this)
   }
   componentDidMount() {
     console.log(this.props)
     this.props.getProducts(this.props.location.search)
   }
-  nextPage() {
-    const nextQueryStr = this.props.location.search.split('&page=')
-    if (nextQueryStr.length == 1) {
-      this.props.history.push(this.props.location.search + '&page=2')
-    } else {
-      //Do nothing for now
+  componentDidUpdate(prevProps) {
+    if (prevProps.location.search !== this.props.location.search) {
+      this.props.getProducts(this.props.location.search)
     }
   }
+  page(int) {
+    let nextQueryStr = this.props.location.search.split('&page=')
+    if (nextQueryStr.length === 1) {
+      nextQueryStr = nextQueryStr[0] + `&page=${1 + int}`
+    } else {
+      const temp = nextQueryStr[1].split('&')
+      temp[0] = String(Number(temp[0]) + int)
+      nextQueryStr[1] = temp.join('&')
+      nextQueryStr = nextQueryStr.join('&page=')
+    }
+    if (nextQueryStr[0] !== '?') nextQueryStr = '?' + nextQueryStr
+
+    this.props.history.push(nextQueryStr)
+  }
+  prevPage() {}
 
   render() {
     const {products} = this.props
@@ -95,7 +107,10 @@ class AllProducts extends React.Component {
             return <ProductCard key={product.id} product={product} />
           })}
         </div>
-        <button type="button" onClick={this.nextPage}>
+        <button type="button" onClick={() => this.page(-1)}>
+          prev page
+        </button>
+        <button type="button" onClick={() => this.page(1)}>
           next page
         </button>
       </React.Fragment>

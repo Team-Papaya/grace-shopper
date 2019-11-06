@@ -12,8 +12,8 @@ router.get('/', async (req, res, next) => {
   if (req.query.cat && req.query.cat[0] && req.query.cat[0].length) {
     const queryString = `SELECT "productId", "categoryId" from "ProductCategory" where "categoryId" in (${req.query.cat.join()})`
     //console.log("QS is: ", queryString);
-    const productIds = await db.query(queryString).then(([res, metadata]) => {
-      let merged = res.reduce((acc, curr) => {
+    const productIds = await db.query(queryString).then(([dbRes]) => {
+      let merged = dbRes.reduce((acc, curr) => {
         if (acc[curr.productId]) {
           return {...acc, [curr.productId]: acc[curr.productId] + 1}
         }
