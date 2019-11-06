@@ -88,7 +88,7 @@ describe('User Model', () => {
       expect(err.message).to.not.have.string('Validation should have failed')
     }
     delete user.role
-    const defaultFueluser = await User.create(user)
-    expect(defaultFueluser.role).to.equal('Normal')
+    const defaultUser = await User.create(user)
+    expect(defaultUser.role).to.equal('Normal')
   })
 })
