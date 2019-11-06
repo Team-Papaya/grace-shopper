@@ -1,6 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {getProductThunk} from '../store/singleProduct'
+import {NavLink} from 'react-router-dom'
 //import {Reviews} from './components'
 
 class SingleProduct extends React.Component {
@@ -16,6 +17,10 @@ class SingleProduct extends React.Component {
     if (!product) return 'No Product!'
     return (
       <div>
+        <NavLink to="/products/add">Add a Product</NavLink>
+        {/* <a href="/products/add">
+          <button>Add a Product</button>
+        </a> */}
         <h1>{product.name}</h1>
         <img src={product.imageUrl} />
         <p>{product.description}</p>

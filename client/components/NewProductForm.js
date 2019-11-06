@@ -1,17 +1,19 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {addProduct} from '../store/products'
+//import {getProductThunk} from '../store/singleProduct'
 
-export class NewProductForm extends React.Component {
+class NewProductForm extends React.Component {
   constructor() {
     super()
     this.handleSubmit = this.handleSubmit.bind(this)
   }
+  componentDidMount() {}
 
   handleSubmit(event) {
     event.preventDefault()
     this.props.submitAddProduct(this.props.product)
-    this.props.history.push('/products')
+    //this.props.history.push('/products')
   }
 
   render() {
@@ -30,13 +32,18 @@ export class NewProductForm extends React.Component {
           </label>
           <br />
           <label>
-            Rating:
-            <input type="text" name="rating" />
+            Description:
+            <input type="text" name="description" />
           </label>
           <br />
           <label>
             Price:
-            <input type="text" name="price" />
+            <input type="number" min="0.00" name="price" />
+          </label>
+          <br />
+          <label>
+            Available Now?
+            <input type="boolean" name="isAvailable" />
           </label>
           <br />
           <span>
@@ -47,6 +54,7 @@ export class NewProductForm extends React.Component {
     )
   }
 }
+
 const mapStateToProps = state => ({
   product: state.product
 })
