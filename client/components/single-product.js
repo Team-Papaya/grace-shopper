@@ -2,7 +2,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {getProductThunk} from '../store/singleProduct'
 import {NavLink} from 'react-router-dom'
-//import {Reviews} from './components'
+//import {AllReviews} from './components'
 
 class SingleProduct extends React.Component {
   // constructor(props) {
