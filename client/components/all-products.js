@@ -68,20 +68,37 @@ const dummyProducts = [
 ]
 
 class AllProducts extends React.Component {
+  constructor() {
+    super()
+    this.nextPage = this.nextPage.bind(this)
+  }
   componentDidMount() {
     console.log(this.props)
     this.props.getProducts(this.props.location.search)
+  }
+  nextPage() {
+    const nextQueryStr = this.props.location.search.split('&page=')
+    if (nextQueryStr.length == 1) {
+      this.props.history.push(this.props.location.search + '&page=2')
+    } else {
+      //Do nothing for now
+    }
   }
 
   render() {
     const {products} = this.props
 
     return (
-      <div>
-        {products.map(product => {
-          return <ProductCard key={product.id} product={product} />
-        })}
-      </div>
+      <React.Fragment>
+        <div>
+          {products.map(product => {
+            return <ProductCard key={product.id} product={product} />
+          })}
+        </div>
+        <button type="button" onClick={this.nextPage}>
+          next page
+        </button>
+      </React.Fragment>
     )
   }
 }

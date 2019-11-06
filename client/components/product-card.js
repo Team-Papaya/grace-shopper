@@ -11,7 +11,7 @@ const ProductCard = props => {
       <div>
         <div>{product.name}</div>
         <div>
-          Rating: {product.rating} ({product.reviews} reviews)
+          Rating: {product.rating} ({product.reviews.length} reviews)
         </div>
       </div>
     </div>
