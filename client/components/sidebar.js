@@ -1,6 +1,7 @@
 import React from 'react'
 
 import {fetchProducts} from '../store/products'
+import {fetchCategories} from '../store/categories'
 import {connect} from 'react-redux'
 
 class Sidebar extends React.Component {
@@ -14,27 +15,40 @@ class Sidebar extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this)
   }
   componentDidMount() {
-    this.setState({
-      categories: this.props.categories.map(cat => ({
-        id: cat.id,
-        selected: false
-      }))
-    })
+    this.props.fetchCats()
+    /*this.setState({
+      
+    })*/
+  }
+  componentDidUpdate() {
+    if (this.props.categories.length !== this.state.categories.length) {
+      this.setState({
+        categories: this.props.categories.map(cat => ({
+          id: cat.id,
+          selected: false
+        }))
+      })
+    }
   }
   handleChange(event) {
+    event.persist()
+    //console.log(event)
     if (event.target.type === 'checkbox') {
+      //console.log('updating a checkbox')
       const newCategories = this.state.categories.map(
         cat =>
           cat.id == event.target.id
-            ? {...cat, selected: event.target.selected}
+            ? {...cat, selected: event.target.checked}
             : cat
       )
+      //console.log(newCategories)
       this.setState({categories: newCategories})
     } else {
       this.setState({[event.target.name]: event.target.value})
     }
   }
-  handleSubmit() {
+  handleSubmit(event) {
+    event.preventDefault()
     const queryStr =
       '?name=' +
       this.state.searchstring +
@@ -43,7 +57,10 @@ class Sidebar extends React.Component {
         .filter(cat => cat.selected)
         .map(cat => cat.id)
         .join('&cat[]=')
-    this.props.submitSearch(queryStr)
+    console.log(queryStr)
+    this.props
+      .submitSearch(queryStr)
+      .then(history.pushState(null, '', '/products/' + queryStr))
   }
   render() {
     return (
@@ -67,6 +84,7 @@ class Sidebar extends React.Component {
 
 const mapStateToProps = state => ({categories: state.categories})
 const mapDispatchToProps = dispatch => ({
-  submitSearch: queryStr => dispatch(fetchProducts(queryStr))
+  submitSearch: queryStr => dispatch(fetchProducts(queryStr)),
+  fetchCats: () => dispatch(fetchCategories())
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Sidebar)

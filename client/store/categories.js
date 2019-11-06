@@ -6,7 +6,8 @@ const setCategories = categories => {
   return {type: SET_CATEGORIES, categories}
 }
 export const fetchCategories = () => {
-  Axios.get('/api/categories').then(res => setCategories(res.data))
+  return dispatch =>
+    Axios.get('/api/categories').then(res => dispatch(setCategories(res.data)))
 }
 const initialState = []
 

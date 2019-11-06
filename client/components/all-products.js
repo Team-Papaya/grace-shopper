@@ -86,14 +86,14 @@ class AllProducts extends React.Component {
 
 const mapState = state => {
   return {
-    products: dummyProducts
-    // products: state.products,
+    products: state.products
   }
 }
 
 const mapDispatch = dispatch => {
   return {
-    // getProducts: (search, category) => dispatch(getProductsThunk(search, category)),
+    getProducts: (search, category) =>
+      dispatch(getProductsThunk(search, category))
   }
 }
 
