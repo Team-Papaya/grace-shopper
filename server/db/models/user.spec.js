@@ -32,3 +32,63 @@ describe('User model', () => {
 }) // end describe('User model')
 
 //the above is for authentication
+
+describe('User Model', () => {
+  let user
+  before(() => db.sync({force: true}))
+  beforeEach(() => {
+    user = {
+      email: 'papa@ya.com',
+      password: '0000',
+      role: 'Inactive',
+      username: 'Papa',
+      firstname: 'papa'
+    }
+  })
+  afterEach(() => db.sync({force: true}))
+
+  it('has fields email, role, username, firstname', async () => {
+    user.notARealAttribute = 'does not compute'
+    const savedUser = await User.create(user)
+    expect(savedUser.email).to.equal('papa@ya.com')
+    expect(savedUser.role).to.equal('Inactive')
+    expect(savedUser.username).to.equal('Papa')
+    expect(savedUser.firstname).to.equal('papa')
+    expect(savedUser.notARealAttribute).to.equal(undefined)
+  })
+
+  it('email cannot be null or an empty string', async () => {
+    try {
+      user.email = ''
+      const userEmail = await User.create(user)
+      if (userEmail === '') {
+        throw Error('Validation should have failed with empty email')
+      }
+    } catch (err) {
+      expect(err.message).to.not.have.string('Validation should have failed')
+    }
+    try {
+      user.email = null
+      const userEmail = await User.create(user)
+      if (userEmail === null) {
+        throw Error('Validation should have failed with null email')
+      }
+    } catch (err) {
+      expect(err.message).to.not.have.string('Validation should have failed')
+    }
+  })
+
+  it('role can only be Normal, Admin, or Invalid (defaults to Normal)', async () => {
+    user.role = 'papaya'
+    try {
+      const badUser = await User.create(user)
+      if (badUser)
+        throw Error('Validation should have failed with invalid role')
+    } catch (err) {
+      expect(err.message).to.not.have.string('Validation should have failed')
+    }
+    delete user.role
+    const defaultFueluser = await User.create(user)
+    expect(defaultFueluser.role).to.equal('Normal')
+  })
+})
