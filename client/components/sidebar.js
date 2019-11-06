@@ -3,6 +3,8 @@ import React from 'react'
 import {fetchProducts} from '../store/products'
 import {fetchCategories} from '../store/categories'
 import {connect} from 'react-redux'
+import {withRouter} from 'react-router-dom'
+//import {history} from 'history'
 
 class Sidebar extends React.Component {
   constructor() {
@@ -19,6 +21,7 @@ class Sidebar extends React.Component {
     /*this.setState({
       
     })*/
+    console.log(this.props)
   }
   componentDidUpdate() {
     if (this.props.categories.length !== this.state.categories.length) {
@@ -57,10 +60,12 @@ class Sidebar extends React.Component {
         .filter(cat => cat.selected)
         .map(cat => cat.id)
         .join('&cat[]=')
-    console.log(queryStr)
-    this.props
-      .submitSearch(queryStr)
-      .then(history.pushState(null, '', '/products/' + queryStr))
+    this.props.history.push('/products/' + queryStr)
+    //console.log(queryStr)
+
+    // this.props
+    //.submitSearch(queryStr)
+    //.then(history.pushState(null, '', '/products/' + queryStr))
   }
   render() {
     return (
@@ -84,7 +89,7 @@ class Sidebar extends React.Component {
 
 const mapStateToProps = state => ({categories: state.categories})
 const mapDispatchToProps = dispatch => ({
-  submitSearch: queryStr => dispatch(fetchProducts(queryStr)),
+  //submitSearch: queryStr => dispatch(fetchProducts(queryStr)),
   fetchCats: () => dispatch(fetchCategories())
 })
-export default connect(mapStateToProps, mapDispatchToProps)(Sidebar)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Sidebar))

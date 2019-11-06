@@ -1,7 +1,8 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {ProductCard} from './'
-// import {getProductsThunk} from '../store'
+import {withRouter} from 'react-router-dom'
+import {fetchProducts} from '../store/products'
 
 const dummyProducts = [
   {
@@ -68,7 +69,8 @@ const dummyProducts = [
 
 class AllProducts extends React.Component {
   componentDidMount() {
-    // this.props.getProducts(search, category)
+    console.log(this.props)
+    this.props.getProducts(this.props.location.search)
   }
 
   render() {
@@ -92,9 +94,8 @@ const mapState = state => {
 
 const mapDispatch = dispatch => {
   return {
-    getProducts: (search, category) =>
-      dispatch(getProductsThunk(search, category))
+    getProducts: queryString => dispatch(fetchProducts(queryString))
   }
 }
 
-export default connect(mapState, mapDispatch)(AllProducts)
+export default withRouter(connect(mapState, mapDispatch)(AllProducts))

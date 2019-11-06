@@ -6,7 +6,7 @@ const ProductCard = props => {
   return (
     <div>
       <div>
-        <img src={product.imageUrls[0]} />
+        <img src={product.imageUrl[0]} />
       </div>
       <div>
         <div>{product.name}</div>
