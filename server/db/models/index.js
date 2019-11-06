@@ -35,7 +35,7 @@ User.hasMany(PurchaseProfile)
 User.hasMany(Review)
 Order.belongsTo(PurchaseProfile)
 PurchaseProfile.hasMany(Order)
-//Product.belongsToMany(Order, { through: OrderProduct });
+Product.belongsToMany(Order, {through: OrderProduct})
 Order.belongsToMany(Product, {through: OrderProduct})
 //Review.belongsTo(Product);
 Product.hasMany(Review)

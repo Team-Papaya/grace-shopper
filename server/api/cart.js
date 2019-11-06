@@ -1,10 +1,15 @@
 //worry about importing later
 const router = require('express').Router()
-const {Order, PurchaseProfile} = require('../db/models')
+const {
+  Order,
+  PurchaseProfile,
+  PricingHistory,
+  Product
+} = require('../db/models')
 
 router.get('/:userId', async (req, res, next) => {
   try {
-    const cart = await Order.findOrCreate({
+    const cart = await Order.findOne({
       where: {
         status: 'pending'
       },
@@ -14,10 +19,13 @@ router.get('/:userId', async (req, res, next) => {
           where: {
             userId: req.params.userId
           }
+        },
+        {
+          model: Product,
+          include: [PricingHistory]
         }
       ]
     })
-
     res.json(cart)
   } catch (err) {
     next(err)
