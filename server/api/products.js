@@ -10,7 +10,9 @@ router.get('/', async (req, res, next) => {
 
   if (req.query.name && req.query.name.length) whereClause.name = req.query.name
   if (req.query.cat && req.query.cat[0] && req.query.cat[0].length) {
-    const queryString = `SELECT "productId", "categoryId" from "ProductCategory" where "categoryId" in (${req.query.cat.join()})`
+    const queryString = `SELECT "productId", "categoryId" from "ProductCategory" where "categoryId" in (${req.query.cat
+      .map(catId => Number(catId))
+      .join()})`
     //console.log("QS is: ", queryString);
     const productIds = await db.query(queryString).then(([dbRes]) => {
       let merged = dbRes.reduce((acc, curr) => {

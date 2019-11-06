@@ -13,7 +13,7 @@ const ProductCard = props => {
         <div>
           Price:{' '}
           {product.pricingHistories.length
-            ? product.pricingHistories[0]
+            ? product.pricingHistories[0].price
             : 'No Price set for this product'}
           Rating:{' '}
           {product.reviews.reduce(
