@@ -4,9 +4,10 @@ const {Product} = require('../db/models/product')
 
 router.get('/:productId', async (req, res, next) => {
   try {
-    const product = await Product.findByPk(req.params.productId, {
+    const product = await Product.findByPk(
+      req.params.productId
       //consider eager loading reviews
-    })
+    )
     if (product) {
       res.json(product)
     } else {

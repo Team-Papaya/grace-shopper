@@ -2,7 +2,6 @@ import axios from 'axios'
 
 const GET_PRODUCTS = 'GET_PRODUCTS'
 const ADD_PRODUCT = 'ADD_PRODUCT'
-const UPDATE_PRODUCT = 'UPDATE_PRODUCT'
 
 const getProducts = products => ({
   type: GET_PRODUCTS,
@@ -11,11 +10,6 @@ const getProducts = products => ({
 
 const addProduct = product => ({
   type: ADD_PRODUCT,
-  product
-})
-
-const updateProduct = product => ({
-  type: UPDATE_PRODUCT,
   product
 })
 
@@ -34,16 +28,6 @@ export const addProductThunk = product => async dispatch => {
     const response = await axios.post('/api/products/add', product)
     dispatch(addProduct(response.data))
     //consider a .get here
-  } catch (err) {
-    console.error(err)
-  }
-}
-
-export const updateProductThunk = product => async dispatch => {
-  try {
-    const response = await axios.put(`api/products/${product.id}`, product)
-    dispatch(updateProduct(response.data))
-    //consider get Products
   } catch (err) {
     console.error(err)
   }
