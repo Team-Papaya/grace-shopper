@@ -1,5 +1,7 @@
 //worry about importing later
 const router = require('express').Router()
+const Sequelize = require('sequelize')
+const Op = Sequelize.Op
 const {
   Order,
   PurchaseProfile,
@@ -22,11 +24,23 @@ router.get('/:userId', async (req, res, next) => {
         },
         {
           model: Product,
-          include: [PricingHistory]
+          include: [
+            {
+              model: PricingHistory,
+              where: {
+                effectiveDate: {
+                  [Op.lt]: new Date()
+                }
+              },
+              order: [['effectiveDate', 'DESC']],
+              limit: 1
+            }
+          ]
         }
       ]
     })
-    res.json(cart)
+    if (!cart) res.json({})
+    else res.json(cart)
   } catch (err) {
     next(err)
   }

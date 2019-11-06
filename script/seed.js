@@ -17,7 +17,7 @@ async function seed() {
 
   const users = await Promise.all([
     User.create({email: 'cody@email.com', password: '123', username: 'MrCody'}),
-    User.create({email: 'murphy@email.com', password: '123'})
+    User.create({email: 'murphy@email.com', password: '123', username: 'dude'})
   ])
   const products = await Promise.all([
     Product.create({
@@ -70,10 +70,24 @@ async function seed() {
     })
   ])
   const categories = await Category.create({name: 'the only category'})
-  const pricingHistory = await PricingHistory.create({
-    price: 100,
-    effectiveDate: Date.now()
-  })
+  const pricingHistories = await Promise.all([
+    PricingHistory.create({
+      price: 50,
+      effectiveDate: Date.now() - 50000000
+    }),
+    PricingHistory.create({
+      price: 30,
+      effectiveDate: Date.now() - 50000000
+    }),
+    PricingHistory.create({
+      price: 75,
+      effectiveDate: Date.now()
+    }),
+    PricingHistory.create({
+      price: 100,
+      effectiveDate: Date.now() + 500000000
+    })
+  ])
 
   //Arbitrary Associations
   await Promise.all([
@@ -82,9 +96,11 @@ async function seed() {
     users[0].addPurchaseProfile(purchaseProfiles[0]),
     purchaseProfiles[0].addOrder(orders[0]),
     orders[0].addProduct(products[1], {through: {quantity: 3}}),
+    orders[0].addProduct(products[2], {through: {quantity: 1}}),
     products[0].addReview(reviews[3]),
-    products[1].addPricingHistory(pricingHistory),
-
+    products[1].addPricingHistory(pricingHistories[0]),
+    products[2].addPricingHistory(pricingHistories[1]),
+    products[1].addPricingHistory(pricingHistories[2]),
     products[2].addCategory(categories[0])
   ])
 
