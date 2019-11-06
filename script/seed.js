@@ -6,7 +6,6 @@ const {
   Order,
   PurchaseProfile,
   Category,
-  OrderProduct,
   PricingHistory,
   Product,
   Review
@@ -77,7 +76,7 @@ async function seed() {
   })
 
   //Arbitrary Associations
-  await Promise.all(
+  await Promise.all([
     users[0].addReview(reviews[0]),
     users[1].addReview(reviews[3]),
     users[0].addPurchaseProfile(purchaseProfiles[0]),
@@ -87,7 +86,7 @@ async function seed() {
     products[1].addPricingHistory(pricingHistory[0]),
     purchaseProfiles[0].addOrder(orders[0]),
     products[2].addCategory(categories[0])
-  )
+  ])
 
   console.log(`seeded ${users.length} users`)
   console.log(`seeded ${products.length} products`)

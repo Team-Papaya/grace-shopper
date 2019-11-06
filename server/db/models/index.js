@@ -33,14 +33,14 @@ Session model and relationship
 User.hasMany(PurchaseProfile)
 //Review.belongsTo(User);
 User.hasMany(Review)
-//Order.belongsTo(PurchaseProfile)
+Order.belongsTo(PurchaseProfile)
 PurchaseProfile.hasMany(Order)
 //Product.belongsToMany(Order, { through: OrderProduct });
 Order.belongsToMany(Product, {through: OrderProduct})
 //Review.belongsTo(Product);
 Product.hasMany(Review)
 //Category.belongsToMany(Product, { through: 'ProductCategory' });
-Product.belongsToMany(Category, {through: 'ProductCategory'})
+Product.belongsToMany(Category, {through: 'productCategory'})
 //PricingHistory.belongsTo(Product)
 Product.hasMany(PricingHistory)
 //PurchaseProfile.belongsTo(Session)
