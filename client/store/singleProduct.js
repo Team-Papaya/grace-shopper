@@ -32,7 +32,7 @@ export const updateProductThunk = product => async dispatch => {
   }
 }
 
-export const productReducer = (state = {}, action) => {
+export default function(state = {}, action) {
   switch (action.type) {
     case GET_PRODUCT:
       return action.product
@@ -42,3 +42,14 @@ export const productReducer = (state = {}, action) => {
       return state
   }
 }
+
+// export const productReducer = (state = {}, action) => {
+//   switch (action.type) {
+//     case GET_PRODUCT:
+//       return action.product
+//     case UPDATE_PRODUCT:
+//       return {...state, ...action.product}
+//     default:
+//       return state
+//   }
+// }

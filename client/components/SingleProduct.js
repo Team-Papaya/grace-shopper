@@ -4,7 +4,11 @@ import {getProductThunk} from '../store/singleProduct'
 //import {reviews} from 'reviews'
 
 const SingleProduct = props => {
+  // const productId = Number(props.match.params.productId)
+  // const product = state.products.find(product => product.id === productId)
+
   const {product} = props
+  //console.log('props: ', props)
   if (!product) return 'No Product!'
   return (
     <div>
@@ -19,13 +23,14 @@ const SingleProduct = props => {
 
 const mapStateToProps = (state, ownProps) => {
   const productId = Number(ownProps.match.params.productId)
+  console.log(state)
   const findProduct = state.products.find(product => product.id === productId)
   return {
     product: findProduct
   }
 }
 const mapDispatchToProps = dispatch => ({
-  fetchSingleProduct: id => dispatch(getProductThunk(id))
+  //fetchSingleProduct: id => dispatch(getProductThunk(id))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(SingleProduct)
