@@ -11,11 +11,16 @@ const User = db.define('user', {
   },
   password: {
     type: Sequelize.STRING,
+    allowNull: false,
     // Making `.password` act like a func hides it when serializing to JSON.
     // This is a hack to get around Sequelize's lack of a "private" option.
     get() {
       return () => this.getDataValue('password')
     }
+  },
+  passwordExpiry: {
+    type: Sequelize.DATE,
+    defaultValue: new Date(new Date().setFullYear(new Date().getFullYear() + 1))
   },
   salt: {
     type: Sequelize.STRING,
@@ -30,16 +35,19 @@ const User = db.define('user', {
     unique: true
   },
   facebookId: {
-    type: Sequelize.String,
+    type: Sequelize.STRING,
     unique: true
   },
-  isAdmin: {
-    type: Sequelize.BOOLEAN,
-    defaultValue: false
+  role: {
+    type: Sequelize.ENUM('Normal', 'Admin', 'Inactive'),
+    defaultValue: 'Normal'
   },
   username: {
     type: Sequelize.STRING,
-
+    allowNull: false,
+    validate: {
+      notEmpty: true
+    }
   },
   firstname: {
     type: Sequelize.STRING
@@ -48,6 +56,20 @@ const User = db.define('user', {
     type: Sequelize.STRING
   }
 })
+
+User.beforeValidate(userInstance => {
+  if (!userInstance.username) {
+    userInstance.username = userInstance.email.split('@')[0]
+  }
+})
+
+/* didn't we talk about capitalizing the username? something like this:
+User.beforeCreate(userInstance => {
+  let capitalizedUsername = ''
+  capitalizedUsername += userInstance.username[0].toUpperCase()
+  userInstance.username = capitalizedUsername
+})
+*/
 
 module.exports = User
 

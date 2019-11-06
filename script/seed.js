@@ -1,18 +1,96 @@
 'use strict'
 
 const db = require('../server/db')
-const {User} = require('../server/db/models')
+const {
+  User,
+  Order,
+  PurchaseProfile,
+  Category,
+  OrderProduct,
+  PricingHistory,
+  Product,
+  Review
+} = require('../server/db/models/index')
 
 async function seed() {
   await db.sync({force: true})
   console.log('db synced!')
 
   const users = await Promise.all([
-    User.create({email: 'cody@email.com', password: '123'}),
+    User.create({email: 'cody@email.com', password: '123', username: 'MrCody'}),
     User.create({email: 'murphy@email.com', password: '123'})
   ])
+  const products = await Promise.all([
+    Product.create({
+      name: 'Chair',
+      description: 'fantastic place to take a good old fashioned seat',
+      quantity: 4
+    }),
+    Product.create({
+      name: 'Table',
+      description: 'use with chair for best effect',
+      quantity: 1
+    }),
+    Product.create({
+      name: 'Fork',
+      description: 'set on table',
+      quantity: 4
+    }),
+    Product.create({
+      name: "Eric's Seat Cushion",
+      description: 'set carefully on table',
+      quantity: 4
+    })
+  ])
+
+  const reviews = await Promise.all([
+    Review.create({
+      rating: 7
+    }),
+    Review.create({
+      rating: 7
+    }),
+    Review.create({
+      rating: 8
+    }),
+    Review.create({
+      rating: 9,
+      content: 'The best product ever made'
+    })
+  ])
+  const orders = await Promise.all([
+    Order.create({status: 'pending'}),
+    Order.create({status: 'purchased'})
+  ])
+  const purchaseProfiles = await Promise.all([
+    PurchaseProfile.create({
+      shipToAddress1: '404 W Superior',
+      shipToCity: 'Chicago',
+      shipToState: 'IL',
+      postalCode: '60666'
+    })
+  ])
+  const categories = await Category.create({name: 'the only category'})
+  const pricingHistory = await PricingHistory.create({
+    price: 100,
+    effectiveDate: Date.now()
+  })
+
+  //Arbitrary Associations
+  await Promise.all(
+    users[0].addReview(reviews[0]),
+    users[1].addReview(reviews[3]),
+    users[0].addPurchaseProfile(purchaseProfiles[0]),
+
+    orders[0].addProduct(products[2], {through: {quantity: 3}}),
+    products[0].addReview(reviews[3]),
+    products[1].addPricingHistory(pricingHistory[0]),
+    purchaseProfiles[0].addOrder(orders[0]),
+    products[2].addCategory(categories[0])
+  )
 
   console.log(`seeded ${users.length} users`)
+  console.log(`seeded ${products.length} products`)
   console.log(`seeded successfully`)
 }
 
