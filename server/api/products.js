@@ -13,7 +13,6 @@ router.get('/', async (req, res, next) => {
     const queryString = `SELECT "productId", "categoryId" from "ProductCategory" where "categoryId" in (${req.query.cat
       .map(catId => Number(catId))
       .join()})`
-    //console.log("QS is: ", queryString);
     const productIds = await db.query(queryString).then(([dbRes]) => {
       let merged = dbRes.reduce((acc, curr) => {
         if (acc[curr.productId]) {
@@ -29,7 +28,7 @@ router.get('/', async (req, res, next) => {
       [Sequelize.Op.in]: productIds
     }
   }
-  //console.log('where clause is: ', whereClause);
+
   Product.findAll({
     include: [
       {model: Category},
@@ -48,7 +47,5 @@ router.get('/', async (req, res, next) => {
     order: [['id', 'ASC']]
   })
     .then(dbRes => res.json(dbRes))
-    .catch(err => console.log(err))
-  console.log(req.query)
-  //res.sendStatus(200)
+    .catch(err => next(err))
 })

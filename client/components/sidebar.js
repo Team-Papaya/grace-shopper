@@ -1,10 +1,8 @@
 import React from 'react'
 
-//import {fetchProducts} from '../store/products'
-import {fetchCategories} from '../store/categories'
+import {getCategoriesThunk} from '../store/categories'
 import {connect} from 'react-redux'
 import {withRouter} from 'react-router-dom'
-//import {history} from 'history'
 
 class Sidebar extends React.Component {
   constructor() {
@@ -18,10 +16,6 @@ class Sidebar extends React.Component {
   }
   componentDidMount() {
     this.props.fetchCats()
-    /*this.setState({
-      
-    })*/
-    console.log(this.props)
   }
   componentDidUpdate() {
     if (this.props.categories.length !== this.state.categories.length) {
@@ -34,17 +28,14 @@ class Sidebar extends React.Component {
     }
   }
   handleChange(event) {
-    event.persist()
-    //console.log(event)
     if (event.target.type === 'checkbox') {
-      //console.log('updating a checkbox')
       const newCategories = this.state.categories.map(
         cat =>
           cat.id == event.target.id
             ? {...cat, selected: event.target.checked}
             : cat
       )
-      //console.log(newCategories)
+
       this.setState({categories: newCategories})
     } else {
       this.setState({[event.target.name]: event.target.value})
@@ -61,11 +52,6 @@ class Sidebar extends React.Component {
         .map(cat => cat.id)
         .join('&cat[]=')
     this.props.history.push('/products/' + queryStr)
-    //console.log(queryStr)
-
-    // this.props
-    //.submitSearch(queryStr)
-    //.then(history.pushState(null, '', '/products/' + queryStr))
   }
   render() {
     return (
@@ -89,7 +75,6 @@ class Sidebar extends React.Component {
 
 const mapStateToProps = state => ({categories: state.categories})
 const mapDispatchToProps = dispatch => ({
-  //submitSearch: queryStr => dispatch(fetchProducts(queryStr)),
-  fetchCats: () => dispatch(fetchCategories())
+  fetchCats: () => dispatch(getCategoriesThunk())
 })
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Sidebar))
