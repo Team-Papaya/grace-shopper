@@ -22,13 +22,29 @@ const Review = require('./review')
  */
 
 //-------Associations--------//
+
+/*
+I think we're missing the following:
+
+Session model and relationship
+*/
+
+//PurchseProfile.belongsTo(User)
 User.hasMany(PurchaseProfile)
+//Review.belongsTo(User);
 User.hasMany(Review)
+//Order.belongsTo(PurchaseProfile)
 PurchaseProfile.hasMany(Order)
+//Product.belongsToMany(Order, { through: OrderProduct });
 Order.belongsToMany(Product, {through: OrderProduct})
+//Review.belongsTo(Product);
 Product.hasMany(Review)
+//Category.belongsToMany(Product, { through: 'ProductCategory' });
 Product.belongsToMany(Category, {through: 'ProductCategory'})
+//PricingHistory.belongsTo(Product)
 Product.hasMany(PricingHistory)
+//PurchaseProfile.belongsTo(Session)
+//Session.hasMany(PurchaseProfile)
 
 module.exports = {
   User,
