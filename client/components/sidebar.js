@@ -1,43 +1,72 @@
 import React from 'react'
-import Axios from 'axios'
 
-const tempProps = {
-  categories: [
-    {id: 1, name: 'cat1'},
+import {fetchProducts} from '../store/products'
+import {connect} from 'react-redux'
 
-    {id: 2, name: 'cat2'},
-
-    {id: 3, name: 'cat3'},
-
-    {id: 4, name: 'cat4'}
-  ],
-  handleSubmit: event => {
-    event.persist()
-    event.preventDefault()
-    const checkedCats = Array.from(event.target.childNodes)
-      .filter(node => node.type === 'checkbox' && node.checked)
-      .map(checked => checked.id)
-    console.log(checkedCats)
-    console.log(Array.from(event.target.childNodes))
-    const queryString = `?name=${
-      event.target.searchstring.value
-    }&cat[]=${checkedCats.join('&cat[]=')}`
-    console.log(queryString)
-    Axios.get('http://localhost:8080/api/products' + queryString)
+class Sidebar extends React.Component {
+  constructor() {
+    super()
+    this.state = {
+      categories: [],
+      searchstring: ''
+    }
+    this.handleChange = this.handleChange.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
+  }
+  componentDidMount() {
+    this.setState({
+      categories: this.props.categories.map(cat => ({
+        id: cat.id,
+        selected: false
+      }))
+    })
+  }
+  handleChange(event) {
+    if (event.target.type === 'checkbox') {
+      const newCategories = this.state.categories.map(
+        cat =>
+          cat.id == event.target.id
+            ? {...cat, selected: event.target.selected}
+            : cat
+      )
+      this.setState({categories: newCategories})
+    } else {
+      this.setState({[event.target.name]: event.target.value})
+    }
+  }
+  handleSubmit() {
+    const queryStr =
+      '?name=' +
+      this.state.searchstring +
+      '&cat[]=' +
+      this.state.categories
+        .filter(cat => cat.selected)
+        .map(cat => cat.id)
+        .join('&cat[]=')
+    this.props.submitSearch(queryStr)
+  }
+  render() {
+    return (
+      <form onSubmit={this.handleSubmit} onChange={this.handleChange}>
+        <input
+          name="searchstring"
+          type="text"
+          value={this.state.searchstring}
+        />
+        {this.props.categories.map(cat => (
+          <React.Fragment key={cat.id}>
+            <label htmlFor={`category${cat.id}`}>{cat.name}</label>
+            <input name={`category${cat.id}`} type="checkbox" id={cat.id} />
+          </React.Fragment>
+        ))}
+        <button type="submit" name="submit" value="submit" />
+      </form>
+    )
   }
 }
 
-const sidebar = () => {
-  const props = tempProps
-  return (
-    <form onSubmit={props.handleSubmit}>
-      <input name="searchstring" type="text" />
-      {props.categories.map(cat => (
-        <input type="checkbox" key={cat.id} id={cat.id} name={cat.name} />
-      ))}
-      <button type="submit" name="submit" value="submit" />
-    </form>
-  )
-}
-
-export default sidebar
+const mapStateToProps = state => ({categories: state.categories})
+const mapDispatchToProps = dispatch => ({
+  submitSearch: queryStr => dispatch(fetchProducts(queryStr))
+})
+export default connect(mapStateToProps, mapDispatchToProps)(Sidebar)
