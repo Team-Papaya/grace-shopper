@@ -8,7 +8,7 @@ const getProducts = products => ({
   products
 })
 
-const addProduct = product => ({
+export const addProduct = product => ({
   type: ADD_PRODUCT,
   product
 })

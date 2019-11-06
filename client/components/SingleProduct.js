@@ -20,8 +20,9 @@ class SingleProduct extends React.Component {
         <img src={product.imageUrl} />
         <p>{product.description}</p>
         <p>{product.quantity}</p>
-        {/* <Reviews reviews={reviews} />
-        display reviews. if there are no reviews, say there are no reviews. */}
+        {/* <ReviewForm productId={product.id}  />
+        <Reviews reviews={reviews} /> */}
+        {/* display reviews. if there are no reviews, say there are no reviews.  */}
       </div>
     )
   }
