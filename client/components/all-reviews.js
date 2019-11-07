@@ -11,7 +11,6 @@ const AllReviews = props => {
         {reviews.map(review => {
           return (
             <li key={review.id}>
-              >
               <h4>
                 <Rating
                   defaultRating={review.rating}

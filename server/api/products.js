@@ -60,10 +60,9 @@ router.get('/', async (req, res, next) => {
 
 router.get('/:productId', async (req, res, next) => {
   try {
-    const product = await Product.findByPk(
-      req.params.productId
-      //consider eager loading reviews
-    )
+    const product = await Product.findByPk(Number(req.params.productId), {
+      include: [{model: Review}]
+    })
     if (product) {
       res.json(product)
     } else {
