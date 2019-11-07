@@ -6,6 +6,7 @@ const Order = db.define('order', {
     type: Sequelize.ENUM('pending', 'purchased', 'cancelled', 'fulfilled'),
     defaultValue: 'pending'
   },
+  sessionId: Sequelize.STRING,
   purchasedAt: Sequelize.DATE,
   cancelledAt: Sequelize.DATE,
   fulfilledAt: Sequelize.DATE
