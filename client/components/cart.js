@@ -1,6 +1,7 @@
 import React from 'react'
 import {getCartThunk} from '../store/cart'
 import {connect} from 'react-redux'
+import {Container, Segment, Grid, Button, Header} from 'semantic-ui-react'
 
 export class Cart extends React.Component {
   componentDidMount() {
@@ -11,38 +12,46 @@ export class Cart extends React.Component {
     let prices = {}
     console.log(cart)
     return (
-      <div id="cart">
-        <div className="cart-topbar">
-          <div>
-            <h1>Cart</h1>
-          </div>
-          <div>
-            <h3>
-              {Array.isArray(cart.products) ? cart.products.length : '0'} Items
-              in Cart
-            </h3>
-          </div>
-        </div>
-        <div className="cart-product-list">
-          {Array.isArray(cart.products) && cart.products.length > 0
-            ? cart.products.map(product => {
-                prices[product.name] = product.pricingHistories[0].price
-                return (
-                  <div className="cart-item" key={product.id}>
-                    <span>
-                      {product.name} Qty: {product.quantity} Price: ${product.quantity *
-                        Number(prices[product.name])}
-                    </span>
-                  </div>
-                )
-              })
-            : 'Your cart is empty!'}
-        </div>}
-        <div className="cart-checkout-panel">
-          <div>
-            <h3>Total Amount: ${}</h3>
-          </div>
-        </div>
+      <div>
+        <Container>
+          <Segment>
+            <div className="cart-topbar">
+              <div>
+                <h1>Cart</h1>
+              </div>
+              <div>
+                <h3>
+                  {Array.isArray(cart.products) ? cart.products.length : '0'}{' '}
+                  Items in Cart
+                </h3>
+              </div>
+            </div>
+          </Segment>
+          <Segment>
+            <Grid>
+              {Array.isArray(cart.products) && cart.products.length > 0
+                ? cart.products.map(product => {
+                    prices[product.name] = product.pricingHistories[0].price
+                    return (
+                      <div className="cart-item" key={product.id}>
+                        <span>
+                          {product.name} Qty: {product.quantity} Price: ${product.quantity *
+                            Number(prices[product.name])}
+                        </span>
+                      </div>
+                    )
+                  })
+                : 'Your cart is empty!'}
+            </Grid>
+          </Segment>
+          <Segment>
+            <div className="cart-checkout-panel">
+              <div>
+                <h3>Total Amount: ${}</h3>
+              </div>
+            </div>
+          </Segment>
+        </Container>
       </div>
     )
   }
