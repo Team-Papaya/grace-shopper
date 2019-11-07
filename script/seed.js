@@ -20,6 +20,7 @@ async function seed() {
     User.create({email: 'cody@email.com', password: '123', username: 'MrCody'}),
     User.create({email: 'murphy@email.com', password: '123'})
   ])
+  console.log(Object.getPrototypeOf(users[0]))
   const products = await Promise.all([
     Product.create({
       name: 'Chair',
@@ -75,7 +76,7 @@ async function seed() {
     price: 100,
     effectiveDate: Date.now()
   })
-
+  console.log(Object.getPrototypeOf(pricingHistory))
   //Arbitrary Associations
   await Promise.all([
     users[0].addReview(reviews[0]),
@@ -86,7 +87,7 @@ async function seed() {
     products[0].addReview(reviews[3]),
     products[1].addPricingHistory(pricingHistory[0]),
     purchaseProfiles[0].addOrder(orders[0]),
-    products[2].addCategory(categories[0])
+    products[2].addCategory(categories)
   ])
 
   console.log(`seeded ${users.length} users`)

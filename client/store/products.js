@@ -13,9 +13,9 @@ const addProduct = product => ({
   product
 })
 
-export const getProductsThunk = () => async dispatch => {
+export const getProductsThunk = (queryString = '') => async dispatch => {
   try {
-    const response = await axios.get(`/api/products`)
+    const response = await axios.get(`/api/products` + queryString)
     const products = response.data
     dispatch(getProducts(products))
   } catch (error) {
@@ -43,3 +43,4 @@ export const productsReducer = (state = [], action) => {
       return state
   }
 }
+export default productsReducer

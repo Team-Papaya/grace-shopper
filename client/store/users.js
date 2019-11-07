@@ -17,7 +17,7 @@ export const fetchUsers = () => async dispatch => {
   }
 }
 
-export const usersReducer = (state = [], action) => {
+const usersReducer = (state = [], action) => {
   switch (action.type) {
     case SET_USERS:
       return action.users
@@ -25,3 +25,4 @@ export const usersReducer = (state = [], action) => {
       return state
   }
 }
+export default usersReducer
