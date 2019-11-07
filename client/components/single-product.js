@@ -35,9 +35,6 @@ class SingleProduct extends React.Component {
           <Segment>
             <Grid columns="one">
               <Grid.Column>
-                <Image src={product.imageUrl} />
-              </Grid.Column>
-              <Grid.Column>
                 <NavLink to="/cart">
                   <Button animated="vertical" color="green">
                     <Button.Content hidden>
@@ -53,7 +50,9 @@ class SingleProduct extends React.Component {
                   <Button color="red">Update Product</Button>
                 </NavLink>
                 <Header>{product.name}</Header>
-                <img src={product.imageUrl} />
+                <Grid.Column>
+                  <Image size="medium" src={product.imageUrl} />
+                </Grid.Column>
                 <p>
                   $
                   {(product.pricingHistories &&
