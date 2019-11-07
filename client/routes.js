@@ -32,7 +32,7 @@ class Routes extends Component {
         <Route exact path="/cart" component={Cart} />
         <Route
           exact
-          path="/cart/selectPurchaseProfile"
+          path="/cart/checkout/shipping"
           component={SelectPurchaseProfile}
         />
         <Route exact path="/products/add" component={NewProductForm} />

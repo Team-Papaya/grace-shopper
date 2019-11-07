@@ -1,7 +1,9 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {withRouter} from 'react-router'
+import {PurchaseProfile} from './'
 import {getPurchaseProfilesThunk} from '../store/purchaseProfiles'
+import {Container, Segment, Grid, Button} from 'semantic-ui-react'
 
 class SelectPurchaseProfile extends React.Component {
   componentDidMount() {
@@ -12,21 +14,29 @@ class SelectPurchaseProfile extends React.Component {
     const {purchaseProfiles} = this.props
 
     return (
-      <div>
-        {purchaseProfiles.map(profile => {
-          return (
-            <div key={profile.id}>
-              <div>Ship To: {profile.shipToName}</div>
-              <div>Address 1: {profile.shipToAddress1}</div>
-              <div>Address 2: {profile.shipToAddress2}</div>
-              <div>City: {profile.shipToCity}</div>
-              <div>State: {profile.shipToState}</div>
-              <div>Postal Code: {profile.postalCode}</div>
-              <div>Notification email: {profile.email}</div>
-            </div>
-          )
-        })}
-      </div>
+      <Container>
+        <Segment>
+          <Grid columns="one" centered>
+            <Grid.Column>
+              <div>
+                {purchaseProfiles.map(purchaseProfile => {
+                  return (
+                    <PurchaseProfile
+                      key={purchaseProfile.id}
+                      purchaseProfile={purchaseProfile}
+                    />
+                  )
+                })}
+              </div>
+            </Grid.Column>
+            <Grid.Row>
+              <Button animated color="blue">
+                Proceed to Checkout
+              </Button>
+            </Grid.Row>
+          </Grid>
+        </Segment>
+      </Container>
     )
   }
 }

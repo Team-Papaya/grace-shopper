@@ -5,21 +5,14 @@ import {NavLink} from 'react-router-dom'
 import {Container, Segment, Grid, Button, Header} from 'semantic-ui-react'
 
 export class Cart extends React.Component {
-  constructor() {
-    super()
-    this.handleSelectShippingInfo = this.handleSelectShippingInfo.bind(this)
-  }
   componentDidMount() {
     this.props.fetchCart()
   }
-
-  handleSelectShippingInfo() {}
 
   render() {
     const cart = this.props.cart
     let prices = {}
     let total = 0
-    console.log(prices)
     if (!Array.isArray(cart.products) || !cart.products.length > 0) {
       return 'Your cart is empty!'
     }
@@ -54,14 +47,16 @@ export class Cart extends React.Component {
               </Grid>
             </Segment>
             <div className="cart-checkout-panel">
-              <div>
-                <h3>Total Amount: ${total}</h3>
-              </div>
-              <div>
-                <NavLink to="/cart/selectPurchaseProfile">
-                  <button type="button">Select Shipping Info</button>
-                </NavLink>
-              </div>
+              <Grid>
+                <div>
+                  <h3>Total Amount: ${total}</h3>
+                </div>
+                <div>
+                  <NavLink to="/cart/checkout/shipping">
+                    <Button type="button">Select Shipping Info</Button>
+                  </NavLink>
+                </div>
+              </Grid>
             </div>
           </Segment>
         </Container>
