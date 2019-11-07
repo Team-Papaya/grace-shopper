@@ -10,7 +10,7 @@ class NewProductForm extends React.Component {
     super()
     this.state = {
       name: '',
-      imageUrl: [],
+      imageUrl: '',
       description: '',
       quantity: '',
       //price: '',
@@ -28,7 +28,10 @@ class NewProductForm extends React.Component {
   }
   handleSubmit(event) {
     event.preventDefault()
-    this.props.submitAddProduct(this.state)
+    this.props.submitAddProduct({
+      ...this.state,
+      imageUrl: [this.state.imageUrl]
+    })
     this.setState({
       name: '',
       imageUrl: [],
