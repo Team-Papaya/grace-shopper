@@ -9,7 +9,7 @@ const getPurchaseProfiles = purchaseProfiles => ({
 
 export const getPurchaseProfilesThunk = userId => async dispatch => {
   try {
-    const {data} = await axios.get(`/api/${userId}/purchaseProfiles`)
+    const {data} = await axios.get(`/api/users/${userId}/purchaseProfiles`)
     dispatch(getPurchaseProfiles(data))
   } catch (error) {
     console.error(error)
