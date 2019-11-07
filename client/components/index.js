@@ -4,6 +4,7 @@
  * having to figure out which file they belong to!
  */
 export {default as Navbar} from './navbar'
+export {default as Cart} from './cart'
 export {default as Sidebar} from './sidebar'
 export {default as UserHome} from './user-home'
 export {default as SingleProduct} from './single-product'
