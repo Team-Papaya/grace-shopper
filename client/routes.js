@@ -11,7 +11,8 @@ import {
   UpdateProductForm,
   AllProducts,
   AllReviews,
-  Sidebar
+  Sidebar,
+  Cart
 } from './components'
 import {me} from './store'
 
@@ -28,6 +29,7 @@ class Routes extends Component {
     return (
       <Switch>
         {/* Routes placed here are available to all visitors */}
+        <Route exact path="/cart" component={Cart} />
         <Route exact path="/products/add" component={NewProductForm} />
         <Route exact path="/products/:id" component={SingleProduct} />
         <Route
@@ -47,7 +49,7 @@ class Routes extends Component {
           </Switch>
         )}
         {/* Displays our Login component as a fallback */}
-        <Route component={AllProducts} />
+        <Route path="/" component={AllProducts} />
       </Switch>
     )
   }
