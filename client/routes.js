@@ -5,14 +5,14 @@ import PropTypes from 'prop-types'
 import {
   Login,
   Signup,
-  UserHome,
   SingleProduct,
   NewProductForm,
   UpdateProductForm,
   AllProducts,
   AllReviews,
   Sidebar,
-  Cart
+  Cart,
+  SelectPurchaseProfile
 } from './components'
 import {me} from './store'
 
@@ -30,6 +30,11 @@ class Routes extends Component {
       <Switch>
         {/* Routes placed here are available to all visitors */}
         <Route exact path="/cart" component={Cart} />
+        <Route
+          exact
+          path="/cart/selectPurchaseProfile"
+          component={SelectPurchaseProfile}
+        />
         <Route exact path="/products/add" component={NewProductForm} />
         <Route exact path="/products/:id" component={SingleProduct} />
         <Route

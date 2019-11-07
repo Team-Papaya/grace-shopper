@@ -1,12 +1,20 @@
 import React from 'react'
 import {getCartThunk} from '../store/cart'
 import {connect} from 'react-redux'
+import {NavLink} from 'react-router-dom'
 import {Container, Segment, Grid, Button, Header} from 'semantic-ui-react'
 
 export class Cart extends React.Component {
+  constructor() {
+    super()
+    this.handleSelectShippingInfo = this.handleSelectShippingInfo.bind(this)
+  }
   componentDidMount() {
     this.props.fetchCart()
   }
+
+  handleSelectShippingInfo() {}
+
   render() {
     const cart = this.props.cart
     let prices = {}
@@ -48,6 +56,11 @@ export class Cart extends React.Component {
             <div className="cart-checkout-panel">
               <div>
                 <h3>Total Amount: ${total}</h3>
+              </div>
+              <div>
+                <NavLink to="/cart/selectPurchaseProfile">
+                  <button type="button">Select Shipping Info</button>
+                </NavLink>
               </div>
             </div>
           </Segment>
