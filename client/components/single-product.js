@@ -37,6 +37,9 @@ class SingleProduct extends React.Component {
                 <Image src={product.imageUrl} />
               </Grid.Column>
               <Grid.Column>
+                <NavLink to="/cart">
+                  <Button color="green">Add to Cart</Button>
+                </NavLink>
                 <NavLink to="/products/add">
                   <Button color="red">Add a Product</Button>
                 </NavLink>
@@ -59,9 +62,10 @@ class SingleProduct extends React.Component {
                   {/* display reviews. if there are no reviews, say there are no reviews.  */}
                 </Segment>
                 <Segment>
+                  <Header as="h3">Categories:</Header>
                   {categories &&
                     categories.map(category => (
-                      <li key={category.id}>Categories:{category.name}</li>
+                      <li key={category.id}>{category.name}</li>
                     ))}
                 </Segment>
               </Grid.Column>

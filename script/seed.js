@@ -101,7 +101,7 @@ async function seed() {
     products[1].addPricingHistory(pricingHistories[0]),
     products[2].addPricingHistory(pricingHistories[1]),
     products[1].addPricingHistory(pricingHistories[2]),
-    products[2].addCategory(categories[0])
+    products[2].addCategory(categories)
   ])
 
   console.log(`seeded ${users.length} users`)

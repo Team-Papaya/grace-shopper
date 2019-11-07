@@ -3,6 +3,7 @@ import {connect} from 'react-redux'
 import {ProductCard} from './'
 import {withRouter} from 'react-router-dom'
 import {getProductsThunk} from '../store/products'
+import {Container, Segment, Grid, Button} from 'semantic-ui-react'
 
 class AllProducts extends React.Component {
   constructor() {
@@ -37,17 +38,33 @@ class AllProducts extends React.Component {
 
     return (
       <React.Fragment>
-        <div>
-          {products.map(product => {
-            return <ProductCard key={product.id} product={product} />
-          })}
-        </div>
-        <button type="button" onClick={() => this.page(-1)}>
-          prev page
-        </button>
-        <button type="button" onClick={() => this.page(1)}>
-          next page
-        </button>
+        <Container>
+          <Segment>
+            <Grid columns="one">
+              <Grid.Column>
+                <div>
+                  {products.map(product => {
+                    return <ProductCard key={product.id} product={product} />
+                  })}
+                </div>
+                <Button
+                  type="button"
+                  onClick={() => this.page(-1)}
+                  color="green"
+                >
+                  prev page
+                </Button>
+                <Button
+                  type="button"
+                  onClick={() => this.page(1)}
+                  color="green"
+                >
+                  next page
+                </Button>
+              </Grid.Column>
+            </Grid>
+          </Segment>
+        </Container>
       </React.Fragment>
     )
   }
