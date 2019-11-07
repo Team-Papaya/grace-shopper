@@ -2,7 +2,15 @@ const router = require('express').Router()
 const {Product, Category, PricingHistory, Review} = require('../db/models')
 const Sequelize = require('sequelize')
 const db = require('../db')
-module.exports = router
+
+// function isAdmin(req, res, next) {
+//   if (req.user.role === 'Admin') {
+//     next()
+//   } else {
+//     console.log('You are not an admin')
+//     res.redirect('/')
+//   }
+// }
 
 router.get('/', async (req, res, next) => {
   const PRODUCTS_PER_PAGE = 2
@@ -49,3 +57,58 @@ router.get('/', async (req, res, next) => {
     .then(dbRes => res.json(dbRes))
     .catch(err => next(err))
 })
+
+router.get('/:productId', async (req, res, next) => {
+  try {
+    const product = await Product.findByPk(Number(req.params.productId), {
+      include: [
+        {model: Review},
+        {
+          model: PricingHistory,
+          order: [['effectiveDate', 'DESC']],
+          where: {effectiveDate: {[Sequelize.Op.lte]: new Date()}},
+          limit: 1,
+          required: false
+        }
+      ]
+    })
+    if (product) {
+      res.json(product)
+    } else {
+      res.sendStatus(404)
+    }
+  } catch (err) {
+    next(err)
+  }
+})
+
+router.post(
+  '/add',
+  //  isAdmin,
+  async (req, res, next) => {
+    try {
+      const product = await Product.create(req.body)
+      res.json(product)
+    } catch (err) {
+      next(err)
+    }
+  }
+)
+
+router.put(
+  '/:productId',
+  //  isAdmin,
+  async (req, res, next) => {
+    try {
+      const updatedProduct = await Product.findByPk(
+        Number(req.params.productId)
+      )
+      const product = await updatedProduct.update(req.body)
+      res.json(product)
+    } catch (err) {
+      next(err)
+    }
+  }
+)
+
+module.exports = router

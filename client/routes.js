@@ -2,8 +2,18 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {withRouter, Route, Switch} from 'react-router-dom'
 import PropTypes from 'prop-types'
-import {Login, Signup, Cart, Sidebar, AllProducts} from './components'
-
+import {
+  Login,
+  Signup,
+  UserHome,
+  SingleProduct,
+  NewProductForm,
+  UpdateProductForm,
+  AllProducts,
+  AllReviews,
+  Sidebar,
+  Cart
+} from './components'
 import {me} from './store'
 
 /**
@@ -16,13 +26,20 @@ class Routes extends Component {
 
   render() {
     const {isLoggedIn} = this.props
-
     return (
       <Switch>
         {/* Routes placed here are available to all visitors */}
         <Route exact path="/user/:userId/cart" component={Cart} />
+        <Route exact path="/products/add" component={NewProductForm} />
+        <Route exact path="/products/:id" component={SingleProduct} />
+        <Route
+          exact
+          path="/products/:id/update"
+          component={UpdateProductForm}
+        />
+        <Route exact path="/products" component={AllProducts} />
+        <Route exact path="/reviews" component={AllReviews} />
         <Route path="/sidebar" component={Sidebar} />
-        <Route path="/products" component={AllProducts} />
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
         {isLoggedIn && (
