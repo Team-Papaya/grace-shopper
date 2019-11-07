@@ -104,7 +104,7 @@ const startListening = () => {
   // set up our socket control center
 }
 
-const syncDb = () => db.sync()
+const syncDb = () => db.sync({force: true})
 
 async function bootApp() {
   await sessionStore.sync()
