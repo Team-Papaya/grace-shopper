@@ -11,7 +11,8 @@ import {
   Segment,
   Grid,
   Button,
-  Header
+  Header,
+  Icon
 } from 'semantic-ui-react'
 
 class SingleProduct extends React.Component {
@@ -38,7 +39,12 @@ class SingleProduct extends React.Component {
               </Grid.Column>
               <Grid.Column>
                 <NavLink to="/cart">
-                  <Button color="green">Add to Cart</Button>
+                  <Button animated="vertical" color="green">
+                    <Button.Content hidden>
+                      <Icon name="shop" />
+                    </Button.Content>
+                    <Button.Content visible>Add to Cart</Button.Content>
+                  </Button>
                 </NavLink>
                 <NavLink to="/products/add">
                   <Button color="red">Add a Product</Button>
