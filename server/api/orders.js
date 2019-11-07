@@ -1,23 +1,20 @@
 const router = require('express').Router()
-const {Order} = require('../db/models')
+const {Order, Product} = require('../db/models')
 module.exports = router
 
-router.post('/', (req, res, next) => {
-  const {productId, qty} = req.body
+router.post('/', async (req, res, next) => {
+  try {
+    const {productId, qty} = req.body
 
-  Order.create({
-    sessionId: req.session.id
-  })
-    .then(promisedOrder => {
-      console.log(
-        'Promised order - addProduct: ',
-        promisedOrder.addProduct(productId, {through: {quantity: qty}})
-      )
-      return promisedOrder.addProduct(productId, {through: {quantity: qty}})
+    const order = await Order.create({
+      sessionId: req.session.id
     })
-    .then(finalPromisedOrder => {
-      console.log('final: ', finalPromisedOrder)
-      res.json(finalPromisedOrder)
-    })
-    .catch(next)
+
+    const product = await Product.findByPk(Number(productId))
+    await order.addProduct(product, {through: {quantity: Number(qty)}})
+
+    res.json(await Order.findByPk(order.id))
+  } catch (err) {
+    next(err)
+  }
 })
