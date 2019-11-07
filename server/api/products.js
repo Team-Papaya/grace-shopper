@@ -69,6 +69,10 @@ router.get('/:productId', async (req, res, next) => {
           where: {effectiveDate: {[Sequelize.Op.lte]: new Date()}},
           limit: 1,
           required: false
+        },
+        {
+          model: Category,
+          through: {attributes: []}
         }
       ]
     })

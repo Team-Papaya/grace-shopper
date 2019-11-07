@@ -1,17 +1,18 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {getProductThunk} from '../store/singleProduct'
+import {getCategoriesThunk} from '../store/categories'
 //import {getReviewsThunk} from '../store/reviews'
 import {NavLink} from 'react-router-dom'
 import AllReviews from './all-reviews'
-
 import {
   Image,
   Container,
   Segment,
   Grid,
   Button,
-  Header
+  Header,
+  Icon
 } from 'semantic-ui-react'
 
 class SingleProduct extends React.Component {
@@ -26,17 +27,22 @@ class SingleProduct extends React.Component {
   render() {
     const {product} = this.props
     if (!product) return 'No Product!'
-    console.log(this.props.product)
-
+    const categories = product.categories
+    console.log('product: ', product)
     return (
       <div>
         <Container>
           <Segment>
             <Grid columns="one">
               <Grid.Column>
-                <Image src={product.imageUrl} />
-              </Grid.Column>
-              <Grid.Column>
+                <NavLink to="/cart">
+                  <Button animated="vertical" color="green">
+                    <Button.Content hidden>
+                      <Icon name="shop" />
+                    </Button.Content>
+                    <Button.Content visible>Add to Cart</Button.Content>
+                  </Button>
+                </NavLink>
                 <NavLink to="/products/add">
                   <Button color="red">Add a Product</Button>
                 </NavLink>
@@ -44,7 +50,9 @@ class SingleProduct extends React.Component {
                   <Button color="red">Update Product</Button>
                 </NavLink>
                 <Header>{product.name}</Header>
-                <img src={product.imageUrl} />
+                <Grid.Column>
+                  <Image size="medium" src={product.imageUrl} />
+                </Grid.Column>
                 <p>
                   $
                   {(product.pricingHistories &&
@@ -57,6 +65,13 @@ class SingleProduct extends React.Component {
                 <Segment>
                   <AllReviews reviews={this.props.product.reviews || []} />
                   {/* display reviews. if there are no reviews, say there are no reviews.  */}
+                </Segment>
+                <Segment>
+                  <Header as="h3">Categories:</Header>
+                  {categories &&
+                    categories.map(category => (
+                      <li key={category.id}>{category.name}</li>
+                    ))}
                 </Segment>
               </Grid.Column>
             </Grid>
@@ -75,7 +90,8 @@ const mapStateToProps = state => {
   }
 }
 const mapDispatchToProps = dispatch => ({
-  fetchSingleProduct: id => dispatch(getProductThunk(id))
+  fetchSingleProduct: id => dispatch(getProductThunk(id)),
+  getCategory: categoryTag => dispatch(getCategoriesThunk(categoryTag))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(SingleProduct)
