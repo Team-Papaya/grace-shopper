@@ -12,17 +12,16 @@ export const getCart = cart => {
 export const getCartThunk = userId => {
   return async dispatch => {
     try {
-      const {data} = await axios.get(`/:${userId}`)
-      dispatch(getCart(data))
+      const response = await axios.get(`/api/cart/${userId}`)
+      const cart = response.data
+      dispatch(getCart(cart))
     } catch (err) {
       console.log(err)
     }
   }
 }
 
-const initialState = {}
-
-const cartReducer = (state = initialState, action) => {
+const cartReducer = (state = {}, action) => {
   switch (action.type) {
     case GET_CART:
       return action.cart

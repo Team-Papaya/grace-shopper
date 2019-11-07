@@ -8,6 +8,7 @@ export class Cart extends React.Component {
   }
   render() {
     const cart = this.props.cart
+    let prices = {}
     console.log(cart)
     return (
       <div id="cart">
@@ -16,15 +17,22 @@ export class Cart extends React.Component {
             <h1>Cart</h1>
           </div>
           <div>
-            <h3>X Items in Cart</h3>
+            <h3>
+              {Array.isArray(cart.products) ? cart.products.length : '0'} Items
+              in Cart
+            </h3>
           </div>
         </div>
         <div className="cart-product-list">
-          {Array.isArray(cart.products) && Selection.projects.length > 0
+          {Array.isArray(cart.products) && cart.products.length > 0
             ? cart.products.map(product => {
+                prices[product.name] = product.pricingHistories[0].price
                 return (
                   <div className="cart-item" key={product.id}>
-                    {product.name}
+                    <span>
+                      {product.name} Qty: {product.quantity} Price: ${product.quantity *
+                        Number(prices[product.name])}
+                    </span>
                   </div>
                 )
               })
@@ -32,7 +40,7 @@ export class Cart extends React.Component {
         </div>}
         <div className="cart-checkout-panel">
           <div>
-            <h3>Total Amount: $MONEYSUM</h3>
+            <h3>Total Amount: ${}</h3>
           </div>
         </div>
       </div>
