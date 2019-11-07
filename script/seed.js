@@ -19,6 +19,7 @@ async function seed() {
     User.create({email: 'cody@email.com', password: '123', username: 'MrCody'}),
     User.create({email: 'murphy@email.com', password: '123', username: 'dude'})
   ])
+  console.log(Object.getPrototypeOf(users[0]))
   const products = await Promise.all([
     Product.create({
       name: 'Chair',
