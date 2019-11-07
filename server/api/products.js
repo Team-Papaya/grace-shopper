@@ -61,7 +61,16 @@ router.get('/', async (req, res, next) => {
 router.get('/:productId', async (req, res, next) => {
   try {
     const product = await Product.findByPk(Number(req.params.productId), {
-      include: [{model: Review}]
+      include: [
+        {model: Review},
+        {
+          model: PricingHistory,
+          order: [['effectiveDate', 'DESC']],
+          where: {effectiveDate: {[Sequelize.Op.lte]: new Date()}},
+          limit: 1,
+          required: false
+        }
+      ]
     })
     if (product) {
       res.json(product)

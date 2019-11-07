@@ -13,6 +13,10 @@ const addReview = review => ({
   review
 })
 
+/*
+the entire getAllReviews might be unnecessary if we don't plan to make a display all reviews page
+ */
+
 export const getReviewsThunk = (queryString = '') => async dispatch => {
   try {
     const response = await axios.get(`/api/reviews` + queryString)
