@@ -2,7 +2,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {getProductThunk} from '../store/singleProduct'
 import {NavLink} from 'react-router-dom'
-//import {AllReviews} from './components'
+import AllReviews from './all-reviews'
 
 class SingleProduct extends React.Component {
   // constructor(props) {
@@ -12,12 +12,13 @@ class SingleProduct extends React.Component {
   componentDidMount() {
     this.props.fetchSingleProduct(this.props.match.params.id)
   }
+
   render() {
     const {product} = this.props
     if (!product) return 'No Product!'
     return (
       <div>
-        <NavLink to="/products/add">Add a Product</NavLink>
+        <NavLink to="/productsAdd">Add a Product</NavLink>
         {/* <a href="/products/add">
           <button>Add a Product</button>
         </a> */}
@@ -25,22 +26,17 @@ class SingleProduct extends React.Component {
         <img src={product.imageUrl} />
         <p>{product.description}</p>
         <p>{product.quantity}</p>
-        {/* <ReviewForm productId={product.id}  />
-        <Reviews reviews={reviews} /> */}
+        <AllReviews reviews={this.props.reviews} />
         {/* display reviews. if there are no reviews, say there are no reviews.  */}
       </div>
     )
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
-  // const productId = Number(ownProps.match.params.productId)
-  // const findProduct = state.products.find(product => product.id === productId)
-  // return {
-  //   product: findProduct
-  // }
+const mapStateToProps = state => {
   return {
-    product: state.productReducer
+    product: state.product,
+    reviews: state.reviews
   }
 }
 const mapDispatchToProps = dispatch => ({

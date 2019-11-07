@@ -3,17 +3,18 @@ import {connect} from 'react-redux'
 import {addProductThunk} from '../store/products'
 //import {updateProduct, updateProductThunk} from '../store/singleProduct'
 //import {getProductThunk} from '../store/singleProduct'
+import {Form, Container, Header} from 'semantic-ui-react'
 
 class NewProductForm extends React.Component {
   constructor() {
     super()
     this.state = {
       name: '',
-      imageUrl: {},
+      imageUrl: [],
       description: '',
-      quantity: 0,
-      price: 0,
-      available: false
+      quantity: '',
+      //price: '',
+      isAvailable: false
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -24,99 +25,89 @@ class NewProductForm extends React.Component {
     this.setState({
       [event.target.name]: event.target.value
     })
-    // let inputField = {}
-    // inputField[event.target.name] = event.target.value
-    // this.props.updateInputField(inputField)
   }
   handleSubmit(event) {
     event.preventDefault()
     this.props.submitAddProduct(this.state)
-    // const productName = event.target.name.value
-    // this.props.submitAddProduct({
-    //   name: productName
-    // })
-    this.props.history.push('/products')
+    this.setState({
+      name: '',
+      imageUrl: [],
+      description: '',
+      quantity: '',
+      //price: '',
+      isAvailable: false
+    })
+    //this.props.history.push('/products')
   }
 
   render() {
-    const {product} = this.props
     return (
-      <form onSubmit={this.handleSubmit}>
-        <h1>New Product Form</h1>;
-        <div>
-          <label>
-            Name:
-            <input
-              type="text"
+      <Container>
+        <Header size="medium" color="red">
+          New Product
+        </Header>
+        <Form onSubmit={this.handleSubmit}>
+          <div>
+            <Form.Input
+              label="Name"
+              placeholder="Name"
               name="name"
-              value={product.name}
+              value={this.state.name}
               onChange={this.handleChange}
             />
-          </label>
-          <br />
-          <label>
-            ImageUrl:
-            <input
-              type="text"
+            <br />
+            <Form.Input
+              label="ImageUrl"
+              placeholder="ImageUrl"
               name="imageUrl"
-              value={product.imageUrl}
+              value={this.state.imageUrl}
               onChange={this.handleChange}
             />
-          </label>
-          <br />
-          <label>
-            Description:
-            <input
-              type="text"
+            <br />
+            <Form.Input
+              label="Description"
+              placeholder="Description"
               name="description"
-              value={product.description}
+              value={this.state.description}
               onChange={this.handleChange}
             />
-          </label>
-          <br />
-          <label>
-            Quantity:
-            <input
-              type="number"
-              min="0"
+            <br />
+            <Form.Input
+              label="Quantity"
+              placeholder="Quantity"
               name="quantity"
-              value={product.quantity}
+              value={this.state.quantity}
               onChange={this.handleChange}
             />
-          </label>
-          <br />
-          <label>
-            Price:
-            <input
-              type="number"
-              min="0"
-              name="price"
-              value={product.price}
-              onChange={this.handleChange}
-            />
-          </label>
-          <br />
-          <label>
-            Available Now?
-            <input
-              type="boolean"
+            {/* Price */}
+            <br />
+            {/* <Form.Group>
+              <Form.Checkbox
+                label="isAvailable"
+                name="isAvailable"
+                value={this.state.isAvailable}
+                onChange={this.handleChange}
+              />
+            </Form.Group> */}
+            <Form.Input
+              label="isAvailable"
               name="isAvailable"
-              value={product.isAvailable}
+              value={this.state.isAvailable}
               onChange={this.handleChange}
             />
-          </label>
-          <br />
-          <span>
-            <button type="submit">Submit</button>
-          </span>
-        </div>
-      </form>
+            <br />
+            <span>
+              <Form.Button type="submit">Submit</Form.Button>
+            </span>
+          </div>
+        </Form>
+      </Container>
     )
   }
 }
-
 const mapStateToProps = state => ({
-  product: state.productReducer
+  //product: state.product
+  products: state.products
 })
 
 const mapDispatchToProps = dispatch => ({

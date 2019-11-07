@@ -5,8 +5,9 @@ const db = require('../db')
 
 // function isAdmin(req, res, next) {
 //   if (req.user.role === 'Admin') {
-//     return next()
+//     next()
 //   } else {
+//     console.log('You are not an admin')
 //     res.redirect('/')
 //   }
 // }
@@ -74,7 +75,7 @@ router.get('/:productId', async (req, res, next) => {
 })
 
 router.post(
-  '/add',
+  '/',
   //  isAdmin,
   async (req, res, next) => {
     try {
