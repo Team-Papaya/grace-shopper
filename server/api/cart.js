@@ -6,6 +6,10 @@ const {Order, PricingHistory, Product} = require('../db/models')
 
 router.get('/', async (req, res, next) => {
   try {
+    // REVIEW: this feels big enough and domain-specific enough
+    // to place in it's own model method
+    // This will also facilitate more isolated testing.
+    // The pricing history seems like a higher complexity thing.
     const cart = await Order.findOne({
       where: {
         status: 'pending',

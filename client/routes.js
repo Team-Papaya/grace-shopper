@@ -35,7 +35,12 @@ class Routes extends Component {
         <Route
           exact
           path="/products/:id/update"
-          component={UpdateProductForm}
+          {/* REVIEW: discuss `key` hacking */}
+          render={(renderProps) => {
+            // comonentDidUpdate(prevProps, prevState)
+            // componentWillRecieveProps(nextProps)
+            return <UpdateProductForm key={renderProps.match.params.id} {...renderProps}/>
+          }}
         />
         <Route exact path="/products" component={AllProducts} />
         <Route exact path="/reviews" component={AllReviews} />

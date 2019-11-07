@@ -11,11 +11,11 @@ class AllProducts extends React.Component {
     this.page = this.page.bind(this)
   }
   componentDidMount() {
-    this.props.getProducts(this.props.location.search)
+    this.props.getProductsThunk(this.props.location.search)
   }
   componentDidUpdate(prevProps) {
     if (prevProps.location.search !== this.props.location.search) {
-      this.props.getProducts(this.props.location.search)
+      this.props.getProductsThunk(this.props.location.search)
     }
   }
   page(int) {
@@ -76,10 +76,14 @@ const mapState = state => {
   }
 }
 
-const mapDispatch = dispatch => {
-  return {
-    getProducts: queryString => dispatch(getProductsThunk(queryString))
-  }
-}
+const mapDispatch = { getProductsThunk, coolAwesomeThunk }
+
+//const mapDispatch = dispatch => {
+//  return {
+//    handleSubmit: (event) => { event.preventDefault() },
+//    coolAwesomeThunk: (a, b) => dispatch(coolAwesomeThunk(a, b)),
+//    getProductsThunk: queryString => dispatch(getProductsThunk(queryString))
+//  }
+//}
 
 export default withRouter(connect(mapState, mapDispatch)(AllProducts))

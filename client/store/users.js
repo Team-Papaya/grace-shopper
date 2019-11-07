@@ -1,5 +1,6 @@
 import axios from 'axios'
 
+// REVIEW: naming conventions for action types
 const SET_USERS = 'SET_USERS'
 
 const setUsers = users => ({
