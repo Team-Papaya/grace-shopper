@@ -9,7 +9,6 @@ router.use('/categories', require('./categories'))
 router.use('/cart', require('./cart'))
 router.use('/orders', require('./orders'))
 router.use('/reviews', require('./reviews'))
-router.use('/purchaseProfiles', require('./purchaseProfiles'))
 
 router.use((req, res, next) => {
   const error = new Error('Not Found')
