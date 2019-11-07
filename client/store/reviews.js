@@ -9,7 +9,7 @@ const addReview = review => ({
 
 export const addReviewThunk = (form, productId) => async dispatch => {
   try {
-    const response = await axios.post('/api/reviews', {
+    const response = await axios.post('/api/reviews/add', {
       ...form,
       productId: productId
     })

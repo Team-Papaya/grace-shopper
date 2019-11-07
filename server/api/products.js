@@ -75,7 +75,7 @@ router.get('/:productId', async (req, res, next) => {
 })
 
 router.post(
-  '/',
+  '/add',
   //  isAdmin,
   async (req, res, next) => {
     try {

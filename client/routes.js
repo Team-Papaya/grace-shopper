@@ -8,6 +8,7 @@ import {
   UserHome,
   SingleProduct,
   NewProductForm,
+  UpdateProductForm,
   AllProducts,
   Sidebar
 } from './components'
@@ -26,8 +27,13 @@ class Routes extends Component {
     return (
       <Switch>
         {/* Routes placed here are available to all visitors */}
-        <Route exact path="/productsAdd" component={NewProductForm} />
+        <Route exact path="/products/add" component={NewProductForm} />
         <Route exact path="/products/:id" component={SingleProduct} />
+        <Route
+          exact
+          path="/products/:id/update"
+          component={UpdateProductForm}
+        />
         <Route exact path="/products" component={AllProducts} />
         <Route path="/sidebar" component={Sidebar} />
         <Route path="/login" component={Login} />

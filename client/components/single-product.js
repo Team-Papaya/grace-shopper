@@ -18,7 +18,7 @@ class SingleProduct extends React.Component {
     if (!product) return 'No Product!'
     return (
       <div>
-        <NavLink to="/productsAdd">Add a Product</NavLink>
+        <NavLink to="/products/add">Add a Product</NavLink>
         {/* <a href="/products/add">
           <button>Add a Product</button>
         </a> */}

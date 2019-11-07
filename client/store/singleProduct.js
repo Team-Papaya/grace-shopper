@@ -13,9 +13,9 @@ const updateProduct = product => ({
   product
 })
 
-export const getProductThunk = id => async dispatch => {
+export const getProductThunk = productId => async dispatch => {
   try {
-    const response = await axios.get(`/api/products/${id}`)
+    const response = await axios.get(`/api/products/${productId}`)
     dispatch(getProduct(response.data))
   } catch (error) {
     console.error(error)
