@@ -2,26 +2,16 @@
 const router = require('express').Router()
 const Sequelize = require('sequelize')
 const Op = Sequelize.Op
-const {
-  Order,
-  PurchaseProfile,
-  PricingHistory,
-  Product
-} = require('../db/models')
+const {Order, PricingHistory, Product} = require('../db/models')
 
 router.get('/', async (req, res, next) => {
   try {
     const cart = await Order.findOne({
       where: {
-        status: 'pending'
+        status: 'pending',
+        sessionId: req.session.id
       },
       include: [
-        {
-          model: PurchaseProfile,
-          where: {
-            userId: req.params.userId
-          }
-        },
         {
           model: Product,
           include: [
