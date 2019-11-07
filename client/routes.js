@@ -29,7 +29,7 @@ class Routes extends Component {
     return (
       <Switch>
         {/* Routes placed here are available to all visitors */}
-        <Route exact path="/user/:userId/cart" component={Cart} />
+        <Route exact path="/cart" component={Cart} />
         <Route exact path="/products/add" component={NewProductForm} />
         <Route exact path="/products/:id" component={SingleProduct} />
         <Route

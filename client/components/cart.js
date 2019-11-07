@@ -5,7 +5,7 @@ import {Container, Segment, Grid, Button, Header} from 'semantic-ui-react'
 
 export class Cart extends React.Component {
   componentDidMount() {
-    this.props.fetchCart(this.props.match.params.userId)
+    this.props.fetchCart()
   }
   render() {
     const cart = this.props.cart
@@ -64,7 +64,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     //!!!!!!!!!!!!!!userId should come out of the api route and the thunk as soon as Chris and I have the same code on master!!!!!!!!!!!!!
-    fetchCart: userId => dispatch(getCartThunk(userId))
+    fetchCart: () => dispatch(getCartThunk())
   }
 }
 

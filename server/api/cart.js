@@ -9,7 +9,7 @@ const {
   Product
 } = require('../db/models')
 
-router.get('/:userId', async (req, res, next) => {
+router.get('/', async (req, res, next) => {
   try {
     const cart = await Order.findOne({
       where: {
