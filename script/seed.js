@@ -81,7 +81,7 @@ async function seed() {
   await Promise.all([
     users[0].addReview(reviews[0]),
     users[1].addReview(reviews[3]),
-    users[0].addPurchaseprofile(purchaseProfiles[0]),
+    users[0].addPurchaseProfile(purchaseProfiles[0]),
 
     orders[0].addProduct(products[2], {through: {quantity: 3}}),
     products[0].addReview(reviews[3]),

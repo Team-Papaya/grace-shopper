@@ -2,7 +2,7 @@ const db = require('../db')
 const Sequelize = require('sequelize')
 
 const PurchaseProfile = db.define(
-  'purchaseprofile',
+  'purchaseProfile',
   {
     email: {
       type: Sequelize.STRING,
