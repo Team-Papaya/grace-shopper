@@ -20,7 +20,7 @@ class Routes extends Component {
     return (
       <Switch>
         {/* Routes placed here are available to all visitors */}
-        <Route exact path="/cart/:userId" component={Cart} />
+        <Route exact path="/user/:userId/cart" component={Cart} />
         <Route path="/sidebar" component={Sidebar} />
         <Route path="/products" component={AllProducts} />
         <Route path="/login" component={Login} />
@@ -32,7 +32,7 @@ class Routes extends Component {
           </Switch>
         )}
         {/* Displays our Login component as a fallback */}
-        <Route component={AllProducts} />
+        <Route path="/" component={AllProducts} />
       </Switch>
     )
   }

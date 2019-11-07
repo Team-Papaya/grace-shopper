@@ -39,7 +39,7 @@ Product.belongsToMany(Order, {through: OrderProduct})
 Order.belongsToMany(Product, {through: OrderProduct})
 //Review.belongsTo(Product);
 Product.hasMany(Review)
-//Category.belongsToMany(Product, { through: 'ProductCategory' });
+//Category.belongsToMany(Product, { through: 'productCategory' });
 Product.belongsToMany(Category, {through: 'productCategory'})
 //PricingHistory.belongsTo(Product)
 Product.hasMany(PricingHistory)
