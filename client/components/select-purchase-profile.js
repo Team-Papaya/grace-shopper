@@ -4,6 +4,7 @@ import {withRouter} from 'react-router'
 import {PurchaseProfile} from './'
 import {getPurchaseProfilesThunk} from '../store/purchaseProfiles'
 import {Container, Segment, Grid, Header, Form} from 'semantic-ui-react'
+import Axios from 'axios'
 
 class SelectPurchaseProfile extends React.Component {
   constructor() {
@@ -12,18 +13,39 @@ class SelectPurchaseProfile extends React.Component {
       selected: 0
     }
     this.handleChange = this.handleChange.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
   }
   componentDidMount() {
     this.props.fetchPurchaseProfiles(this.props.user.id)
   }
 
   handleChange(event) {
+    event.persist()
+    event.preventDefault()
+    console.log(event)
     if (event.target.type === 'radio') {
       this.setState({selected: event.target.id})
     } else {
       this.setState({
         [event.target.name]: event.target.value
       })
+    }
+  }
+  handleSubmit(event) {
+    console.log(this.state.selected)
+    if (this.state.selected) {
+      /*
+          if this.state.selected, we must be using an existing pricing history
+
+
+      */
+      Axios.post(
+        `/api/checkout/${this.props.cartId}/existingProfile/${
+          this.state.selected
+        }`
+      )
+    } else {
+      //
     }
   }
 
@@ -34,11 +56,14 @@ class SelectPurchaseProfile extends React.Component {
       <form
         id="select-purchase-profile"
         onSubmit={event => {
-          console.log(this.state.selected)
+          /*console.log(this.state.selected)
           event.preventDefault()
           event.persist()
-          console.log(event)
+          console.log(event)*/
+          event.preventDefault()
+          this.handleSubmit(event)
         }}
+        onChange={this.handleChange}
       >
         <h2>Enter Shipping Information</h2>
         <div className="add-pp-option">
@@ -48,7 +73,7 @@ class SelectPurchaseProfile extends React.Component {
             name="purchase-profile-select"
             checked="checked"
           />
-          <form id="add-purchase-profile" onChange={this.handleChange}>
+          <form id="add-purchase-profile" /*onChange={this.handleChange}*/>
             <div id="add-pp-new">
               <div>
                 <div className="add-pp-option-details">
@@ -191,7 +216,8 @@ class SelectPurchaseProfile extends React.Component {
 const mapState = state => {
   return {
     user: state.user,
-    purchaseProfiles: state.purchaseProfiles
+    purchaseProfiles: state.purchaseProfiles,
+    cartId: state.cart.id
   }
 }
 

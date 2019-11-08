@@ -2,7 +2,7 @@ const router = require('express').Router()
 const Sequelize = require('sequelize')
 //const Op = Sequelize.Op
 const {Order, PurchaseProfile} = require('../db/models')
-
+module.exports = router
 router.put('/:orderId/newProfile', async (req, res, next) => {
   const profile = await PurchaseProfile.create(req.body)
   if (req.session.userId) PurchaseProfile.addUser(req.session.userId)
