@@ -1,6 +1,7 @@
 const router = require('express').Router()
 const {Product, Category, PricingHistory, Review} = require('../db/models')
 const Sequelize = require('sequelize')
+const Op = Sequelize.Op
 const db = require('../db')
 
 // function adminRole (req, res, next) {
@@ -16,7 +17,8 @@ router.get('/', async (req, res, next) => {
   const PRODUCTS_PER_PAGE = 6
   const whereClause = {}
 
-  if (req.query.name && req.query.name.length) whereClause.name = req.query.name
+  if (req.query.name && req.query.name.length)
+    whereClause.name = {[Op.like]: '%' + req.query.name + '%'}
   if (req.query.cat && req.query.cat[0] && req.query.cat[0].length) {
     const queryString = `SELECT "productId", "categoryId" from "productCategory" where "categoryId" in (${req.query.cat
       .map(catId => Number(catId))
@@ -104,10 +106,32 @@ router.put(
   //  adminRole,
   async (req, res, next) => {
     try {
+      console.log('REQUEST BODY: ', req.body)
       const updatedProduct = await Product.findByPk(
-        Number(req.params.productId)
+        Number(req.params.productId),
+        {
+          include: [
+            {
+              model: PricingHistory,
+              order: [['effectiveDate', 'DESC']],
+              where: {effectiveDate: {[Sequelize.Op.lte]: new Date()}},
+              limit: 1,
+              required: false
+            }
+          ]
+        }
       )
       const product = await updatedProduct.update(req.body)
+      if (
+        req.body.price &&
+        (!updatedProduct.pricingHistories.length ||
+          updatedProduct.pricingHistories[0] != req.body.price)
+      ) {
+        updatedProduct.createPricingHistory({
+          price: req.body.price,
+          effectiveDate: req.body.effectiveDate || Date.now() + 100
+        })
+      }
       res.json(product)
     } catch (err) {
       next(err)
