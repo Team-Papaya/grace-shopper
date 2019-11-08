@@ -1,5 +1,5 @@
 import React from 'react'
-
+import AddToCartButton from './addToCart'
 const ProductCard = props => {
   const {product} = props
 
@@ -21,6 +21,7 @@ const ProductCard = props => {
             0
           )}{' '}
           ({product.reviews.length} reviews)
+          <AddToCartButton id={product.id} />
         </div>
       </div>
     </div>

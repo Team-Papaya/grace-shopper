@@ -44,6 +44,7 @@ Product.belongsToMany(Category, {through: 'productCategory'})
 //PricingHistory.belongsTo(Product)
 Product.hasMany(PricingHistory)
 //PurchaseProfile.belongsTo(Session)
+OrderProduct.belongsTo(Product, {foreignKey: 'productId'})
 //Session.hasMany(PurchaseProfile)
 
 module.exports = {
