@@ -1,10 +1,10 @@
 import React from 'react'
-
 import {getCategoriesThunk} from '../store/categories'
 import {connect} from 'react-redux'
-import {withRouter} from 'react-router-dom'
+import {withRouter, NavLink} from 'react-router-dom'
+import {Sidebar, Menu, Button, Icon, Form} from 'semantic-ui-react'
 
-class Sidebar extends React.Component {
+class SidebarComponent extends React.Component {
   constructor() {
     super()
     this.state = {
@@ -35,7 +35,6 @@ class Sidebar extends React.Component {
             ? {...cat, selected: event.target.checked}
             : cat
       )
-
       this.setState({categories: newCategories})
     } else {
       this.setState({[event.target.name]: event.target.value})
@@ -55,26 +54,63 @@ class Sidebar extends React.Component {
   }
   render() {
     return (
-      <form onSubmit={this.handleSubmit} onChange={this.handleChange}>
-        <input
-          name="searchstring"
-          type="text"
-          value={this.state.searchstring}
-        />
-        {this.props.categories.map(cat => (
-          <React.Fragment key={cat.id}>
-            <label htmlFor={`category${cat.id}`}>{cat.name}</label>
-            <input name={`category${cat.id}`} type="checkbox" id={cat.id} />
-          </React.Fragment>
-        ))}
-        <button type="submit" name="submit" value="submit" />
-      </form>
+      <Sidebar as={Menu} icon="labeled" vertical visible width="thin">
+        <Menu.Item as={NavLink} to="/products">
+          <Icon name="home" />
+          Home
+        </Menu.Item>
+        <Form onSubmit={this.handleSubmit} onChange={this.handleChange}>
+          <input
+            name="searchstring"
+            type="text"
+            value={this.state.searchstring}
+          />
+          <Menu.Item>
+            <Button type="submit" name="submit" value="submit">
+              <Icon name="search" />
+              Search
+            </Button>
+          </Menu.Item>
+          <Menu.Item>
+            <Icon name="tags" />
+            Select Categories:
+            {this.props.categories.map(cat => (
+              <React.Fragment key={cat.id}>
+                <label htmlFor={`category${cat.id}`}>{cat.name}</label>
+                <Form.Group>
+                  <Form.Checkbox name={`category${cat.id}`} id={cat.id} />
+                </Form.Group>
+              </React.Fragment>
+            ))}
+          </Menu.Item>
+        </Form>
+      </Sidebar>
     )
   }
+  // render() {
+  //   return (
+  //     <form onSubmit={this.handleSubmit} onChange={this.handleChange}>
+  //       <input
+  //         name="searchstring"
+  //         type="text"
+  //         value={this.state.searchstring}
+  //       />
+  //       {this.props.categories.map(cat => (
+  //         <React.Fragment key={cat.id}>
+  //           <label htmlFor={`category${cat.id}`}>{cat.name}</label>
+  //           <input name={`category${cat.id}`} type="checkbox" id={cat.id} />
+  //         </React.Fragment>
+  //       ))}
+  //       <button type="submit" name="submit" value="submit" />
+  //     </form>
+  //   )
+  // }
 }
 
 const mapStateToProps = state => ({categories: state.categories})
 const mapDispatchToProps = dispatch => ({
   fetchCats: () => dispatch(getCategoriesThunk())
 })
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Sidebar))
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(SidebarComponent)
+)
