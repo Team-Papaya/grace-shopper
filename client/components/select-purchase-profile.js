@@ -35,13 +35,21 @@ class SelectPurchaseProfile extends React.Component {
 
 
       */
-      Axios.post(
-        `/api/checkout/${this.props.cartId}/existingProfile/${
-          this.state.selected
-        }`
-      )
+      try {
+        Axios.post(
+          `/api/checkout/${this.props.cartId}/existingProfile/${
+            this.state.selected
+          }`
+        )
+      } catch (err) {
+        console.error(err)
+      }
     } else {
-      Axios.put(`/api/checkout/${this.props.cartId}/newProfile`, this.state)
+      try {
+        Axios.put(`/api/checkout/${this.props.cartId}/newProfile`, this.state)
+      } catch (err) {
+        console.error(err)
+      }
     }
   }
 
