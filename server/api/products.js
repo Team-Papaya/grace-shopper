@@ -14,7 +14,7 @@ const db = require('../db')
 // }
 
 router.get('/', async (req, res, next) => {
-  const PRODUCTS_PER_PAGE = 2
+  const PRODUCTS_PER_PAGE = 6
   const whereClause = {}
 
   if (req.query.name && req.query.name.length)
@@ -106,10 +106,32 @@ router.put(
   //  adminRole,
   async (req, res, next) => {
     try {
+      console.log('REQUEST BODY: ', req.body)
       const updatedProduct = await Product.findByPk(
-        Number(req.params.productId)
+        Number(req.params.productId),
+        {
+          include: [
+            {
+              model: PricingHistory,
+              order: [['effectiveDate', 'DESC']],
+              where: {effectiveDate: {[Sequelize.Op.lte]: new Date()}},
+              limit: 1,
+              required: false
+            }
+          ]
+        }
       )
       const product = await updatedProduct.update(req.body)
+      if (
+        req.body.price &&
+        (!updatedProduct.pricingHistories.length ||
+          updatedProduct.pricingHistories[0] != req.body.price)
+      ) {
+        updatedProduct.createPricingHistory({
+          price: req.body.price,
+          effectiveDate: req.body.effectiveDate || Date.now() + 100
+        })
+      }
       res.json(product)
     } catch (err) {
       next(err)

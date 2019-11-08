@@ -11,7 +11,7 @@ class UpdateProductForm extends React.Component {
       imageUrl: '',
       description: '',
       quantity: '',
-      //price: '',
+      price: '',
       isAvailable: false
     }
     this.handleChange = this.handleChange.bind(this)
@@ -25,29 +25,64 @@ class UpdateProductForm extends React.Component {
 
   componentDidMount() {
     this.props.fetchSingleProduct(this.props.match.params.id)
-    console.log(this.props)
+  }
+  componentDidUpdate(prevProps) {
+    //console.log("My props are, ", this.props)
+    if (!prevProps.product || this.props.product !== prevProps.product) {
+      this.setState({
+        name: this.props.product.name,
+        imageUrl: this.props.product.imageUrl.length
+          ? this.props.product.imageUrl[0]
+          : 'No image found',
+        description: this.props.product.description,
+        quantity: this.props.product.quantity,
+        price: this.props.product.pricingHistories.length
+          ? this.props.product.pricingHistories[0].price
+          : 'No Valid Price Found',
+        isAvailable: Boolean(this.props.product.isAvailable)
+      })
+    }
   }
 
   handleChange(event) {
-    this.setState({
-      [event.target.name]: event.target.value
-    })
+    event.persist()
+    console.log(event)
+    //For some reason, the semantic ui checkbox associates events with a label instead of the box itself
+    //Consequently, we can't look at the checked value directly
+    //And for some reason also can't seem to get a name property either.
+    if (event.target.id && event.target.id === 'isAvailable') {
+      this.setState({isAvailable: !this.state.isAvailable})
+    } else {
+      this.setState({
+        [event.target.name]: event.target.value
+      })
+    }
   }
   handleSubmit(event) {
+    console.log('submit func:', this.props.submitUpdateProduct)
     event.preventDefault()
-    this.props.submitUpdateProduct({
-      ...this.state,
-      imageUrl: [this.state.imageUrl]
-    })
-    this.setState({
+    this.props
+      .submitUpdateProduct({
+        ...this.state,
+        id: this.props.match.params.id,
+        imageUrl: [this.state.imageUrl],
+        /*eslint-disable no-self-compare*/
+        price:
+          Number(this.state.price) === Number(this.state.price)
+            ? Number(this.state.price)
+            : null
+      })
+      .then(() =>
+        /*this.setState({
       name: '',
       imageUrl: [],
       description: '',
       quantity: '',
-      //price: '',
+      price: '',
       isAvailable: false
-    })
-    //this.props.history.push('/products')
+    })*/
+        this.props.history.push('/products')
+      )
   }
 
   render() {
@@ -91,6 +126,14 @@ class UpdateProductForm extends React.Component {
             />
             {/* Price */}
             <br />
+            <Form.Input
+              label="Price"
+              placeholder="Price"
+              name="price"
+              value={this.state.price}
+              onChange={this.handleChange}
+            />
+            <br />
             {/* <Form.Group>
               <Form.Checkbox
                 label="isAvailable"
@@ -99,10 +142,11 @@ class UpdateProductForm extends React.Component {
                 onChange={this.handleChange}
               />
             </Form.Group> */}
-            <Form.Input
+            <Form.Checkbox
               label="isAvailable"
               name="isAvailable"
-              value={this.state.isAvailable}
+              id="isAvailable"
+              checked={this.state.isAvailable}
               onChange={this.handleChange}
             />
             <br />

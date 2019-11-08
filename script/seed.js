@@ -10,6 +10,176 @@ const {
   Product,
   Review
 } = require('../server/db/models/index')
+const faker = require('faker')
+
+const randomInd = num => {
+  return Math.floor(Math.random() * num)
+}
+const randomNum = (num, min = 0) => {
+  return Math.floor(Math.random() * (num - min) + min) + 1
+}
+const randomAdj = adjs => {
+  return adjs[randomInd(adjs.length)]
+}
+const mealInd = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+const dinnerAdj = [
+  'Hearty ',
+  'Delicous ',
+  'Healthy ',
+  'Gluten-free ',
+  '1 day old ',
+  '2 day old ',
+  '3 day old ',
+  'Expired ',
+  'Ready-made ',
+  'Half-eaten ',
+  'Quick and Easy ',
+  "Yesterday's ",
+  'Average ',
+  'Disgusting ',
+  'Leftover ',
+  'Moldy ',
+  'Surprisingly tasty '
+]
+const transInd = [1, 2, 3, 4, 5, 6, 8, 9, 10]
+const transportAdj = [
+  'Deluxe ',
+  'State of the Art ',
+  'Fashionable ',
+  'Double-decker ',
+  'Really nice ',
+  'Yung ',
+  'Fast ',
+  'Slow ',
+  'Underwhelming ',
+  'Small ',
+  'Large ',
+  'Electric ',
+  'Hybrid ',
+  'Sleek ',
+  'Armored ',
+  'Military-grade ',
+  'Rusty '
+]
+const anmlInd = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+const anmlAdj = [
+  'Fluffy ',
+  'Genuine ',
+  'Recently groomed ',
+  'Recently rescued ',
+  'Hairy ',
+  'Mini ',
+  'Large ',
+  'Loving ',
+  'Good ',
+  'Cool '
+]
+
+const techInd = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+const techAdj = [
+  'Ancient ',
+  'Cybernetic ',
+  'State of the Art ',
+  'Really sick ',
+  'Dope ',
+  'Really old ',
+  'Cool smart ',
+  'Great awesome ',
+  'Yung ',
+  'Unbelievably functional ',
+  'New ',
+  'High-quality ',
+  'Wearable ',
+  'Educational '
+]
+
+const foodStrings = ['meal', 'snack', 'dinner', 'lunch', 'breakfast']
+class Food {
+  constructor(typeString) {
+    this.name = randomAdj(dinnerAdj) + typeString
+    this.description = '' //bacon text for food? yeee
+    this.quantity = randomNum(20)
+    this.imageUrl = [
+      `http://lorempixel.com/256/256/food/${mealInd[randomInd(mealInd.length)]}`
+    ]
+  }
+}
+const transStrings = [
+  'carrier',
+  'vehicle',
+  'alternative to walking',
+  'transport'
+]
+class Transport {
+  constructor(typeString) {
+    //typestring
+    //type to be carrier, vehicle, portability, fancy alternative to walking
+    this.name = randomAdj(transportAdj) + typeString
+    this.description =
+      'Great way of getting around. Not too expensive and wonderfully made'
+    this.quantity = randomNum(5)
+    this.imageUrl = [
+      `http://lorempixel.com/256/256/transport/${
+        transInd[randomInd(transInd.length)]
+      }`
+    ]
+  }
+}
+
+const anmlStrings = [
+  '4-legger',
+  'mammal',
+  'land-dweller',
+  'animal',
+  'mystery animal',
+  'pal',
+  'lil guy'
+]
+class Animal {
+  constructor(typeString) {
+    this.name = randomAdj(anmlAdj) + typeString
+    this.description = ''
+    this.quantity = 1
+    this.imageUrl = [
+      `http://lorempixel.com/256/256/animals/${
+        anmlInd[randomInd(anmlInd.length)]
+      }`
+    ]
+  }
+}
+
+const techStrings = [
+  'tech',
+  'technology',
+  'piece of science',
+  'machinery',
+  'jumble of tech',
+  'device',
+  'portable device'
+]
+class Tech {
+  constructor(typeString) {
+    //typestring
+    //type to be tech, technology, piece of science, machinery, piece of tech
+    this.name = randomAdj(techAdj) + typeString
+    this.description =
+      'Great way of getting around. Not too expensive and wonderfully made'
+    this.quantity = randomNum(5)
+    this.imageUrl = [
+      `http://lorempixel.com/256/256/technics/${
+        techInd[randomInd(techInd.length)]
+      }`
+    ]
+  }
+}
+
+class Price {
+  constructor() {
+    this.price = randomNum(1000)
+    this.effectiveDate = Date.now() + randomNum(10000, 9999)
+  }
+}
 
 async function seed() {
   await db.sync({force: true})
@@ -19,6 +189,16 @@ async function seed() {
     User.create({email: 'cody@email.com', password: '123', username: 'MrCody'}),
     User.create({email: 'murphy@email.com', password: '123', username: 'dude'})
   ])
+  const categories = await Promise.all([
+    Category.create({name: 'Food'}),
+    Category.create({name: 'Transport'}),
+    Category.create({name: 'Animals'}),
+    Category.create({name: 'Technology'})
+  ])
+  // for (let i = 0; i < 100; i++) {
+  //   pricingHistories.push(await PricingHistory.create(new Price()))
+  // }
+
   const products = await Promise.all([
     Product.create({
       name: 'Chair',
@@ -29,18 +209,50 @@ async function seed() {
       name: 'Table',
       description: 'use with chair for best effect',
       quantity: 1
-    }),
-    Product.create({
-      name: 'Fork',
-      description: 'set on table',
-      quantity: 4
-    }),
-    Product.create({
-      name: "Eric's Seat Cushion",
-      description: 'set carefully on table',
-      quantity: 4
     })
   ])
+
+  for (let i = 0; i < 30; i++) {
+    products.push(
+      await Product.create(
+        new Food(foodStrings[randomNum(foodStrings.length - 1)])
+      ).then(prod => {
+        prod.addCategory(categories[0])
+        prod.createPricingHistory(new Price(1000))
+      })
+    )
+    products.push(
+      await Product.create(
+        new Transport(transStrings[randomNum(transStrings.length - 1)])
+      ).then(prod => {
+        prod.addCategory(categories[1])
+        prod.createPricingHistory(new Price(1000))
+      })
+    )
+    products.push(
+      await Product.create(
+        new Tech(techStrings[randomNum(techStrings.length - 1)])
+      ).then(prod => {
+        prod.addCategory(categories[2])
+        prod.createPricingHistory(new Price(1000))
+      })
+    )
+    products.push(
+      await Product.create(
+        new Animal(anmlStrings[randomNum(anmlStrings.length - 1)])
+      ).then(prod => {
+        prod.addCategory(categories[3])
+        prod.createPricingHistory(new Price(1000))
+      })
+    )
+  }
+  // products.forEach(async function(product) {
+  //   console.log(product)
+  //   // console.log(pricingHistories[randomNum(pricingHistories.length - 1)])
+  //   await product.addPricingHistory(
+  //     pricingHistories[randomNum(pricingHistories.length - 1)]
+  //   )
+  // })
 
   const reviews = await Promise.all([
     Review.create({
@@ -69,25 +281,6 @@ async function seed() {
       postalCode: '60666'
     })
   ])
-  const categories = await Category.create({name: 'the only category'})
-  const pricingHistories = await Promise.all([
-    PricingHistory.create({
-      price: 50,
-      effectiveDate: Date.now() - 50000000
-    }),
-    PricingHistory.create({
-      price: 30,
-      effectiveDate: Date.now() - 50000000
-    }),
-    PricingHistory.create({
-      price: 75,
-      effectiveDate: Date.now()
-    }),
-    PricingHistory.create({
-      price: 100,
-      effectiveDate: Date.now() + 500000000
-    })
-  ])
 
   //Arbitrary Associations
   await Promise.all([
@@ -98,10 +291,9 @@ async function seed() {
     orders[0].addProduct(products[1], {through: {quantity: 3}}),
     orders[0].addProduct(products[2], {through: {quantity: 1}}),
     products[0].addReview(reviews[3]),
-    products[1].addPricingHistory(pricingHistories[0]),
-    products[2].addPricingHistory(pricingHistories[1]),
-    products[1].addPricingHistory(pricingHistories[2]),
-    products[2].addCategory(categories)
+    products[0].addCategory(categories[2])
+
+    //products[2].addCategory(categories)
   ])
 
   console.log(`seeded ${users.length} users`)
