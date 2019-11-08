@@ -3,29 +3,43 @@ import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {logout} from '../store'
+import {Menu, Container, Grid} from 'semantic-ui-react'
 
 const Navbar = ({handleClick, isLoggedIn}) => (
   <div>
-    <h1>TEAM PAPA</h1>
-    <nav>
-      {isLoggedIn ? (
-        <div>
-          {/* The navbar will show these links after you log in */}
-          <Link to="/home">Home</Link>
-          <a href="#" onClick={handleClick}>
-            Logout
-          </a>
-        </div>
-      ) : (
-        <div>
-          {/* The navbar will show these links before you log in */}
-          <Link to="/login">Login</Link>
-          <Link to="/signup">Sign Up</Link>
-          <Link to="/cart">Cart</Link>
-        </div>
-      )}
-    </nav>
-    <hr />
+    <Menu>
+      <Container>
+        <h1>TEAM PAPA</h1>
+        <nav>
+          {isLoggedIn ? (
+            <div>
+              {/* The navbar will show these links after you log in */}
+              <Link to="/home">Home</Link>
+              {/* <a href="#" onClick={handleClick}>
+              Logout
+            </a> */}
+              <Menu.Item onClick={handleClick}>Logout</Menu.Item>
+            </div>
+          ) : (
+            <div>
+              {/* The navbar will show these links before you log in */}
+              <Grid>
+                <Menu.Item as={Link} to="/login">
+                  Login
+                </Menu.Item>
+                <Menu.Item as={Link} to="/signup">
+                  Sign Up
+                </Menu.Item>
+              </Grid>
+            </div>
+          )}
+        </nav>
+        <Menu.Item as={Link} to="/cart">
+          Cart
+        </Menu.Item>
+        <hr />
+      </Container>
+    </Menu>
   </div>
 )
 
