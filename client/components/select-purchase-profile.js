@@ -8,7 +8,9 @@ import {Container, Segment, Grid, Header, Form} from 'semantic-ui-react'
 class SelectPurchaseProfile extends React.Component {
   constructor() {
     super()
-    this.state = {}
+    this.state = {
+      selected: 0
+    }
     this.handleChange = this.handleChange.bind(this)
   }
   componentDidMount() {
@@ -16,9 +18,13 @@ class SelectPurchaseProfile extends React.Component {
   }
 
   handleChange(event) {
-    this.setState({
-      [event.target.name]: event.target.value
-    })
+    if (event.target.type === 'radio') {
+      this.setState({selected: event.target.id})
+    } else {
+      this.setState({
+        [event.target.name]: event.target.value
+      })
+    }
   }
 
   render() {
@@ -28,6 +34,7 @@ class SelectPurchaseProfile extends React.Component {
       <form
         id="select-purchase-profile"
         onSubmit={event => {
+          console.log(this.state.selected)
           event.preventDefault()
           event.persist()
           console.log(event)

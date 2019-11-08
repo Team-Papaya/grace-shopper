@@ -34,7 +34,9 @@ class Routes extends Component {
         <Route
           exact
           path="/cart/checkout/shipping"
-          component={SelectPurchaseProfile}
+          render={renderProps => (
+            <SelectPurchaseProfile key={isLoggedIn} {...renderProps} />
+          )}
         />
         <Route exact path="/products/add" component={NewProductForm} />
         <Route exact path="/products/:id" component={SingleProduct} />
