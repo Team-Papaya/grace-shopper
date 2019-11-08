@@ -1,6 +1,7 @@
 const router = require('express').Router()
 const {Product, Category, PricingHistory, Review} = require('../db/models')
 const Sequelize = require('sequelize')
+const Op = Sequelize.Op
 const db = require('../db')
 
 // function adminRole (req, res, next) {
@@ -16,9 +17,10 @@ router.get('/', async (req, res, next) => {
   const PRODUCTS_PER_PAGE = 2
   const whereClause = {}
 
-  if (req.query.name && req.query.name.length) whereClause.name = req.query.name
+  if (req.query.name && req.query.name.length)
+    whereClause.name = {[Op.like]: '%' + req.query.name + '%'}
   if (req.query.cat && req.query.cat[0] && req.query.cat[0].length) {
-    const queryString = `SELECT "productId", "categoryId" from "ProductCategory" where "categoryId" in (${req.query.cat
+    const queryString = `SELECT "productId", "categoryId" from "productCategory" where "categoryId" in (${req.query.cat
       .map(catId => Number(catId))
       .join()})`
     const productIds = await db.query(queryString).then(([dbRes]) => {
