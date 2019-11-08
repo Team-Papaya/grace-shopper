@@ -14,7 +14,7 @@ const db = require('../db')
 // }
 
 router.get('/', async (req, res, next) => {
-  const PRODUCTS_PER_PAGE = 2
+  const PRODUCTS_PER_PAGE = 6
   const whereClause = {}
 
   if (req.query.name && req.query.name.length)
