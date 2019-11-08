@@ -21,10 +21,10 @@ class AllProducts extends React.Component {
   page(int) {
     let nextQueryStr = this.props.location.search.split('&page=')
     if (nextQueryStr.length === 1) {
-      nextQueryStr = nextQueryStr[0] + `&page=${1 + int}`
+      nextQueryStr = nextQueryStr[0] + `&page=${Math.max(1, 1 + int)}`
     } else {
       const temp = nextQueryStr[1].split('&')
-      temp[0] = String(Number(temp[0]) + int)
+      temp[0] = String(Math.max(1, Number(temp[0]) + int))
       nextQueryStr[1] = temp.join('&')
       nextQueryStr = nextQueryStr.join('&page=')
     }
