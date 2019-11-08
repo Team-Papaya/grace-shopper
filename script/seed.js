@@ -63,7 +63,22 @@ async function seed() {
   ])
   const purchaseProfiles = await Promise.all([
     PurchaseProfile.create({
+      shipToName: 'me',
       shipToAddress1: '404 W Superior',
+      shipToCity: 'Chicago',
+      shipToState: 'IL',
+      postalCode: '60666'
+    }),
+    PurchaseProfile.create({
+      shipToName: 'definitely not me',
+      shipToAddress1: '100 Sketchy Back Alley',
+      shipToCity: 'Chicago',
+      shipToState: 'IL',
+      postalCode: '60666'
+    }),
+    PurchaseProfile.create({
+      shipToName: 'Ma',
+      shipToAddress1: '403 W Superior',
       shipToCity: 'Chicago',
       shipToState: 'IL',
       postalCode: '60666'
@@ -94,6 +109,8 @@ async function seed() {
     users[0].addReview(reviews[0]),
     users[1].addReview(reviews[3]),
     users[0].addPurchaseProfile(purchaseProfiles[0]),
+    users[0].addPurchaseProfile(purchaseProfiles[1]),
+    users[0].addPurchaseProfile(purchaseProfiles[2]),
     purchaseProfiles[0].addOrder(orders[0]),
     orders[0].addProduct(products[1], {through: {quantity: 3}}),
     orders[0].addProduct(products[2], {through: {quantity: 1}}),
