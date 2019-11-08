@@ -10,6 +10,18 @@ const {
   Product,
   Review
 } = require('../server/db/models/index')
+const faker = require('faker')
+
+const images = {
+  sushi: 'http://lorempixel.com/640/480/food/8'
+}
+const image1 = faker.image.food()
+const image2 = faker.image.food()
+
+console.log(image1)
+console.log(image2)
+console.log(image1)
+console.log(image2)
 
 async function seed() {
   await db.sync({force: true})
