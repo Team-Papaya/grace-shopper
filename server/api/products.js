@@ -104,10 +104,17 @@ router.put(
   //  adminRole,
   async (req, res, next) => {
     try {
+      console.log('REQUEST BODY: ', req.body)
       const updatedProduct = await Product.findByPk(
         Number(req.params.productId)
       )
       const product = await updatedProduct.update(req.body)
+      if (req.body.price) {
+        updatedProduct.createPricingHistory({
+          price: req.body.price,
+          effectiveDate: req.body.effectiveDate || Date.now() + 100
+        })
+      }
       res.json(product)
     } catch (err) {
       next(err)

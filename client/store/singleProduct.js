@@ -24,7 +24,7 @@ export const getProductThunk = id => async dispatch => {
 
 export const updateProductThunk = product => async dispatch => {
   try {
-    const response = await axios.put(`api/products/${product.id}`, product)
+    const response = await axios.put(`/api/products/${product.id}`, product)
     dispatch(updateProduct(response.data))
     //consider get Products
   } catch (err) {
