@@ -34,13 +34,18 @@ export class Cart extends React.Component {
             <Segment>
               <Grid row={cart.products.length}>
                 {cart.products.map(product => {
+                  console.log('Prices in map: ', prices)
+                  console.log('Product in map: ', product)
                   prices[product.name] = product.pricingHistories[0].price
-                  total += product.quantity * prices[product.name]
+                  total += product.orderProduct.quantity * prices[product.name]
                   return (
                     <Grid.Row key={product.id}>
                       <h3>{product.name}</h3>
-                      <h5>Qty: {product.quantity}</h5>{' '}
-                      <h5>Price: ${product.quantity * prices[product.name]}</h5>
+                      <h5>Qty: {product.orderProduct.quantity}</h5>{' '}
+                      <h5>
+                        Price: ${product.orderProduct.quantity *
+                          prices[product.name]}
+                      </h5>
                     </Grid.Row>
                   )
                 })}
