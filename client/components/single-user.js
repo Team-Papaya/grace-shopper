@@ -10,7 +10,7 @@ class SingleUser extends React.Component {
   }
   handleRemove = (event, id) => {
     event.preventDefault()
-    this.props.removeUserThunk(id)
+    this.props.removeUserThunk(id).then(() => this.props.history.push('/users'))
     //this.props.history.push('/users')
   }
   render() {

@@ -29,7 +29,7 @@ I think we're missing the following:
 Session model and relationship
 */
 
-//PurchseProfile.belongsTo(User)
+PurchaseProfile.belongsTo(User)
 User.hasMany(PurchaseProfile)
 //Review.belongsTo(User);
 User.hasMany(Review)
