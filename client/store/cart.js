@@ -21,10 +21,33 @@ export const getCartThunk = () => {
   }
 }
 
+const ADD_TO_CART = 'ADD_TO_CART'
+/*const addToCart=(assoc)=>{
+  return {type: ADD_TO_CART, relation: assoc}
+}*/
+export const addToCartThunk = (productId, cartId, quantity) => {
+  return dispatch => {
+    axios.put(`/api/orders/${cartId}/contents`, {
+      product: productId,
+      quantity
+    }) /*.then(res=>
+          dispatch(addToCart(res.data))
+      )*/
+  }
+}
+export const makeCartThunk = (productId, quantity) => {
+  return dispatch =>
+    axios
+      .post('/api/orders/', {productId, qty: quantity})
+      .then(res => dispatch(getCart(res.data)))
+}
+
 const cartReducer = (state = {}, action) => {
   switch (action.type) {
     case GET_CART:
       return action.cart
+    case ADD_TO_CART:
+      return {...state, products: [...state.products, action.relation]}
     default:
       return state
   }

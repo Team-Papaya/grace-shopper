@@ -11,10 +11,11 @@ import {
   UpdateProductForm,
   AllProducts,
   AllReviews,
-  Sidebar,
+  SidebarComponent,
   Cart
 } from './components'
 import {me} from './store'
+import {getCartThunk} from './store/cart.js'
 
 /**
  * COMPONENT
@@ -39,7 +40,7 @@ class Routes extends Component {
         />
         <Route exact path="/products" component={AllProducts} />
         <Route exact path="/reviews" component={AllReviews} />
-        <Route path="/sidebar" component={Sidebar} />
+        <Route path="/sidebar" component={SidebarComponent} />
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
         {isLoggedIn && (
@@ -70,6 +71,7 @@ const mapDispatch = dispatch => {
   return {
     loadInitialData() {
       dispatch(me())
+      dispatch(getCartThunk())
     }
   }
 }

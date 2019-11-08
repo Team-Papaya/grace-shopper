@@ -5,6 +5,7 @@ import {getCategoriesThunk} from '../store/categories'
 //import {getReviewsThunk} from '../store/reviews'
 import {NavLink} from 'react-router-dom'
 import AllReviews from './all-reviews'
+import {SidebarComponent} from './'
 import {
   Image,
   Container,
@@ -31,6 +32,7 @@ class SingleProduct extends React.Component {
     console.log('product: ', product)
     return (
       <div>
+        <SidebarComponent />
         <Container>
           <Segment>
             <Grid columns="one">
