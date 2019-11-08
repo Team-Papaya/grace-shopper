@@ -3,7 +3,7 @@ const {Product, Category, PricingHistory, Review} = require('../db/models')
 const Sequelize = require('sequelize')
 const db = require('../db')
 
-// function isAdmin(req, res, next) {
+// function adminRole (req, res, next) {
 //   if (req.user.role === 'Admin') {
 //     next()
 //   } else {
@@ -88,7 +88,7 @@ router.get('/:productId', async (req, res, next) => {
 
 router.post(
   '/add',
-  //  isAdmin,
+  //  adminRole,
   async (req, res, next) => {
     try {
       const product = await Product.create(req.body)
@@ -101,7 +101,7 @@ router.post(
 
 router.put(
   '/:productId',
-  //  isAdmin,
+  //  adminRole,
   async (req, res, next) => {
     try {
       const updatedProduct = await Product.findByPk(

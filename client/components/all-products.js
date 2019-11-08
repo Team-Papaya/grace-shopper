@@ -1,6 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {ProductCard} from './'
+import {ProductCard, SidebarComponent} from './'
 import {withRouter} from 'react-router-dom'
 import {getProductsThunk} from '../store/products'
 import {Container, Segment, Grid, Button, Icon} from 'semantic-ui-react'
@@ -38,6 +38,7 @@ class AllProducts extends React.Component {
 
     return (
       <React.Fragment>
+        <SidebarComponent />
         <Container>
           <Segment>
             <Grid columns="one" centered>
