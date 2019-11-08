@@ -5,7 +5,7 @@ const {Order, PurchaseProfile} = require('../db/models')
 module.exports = router
 router.put('/:orderId/newProfile', async (req, res, next) => {
   const profile = await PurchaseProfile.create(req.body)
-  if (req.session.userId) PurchaseProfile.addUser(req.session.userId)
+  if (req.user.id) await profile.setUser(req.user.id)
   Order.findByPk(req.params.orderId)
     .then(dbRes => dbRes.setPurchaseProfile(profile))
     .then(() => res.sendStatus(204))

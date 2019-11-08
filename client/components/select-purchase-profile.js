@@ -20,9 +20,6 @@ class SelectPurchaseProfile extends React.Component {
   }
 
   handleChange(event) {
-    event.persist()
-    event.preventDefault()
-    console.log(event)
     if (event.target.type === 'radio') {
       this.setState({selected: event.target.id})
     } else {
@@ -32,10 +29,9 @@ class SelectPurchaseProfile extends React.Component {
     }
   }
   handleSubmit(event) {
-    console.log(this.state.selected)
     if (this.state.selected) {
       /*
-          if this.state.selected, we must be using an existing pricing history
+          if this.state.selected, we must be using an existing purchase profile
 
 
       */
@@ -45,7 +41,7 @@ class SelectPurchaseProfile extends React.Component {
         }`
       )
     } else {
-      //
+      Axios.put(`/api/checkout/${this.props.cartId}/newProfile`, this.state)
     }
   }
 
@@ -56,10 +52,6 @@ class SelectPurchaseProfile extends React.Component {
       <form
         id="select-purchase-profile"
         onSubmit={event => {
-          /*console.log(this.state.selected)
-          event.preventDefault()
-          event.persist()
-          console.log(event)*/
           event.preventDefault()
           this.handleSubmit(event)
         }}
@@ -78,11 +70,11 @@ class SelectPurchaseProfile extends React.Component {
               <div>
                 <div className="add-pp-option-details">
                   <div className="add-pp-option-inputpair">
-                    <label htmlFor="shipTo">Ship To</label>
+                    <label htmlFor="shipToName">Ship To</label>
                     <input
                       type="text"
-                      name="shipTo"
-                      value={this.state.shipTo}
+                      name="shipToName"
+                      value={this.state.shipToName}
                     />
                   </div>
                   <div className="add-pp-option-inputpair">
@@ -90,35 +82,43 @@ class SelectPurchaseProfile extends React.Component {
                     <input type="text" name="email" value={this.state.email} />
                   </div>
                   <div className="add-pp-option-inputpair">
-                    <label htmlFor="address1">Address 1</label>
+                    <label htmlFor="shipToAddress1">Address 1</label>
                     <input
                       type="text"
-                      name="address1"
-                      value={this.state.address1}
+                      name="shipToAddress1"
+                      value={this.state.shipToAddress1}
                     />
                   </div>
                   <div className="add-pp-option-inputpair">
-                    <label htmlFor="address2">Address 2</label>
+                    <label htmlFor="shipToAddress2">Address 2</label>
                     <input
                       type="text"
-                      name="address2"
-                      value={this.state.address2}
+                      name="shipToAddress2"
+                      value={this.state.shipToAddress2}
                     />
                   </div>
                   <div className="add-pp-option-inputpair">
-                    <label htmlFor="city">City</label>
-                    <input type="text" name="city" value={this.state.city} />
-                  </div>
-                  <div className="add-pp-option-inputpair">
-                    <label htmlFor="state">State</label>
-                    <input type="text" name="state" value={this.state.state} />
-                  </div>
-                  <div className="add-pp-option-inputpair">
-                    <label htmlFor="postalCode">Postal Code</label>
+                    <label htmlFor="shipToCity">City</label>
                     <input
                       type="text"
-                      name="postalCode"
-                      value={this.state.postalCode}
+                      name="shipToCity"
+                      value={this.state.shipToCity}
+                    />
+                  </div>
+                  <div className="add-pp-option-inputpair">
+                    <label htmlFor="shipToState">State</label>
+                    <input
+                      type="text"
+                      name="shipToState"
+                      value={this.state.shipToState}
+                    />
+                  </div>
+                  <div className="add-pp-option-inputpair">
+                    <label htmlFor="shipToPostalCode">Postal Code</label>
+                    <input
+                      type="text"
+                      name="shipToPostalCode"
+                      value={this.state.shipToPostalCode}
                     />
                   </div>
                 </div>

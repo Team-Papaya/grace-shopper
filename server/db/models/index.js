@@ -29,8 +29,8 @@ I think we're missing the following:
 Session model and relationship
 */
 
-//PurchseProfile.belongsTo(User)
 User.hasMany(PurchaseProfile)
+PurchaseProfile.belongsTo(User, {foreignKey: 'userId'})
 //Review.belongsTo(User);
 User.hasMany(Review)
 Order.belongsTo(PurchaseProfile)

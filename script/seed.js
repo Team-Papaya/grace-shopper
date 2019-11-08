@@ -67,21 +67,21 @@ async function seed() {
       shipToAddress1: '404 W Superior',
       shipToCity: 'Chicago',
       shipToState: 'IL',
-      postalCode: '60666'
+      shipToPostalCode: '60666'
     }),
     PurchaseProfile.create({
       shipToName: 'definitely not me',
       shipToAddress1: '100 Sketchy Back Alley',
       shipToCity: 'Chicago',
       shipToState: 'IL',
-      postalCode: '60666'
+      shipToPostalCode: '60666'
     }),
     PurchaseProfile.create({
       shipToName: 'Ma',
       shipToAddress1: '403 W Superior',
       shipToCity: 'Chicago',
       shipToState: 'IL',
-      postalCode: '60666'
+      shipToPostalCode: '60666'
     })
   ])
   const categories = await Category.create({name: 'the only category'})
