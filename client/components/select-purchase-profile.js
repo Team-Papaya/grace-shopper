@@ -33,70 +33,86 @@ class SelectPurchaseProfile extends React.Component {
           console.log(event)
         }}
       >
-        <form id="add-purchase-profile" onChange={this.handleChange}>
-          <div id="add-pp-new">
-            <h2>Enter Shipping Information</h2>
-            <input
-              type="radio"
-              id="0"
-              name="purchase-profile-select"
-              defaultValue="selected"
-            />
-            <div>
-              <label htmlFor="shipTo">Ship To</label>
-              <input type="text" name="shipTo" value={this.state.shipTo} />
+        <h2>Enter Shipping Information</h2>
+        <div className="add-pp-option">
+          <input
+            type="radio"
+            id="0"
+            name="purchase-profile-select"
+            checked="checked"
+          />
+          <form id="add-purchase-profile" onChange={this.handleChange}>
+            <div id="add-pp-new">
+              <div>
+                <div className="add-pp-option-details">
+                  <div className="add-pp-option-inputpair">
+                    <label htmlFor="shipTo">Ship To</label>
+                    <input
+                      type="text"
+                      name="shipTo"
+                      value={this.state.shipTo}
+                    />
+                  </div>
+                  <div className="add-pp-option-inputpair">
+                    <label htmlFor="email">Email</label>
+                    <input type="text" name="email" value={this.state.email} />
+                  </div>
+                  <div className="add-pp-option-inputpair">
+                    <label htmlFor="address1">Address 1</label>
+                    <input
+                      type="text"
+                      name="address1"
+                      value={this.state.address1}
+                    />
+                  </div>
+                  <div className="add-pp-option-inputpair">
+                    <label htmlFor="address2">Address 2</label>
+                    <input
+                      type="text"
+                      name="address2"
+                      value={this.state.address2}
+                    />
+                  </div>
+                  <div className="add-pp-option-inputpair">
+                    <label htmlFor="city">City</label>
+                    <input type="text" name="city" value={this.state.city} />
+                  </div>
+                  <div className="add-pp-option-inputpair">
+                    <label htmlFor="state">State</label>
+                    <input type="text" name="state" value={this.state.state} />
+                  </div>
+                  <div className="add-pp-option-inputpair">
+                    <label htmlFor="postalCode">Postal Code</label>
+                    <input
+                      type="text"
+                      name="postalCode"
+                      value={this.state.postalCode}
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
-            <div>
-              <label htmlFor="email">Email</label>
-              <input type="text" name="email" value={this.state.email} />
-            </div>
-            <div>
-              <label htmlFor="address1">Address 1</label>
-              <input type="text" name="address1" value={this.state.address1} />
-            </div>
-            <div>
-              <label htmlFor="address2">Address 2</label>
-              <input type="text" name="address2" value={this.state.address2} />
-            </div>
-            <div>
-              <label htmlFor="city">City</label>
-              <input type="text" name="city" value={this.state.city} />
-            </div>
-            <div>
-              <label htmlFor="state">State</label>
-              <input type="text" name="state" value={this.state.state} />
-            </div>
-            <div>
-              <label htmlFor="postalCode">Postal Code</label>
-              <input
-                type="text"
-                name="postalCode"
-                value={this.state.postalCode}
-              />
-            </div>
-          </div>
-        </form>
+          </form>
+        </div>
 
         {user.id ? (
           <div id="add-pp-select-existing">
             <h2>...or Select Existing</h2>
-            <div>
-              {purchaseProfiles.map(purchaseProfile => {
-                return (
-                  <React.Fragment key={purchaseProfile.id}>
-                    <input
-                      type="radio"
-                      id={purchaseProfile.id}
-                      name="purchase-profile-select"
-                    />
-                    <PurchaseProfile purchaseProfile={purchaseProfile} />
-                  </React.Fragment>
-                )
-              })}
-            </div>
+            {purchaseProfiles.map(purchaseProfile => {
+              return (
+                <div key={purchaseProfile.id} className="add-pp-option">
+                  <input
+                    type="radio"
+                    id={purchaseProfile.id}
+                    name="purchase-profile-select"
+                  />
+                  <PurchaseProfile purchaseProfile={purchaseProfile} />
+                </div>
+              )
+            })}
           </div>
         ) : (
-          {undefined}
+          <div />
         )}
 
         <button type="submit">Proceed to Checkout</button>

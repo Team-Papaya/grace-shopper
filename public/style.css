@@ -19,3 +19,21 @@ form div {
   margin: 1em;
   display: inline-block;
 }
+
+.add-pp-option {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.add-pp-option-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.add-pp-option-inputpair {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 1px;
+}
