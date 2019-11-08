@@ -5,7 +5,6 @@ import PropTypes from 'prop-types'
 import {
   Login,
   Signup,
-  UserHome,
   SingleProduct,
   NewProductForm,
   UpdateProductForm,
@@ -13,8 +12,12 @@ import {
   AllReviews,
   SidebarComponent,
   Cart,
+
+  SelectPurchaseProfile
+
   AllUsers,
   SingleUser
+
 } from './components'
 import {me} from './store'
 import {getCartThunk} from './store/cart.js'
@@ -33,6 +36,13 @@ class Routes extends Component {
       <Switch>
         {/* Routes placed here are available to all visitors */}
         <Route exact path="/cart" component={Cart} />
+        <Route
+          exact
+          path="/cart/checkout/shipping"
+          render={renderProps => (
+            <SelectPurchaseProfile key={isLoggedIn} {...renderProps} />
+          )}
+        />
         <Route exact path="/products/add" component={NewProductForm} />
         <Route exact path="/products/:id" component={SingleProduct} />
         <Route

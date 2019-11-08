@@ -1,17 +1,18 @@
 import React from 'react'
 import {getCartThunk} from '../store/cart'
 import {connect} from 'react-redux'
+import {NavLink} from 'react-router-dom'
 import {Container, Segment, Grid, Button, Header} from 'semantic-ui-react'
 
 export class Cart extends React.Component {
   componentDidMount() {
     this.props.fetchCart()
   }
+
   render() {
     const cart = this.props.cart
     let prices = {}
     let total = 0
-    console.log(prices)
     if (!Array.isArray(cart.products) || !cart.products.length > 0) {
       return 'Your cart is empty!'
     }
@@ -51,9 +52,16 @@ export class Cart extends React.Component {
               </Grid>
             </Segment>
             <div className="cart-checkout-panel">
-              <div>
-                <h3>Total Amount: ${total}</h3>
-              </div>
+              <Grid>
+                <div>
+                  <h3>Total Amount: ${total}</h3>
+                </div>
+                <div>
+                  <NavLink to="/cart/checkout/shipping">
+                    <Button type="button">Select Shipping Info</Button>
+                  </NavLink>
+                </div>
+              </Grid>
             </div>
           </Segment>
         </Container>

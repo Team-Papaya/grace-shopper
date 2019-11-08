@@ -35,7 +35,7 @@ const PurchaseProfile = db.define(
         notEmpty: true
       }
     },
-    postalCode: {
+    shipToPostalCode: {
       type: Sequelize.STRING,
       allowNull: false,
       validate: {

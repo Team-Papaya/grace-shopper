@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const {User} = require('../db/models')
+const {User, PurchaseProfile} = require('../db/models')
 module.exports = router
 
 // function adminRole(req, res, next) {
@@ -63,4 +63,23 @@ router.get(
       next(err)
     }
   }
+
+})
+
+router.get('/:userId/purchaseProfiles', async (req, res, next) => {
+  try {
+    const pPs = await PurchaseProfile.findAll({
+      where: {
+        userId: req.params.userId
+      }
+    })
+
+    if (!pPs) res.status(404).send()
+    res.json(pPs)
+  } catch (err) {
+    next(err)
+  }
+})
+
 )
+
