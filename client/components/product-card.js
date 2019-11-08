@@ -7,7 +7,7 @@ import {
   Rating,
   Grid
 } from 'semantic-ui-react'
-
+import AddToCartButton from './addToCart'
 const ProductCard = props => {
   const {product} = props
 
@@ -41,6 +41,7 @@ const ProductCard = props => {
           </Grid>
         </Segment>
       </Container>
+      <AddToCartButton id={product.id} />
     </div>
   )
 }
