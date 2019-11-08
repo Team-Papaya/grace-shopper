@@ -106,10 +106,25 @@ router.put(
     try {
       console.log('REQUEST BODY: ', req.body)
       const updatedProduct = await Product.findByPk(
-        Number(req.params.productId)
+        Number(req.params.productId),
+        {
+          include: [
+            {
+              model: PricingHistory,
+              order: [['effectiveDate', 'DESC']],
+              where: {effectiveDate: {[Sequelize.Op.lte]: new Date()}},
+              limit: 1,
+              required: false
+            }
+          ]
+        }
       )
       const product = await updatedProduct.update(req.body)
-      if (req.body.price) {
+      if (
+        req.body.price &&
+        (!updatedProduct.pricingHistories.length ||
+          updatedProduct.pricingHistories[0] != req.body.price)
+      ) {
         updatedProduct.createPricingHistory({
           price: req.body.price,
           effectiveDate: req.body.effectiveDate || Date.now() + 100

@@ -65,7 +65,12 @@ class UpdateProductForm extends React.Component {
       .submitUpdateProduct({
         ...this.state,
         id: this.props.match.params.id,
-        imageUrl: [this.state.imageUrl]
+        imageUrl: [this.state.imageUrl],
+        /*eslint-disable no-self-compare*/
+        price:
+          Number(this.state.price) === Number(this.state.price)
+            ? Number(this.state.price)
+            : null
       })
       .then(() =>
         /*this.setState({
