@@ -2,6 +2,7 @@ import React from 'react'
 import {getCartThunk} from '../store/cart'
 import {connect} from 'react-redux'
 import {NavLink} from 'react-router-dom'
+import {PurchaseProfile} from './'
 import {Container, Segment, Grid, Button, Header} from 'semantic-ui-react'
 
 export class Cart extends React.Component {
@@ -27,14 +28,14 @@ export class Cart extends React.Component {
               </div>
             </div>
             <br />
-            {!cart.purchaseProfile ? (
+            {cart.purchaseProfile ? (
               <div>
-                <div>
-                  <h3>Shipping Information</h3>
-                </div>
-                <Segment>
-                  <div>Purchase Profile Fields!</div>
-                </Segment>
+                <PurchaseProfile purchaseProfile={cart.purchaseProfile} />
+                <NavLink to="/cart/checkout/shipping">
+                  <Button type="button" color="blue">
+                    Change Shipping Info
+                  </Button>
+                </NavLink>
               </div>
             ) : (
               <div>
@@ -56,8 +57,6 @@ export class Cart extends React.Component {
             <Segment>
               <Grid row={cart.products.length}>
                 {cart.products.map(product => {
-                  console.log('Prices in map: ', prices)
-                  console.log('Product in map: ', product)
                   prices[product.name] = product.pricingHistories[0].price
                   total += product.orderProduct.quantity * prices[product.name]
                   return (
@@ -76,18 +75,21 @@ export class Cart extends React.Component {
             <br />
             <div className="cart-checkout-panel">
               <Grid>
-                <div>
-                  <h3>Total Amount: ${total}</h3>
-                </div>
-                {!cart.purchaseProfile ? (
-                  <NavLink to="/cart/checkout/shipping">
-                    <Button type="button" color="green">
-                      Confirm & Pay
-                    </Button>
-                  </NavLink>
-                ) : (
-                  <div />
-                )}
+                <Grid.Row>
+                  <div>
+                    <h3>Total Amount: ${total}</h3>
+                  </div>
+                  {cart.purchaseProfile ? (
+                    // YO! The below route won't exist until we add Stripe checkout!
+                    <NavLink to="/cart/checkout/payment">
+                      <Button type="button" color="green">
+                        Confirm & Pay
+                      </Button>
+                    </NavLink>
+                  ) : (
+                    <div />
+                  )}
+                </Grid.Row>
               </Grid>
             </div>
           </Segment>
