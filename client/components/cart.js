@@ -18,18 +18,40 @@ export class Cart extends React.Component {
     }
     return (
       <div>
+        <br />
         <Container>
           <Segment>
             <div className="cart-topbar">
               <div>
-                <h1>Cart</h1>
+                <h1>Review Your Order</h1>
               </div>
+            </div>
+            <br />
+            {!cart.purchaseProfile ? (
               <div>
-                <h3>
-                  {Array.isArray(cart.products) ? cart.products.length : '0'}{' '}
-                  Items in Cart
-                </h3>
+                <div>
+                  <h3>Shipping Information</h3>
+                </div>
+                <Segment>
+                  <div>Purchase Profile Fields!</div>
+                </Segment>
               </div>
+            ) : (
+              <div>
+                <NavLink to="/cart/checkout/shipping">
+                  <Button type="button" color="red">
+                    Select Shipping Info
+                  </Button>
+                </NavLink>
+              </div>
+            )}
+
+            <br />
+            <div>
+              <h3>
+                {Array.isArray(cart.products) ? cart.products.length : '0'}{' '}
+                Items in Cart
+              </h3>
             </div>
             <Segment>
               <Grid row={cart.products.length}>
@@ -51,16 +73,21 @@ export class Cart extends React.Component {
                 })}
               </Grid>
             </Segment>
+            <br />
             <div className="cart-checkout-panel">
               <Grid>
                 <div>
                   <h3>Total Amount: ${total}</h3>
                 </div>
-                <div>
+                {!cart.purchaseProfile ? (
                   <NavLink to="/cart/checkout/shipping">
-                    <Button type="button">Select Shipping Info</Button>
+                    <Button type="button" color="green">
+                      Confirm & Pay
+                    </Button>
                   </NavLink>
-                </div>
+                ) : (
+                  <div />
+                )}
               </Grid>
             </div>
           </Segment>

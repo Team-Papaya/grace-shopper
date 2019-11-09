@@ -1,6 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {withRouter} from 'react-router'
+import {NavLink} from 'react-router-dom'
 import {PurchaseProfile} from './'
 import {getPurchaseProfilesThunk} from '../store/purchaseProfiles'
 import {Container, Segment, Grid, Header, Form} from 'semantic-ui-react'
@@ -154,8 +155,9 @@ class SelectPurchaseProfile extends React.Component {
         ) : (
           <div />
         )}
-
-        <button type="submit">Proceed to Checkout</button>
+        <NavLink to="/cart">
+          <button type="submit">Confirm & Pay</button>
+        </NavLink>
       </form>
     )
   }
