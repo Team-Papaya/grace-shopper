@@ -35,13 +35,21 @@ class SelectPurchaseProfile extends React.Component {
 
 
       */
-      Axios.post(
-        `/api/checkout/${this.props.cartId}/existingProfile/${
-          this.state.selected
-        }`
-      )
+      try {
+        Axios.post(
+          `/api/checkout/${this.props.cartId}/existingProfile/${
+            this.state.selected
+          }`
+        )
+      } catch (err) {
+        console.error(err)
+      }
     } else {
-      Axios.put(`/api/checkout/${this.props.cartId}/newProfile`, this.state)
+      try {
+        Axios.put(`/api/checkout/${this.props.cartId}/newProfile`, this.state)
+      } catch (err) {
+        console.error(err)
+      }
     }
   }
 
@@ -149,66 +157,6 @@ class SelectPurchaseProfile extends React.Component {
 
         <button type="submit">Proceed to Checkout</button>
       </form>
-
-      // <Container>
-      //   <Segment>
-      //     <Grid columns="one" centered>
-      //       <Grid.Column>
-      //         <Form>
-      //           <Grid.Row>
-      //             <Header as="h2">Enter shipping info:</Header>
-      //             <div>
-      //               <Form.Input
-      //                 label="Name"
-      //                 placeholder="Name"
-      //                 name="name"
-      //                 value="value"
-      //                 onChange={this.handleChange}
-      //               />
-      //               <br />
-      //               <Form.Input
-      //                 label="ImageUrl"
-      //                 placeholder="ImageUrl"
-      //                 name="imageUrl"
-      //                 value="value"
-      //                 onChange={this.handleChange}
-      //               />
-      //               <br />
-      //               <Form.Input
-      //                 label="Description"
-      //                 placeholder="Description"
-      //                 name="description"
-      //                 value="value"
-      //                 onChange={this.handleChange}
-      //               />
-      //               <br />
-      //             </div>
-      //           </Grid.Row>
-      //           {user.id ? (
-      //             <Grid.Row>
-      //               <Header as="h2">...or select from existing:</Header>
-      //               <div>
-      //                 {purchaseProfiles.map(purchaseProfile => {
-      //                   return (
-      //                     <PurchaseProfile
-      //                       key={purchaseProfile.id}
-      //                       purchaseProfile={purchaseProfile}
-      //                     />
-      //                   )
-      //                 })}
-      //               </div>
-      //             </Grid.Row>
-      //           ) : (
-      //             <React.Fragment />
-      //           )}
-      //         </Form>
-      //       </Grid.Column>
-      //       <Grid.Row>
-      //       <Form.Button type="submit">Proceed to Checkout</Form.Button>
-      //       </Grid.Row>
-      //     </Grid>
-      //   </Segment>
-      // </Container>
     )
   }
 }

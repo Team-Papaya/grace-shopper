@@ -12,6 +12,7 @@ import {
   AllReviews,
   SidebarComponent,
   Cart,
+  SelectPurchaseProfile,
   AllUsers,
   SingleUser
 } from './components'
