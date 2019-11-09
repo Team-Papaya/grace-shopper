@@ -63,8 +63,7 @@ router.get(
       next(err)
     }
   }
-
-})
+)
 
 router.get('/:userId/purchaseProfiles', async (req, res, next) => {
   try {
@@ -80,6 +79,3 @@ router.get('/:userId/purchaseProfiles', async (req, res, next) => {
     next(err)
   }
 })
-
-)
-

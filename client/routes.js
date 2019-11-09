@@ -12,12 +12,9 @@ import {
   AllReviews,
   SidebarComponent,
   Cart,
-
-  SelectPurchaseProfile
-
+  SelectPurchaseProfile,
   AllUsers,
   SingleUser
-
 } from './components'
 import {me} from './store'
 import {getCartThunk} from './store/cart.js'
