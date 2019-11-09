@@ -9,9 +9,7 @@ import products from './products'
 import cart from './cart' //i think ok
 import product from './singleProduct'
 import categories from './categories'
-
 import purchaseProfiles from './purchaseProfiles'
-
 import reviews from './reviews'
 
 const reducer = combineReducers({
