@@ -199,18 +199,7 @@ async function seed() {
   //   pricingHistories.push(await PricingHistory.create(new Price()))
   // }
 
-  const products = await Promise.all([
-    Product.create({
-      name: 'Chair',
-      description: 'fantastic place to take a good old fashioned seat',
-      quantity: 4
-    }),
-    Product.create({
-      name: 'Table',
-      description: 'use with chair for best effect',
-      quantity: 1
-    })
-  ])
+  const products = []
 
   for (let i = 0; i < 30; i++) {
     products.push(
@@ -306,9 +295,7 @@ async function seed() {
     users[0].addPurchaseProfile(purchaseProfiles[2]),
     purchaseProfiles[0].addOrder(orders[0]),
     orders[0].addProduct(products[1], {through: {quantity: 3}}),
-    orders[0].addProduct(products[2], {through: {quantity: 1}}),
-    products[0].addReview(reviews[3]),
-    products[0].addCategory(categories[2])
+    orders[0].addProduct(products[2], {through: {quantity: 1}})
 
     //products[2].addCategory(categories)
   ])
