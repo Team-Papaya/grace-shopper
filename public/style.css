@@ -6,6 +6,19 @@ a {
   text-decoration: none;
 }
 
+a:link {
+  color: black;
+} /* unvisited link */
+a:visited {
+  color: black;
+} /* visited link */
+a:hover {
+  color: black;
+} /* mouse over link */
+a:active {
+  color: black;
+} /* selected link */
+
 label {
   display: block;
 }
@@ -36,4 +49,12 @@ form div {
   flex-direction: row;
   justify-content: space-between;
   margin: 1px;
+}
+
+#nav-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-content: center;
+  height: 42px;
 }
