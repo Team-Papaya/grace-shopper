@@ -13,14 +13,19 @@ const Navbar = ({handleClick, isLoggedIn, userName}) => (
           <h1>PAPA'S ATTIC</h1>
         </NavLink>
         <nav>
-          <Grid id="nav-grid" centered columns={isLoggedIn ? 3 : 4}>
+          <Grid id="nav-grid" centered columns={4}>
             <Menu.Item>
               Welcome{isLoggedIn
                 ? ` back, ${userName || 'friend'}!`
                 : ', friend!'}
             </Menu.Item>
             {isLoggedIn ? (
-              <Menu.Item onClick={handleClick}>Log Out</Menu.Item>
+              <React.Fragment>
+                <Menu.Item onClick={handleClick}>Log Out</Menu.Item>
+                <Menu.Item as={NavLink} to="/profile">
+                  Profile
+                </Menu.Item>
+              </React.Fragment>
             ) : (
               <React.Fragment>
                 <Menu.Item as={NavLink} to="/login">
@@ -32,7 +37,13 @@ const Navbar = ({handleClick, isLoggedIn, userName}) => (
               </React.Fragment>
             )}
             <Menu.Item as={NavLink} to="/cart">
-              Cart
+              <img
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDztMQBIQIDyL7smsHwS8fRUOz21EnhBLDvMW6qSMd84-lWoqB&s"
+                style={{
+                  width: 28,
+                  height: 28
+                }}
+              />
             </Menu.Item>
           </Grid>
         </nav>
