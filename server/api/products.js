@@ -12,52 +12,62 @@ const db = require('../db')
 //     res.redirect('/')
 //   }
 // }
-
+/*eslint-disable complexity*/
 router.get('/', async (req, res, next) => {
+  console.log('GET ALL PRODUCTS ATTEMPT')
   const PRODUCTS_PER_PAGE = 6
   const whereClause = {}
 
   if (req.query.name && req.query.name.length)
     whereClause.name = {[Op.like]: '%' + req.query.name + '%'}
   if (req.query.cat && req.query.cat[0] && req.query.cat[0].length) {
-    const queryString = `SELECT "productId", "categoryId" from "productCategory" where "categoryId" in (${req.query.cat
+    /*const queryString = `SELECT "productId", "categoryId" from "productCategory" where "categoryId" in (${req.query.cat
       .map(catId => Number(catId))
-      .join()})`
-    const productIds = await db.query(queryString).then(([dbRes]) => {
-      let merged = dbRes.reduce((acc, curr) => {
-        if (acc[curr.productId]) {
-          return {...acc, [curr.productId]: acc[curr.productId] + 1}
-        }
-        return {...acc, [curr.productId]: 1}
-      }, {})
-      return Object.keys(merged).filter(
-        key => merged[key] === req.query.cat.length
-      )
+      .join()})`*/
+    const queryString = `SELECT * FROM products 
+      INNER JOIN (
+          SELECT count("categoryId") as matches, "productId"
+          FROM "productCategory"
+          WHERE "categoryId" IN (${req.query.cat
+            .map(catId => Number(catId))
+            .join()})
+          GROUP BY "productId"
+      ) as matchedproducts 
+      ON products.id=matchedproducts."productId"
+      WHERE products.name LIKE '%${req.query.name ? req.query.name : ''}%'
+      
+        
+      ORDER BY products.id
+      LIMIT ${PRODUCTS_PER_PAGE}
+      `
+    console.log(queryString)
+    db
+      .query(queryString)
+      .then(dbRes => res.json(dbRes))
+      .catch(next)
+  } else {
+    Product.findAll({
+      include: [
+        {model: Category},
+        {
+          model: PricingHistory,
+          order: [['effectiveDate', 'DESC']],
+          where: {effectiveDate: {[Sequelize.Op.lte]: new Date()}},
+          limit: 1,
+          required: false
+        },
+        {model: Review}
+      ],
+      where: whereClause,
+      limit: PRODUCTS_PER_PAGE,
+      offset: req.query.page
+        ? Number(req.query.page - 1) * PRODUCTS_PER_PAGE
+        : 0,
+      order: [['id', 'ASC']]
     })
-    whereClause.id = {
-      [Sequelize.Op.in]: productIds
-    }
+      .then(dbRes => res.json(dbRes))
+      .catch(err => next(err))
   }
-
-  Product.findAll({
-    include: [
-      {model: Category},
-      {
-        model: PricingHistory,
-        order: [['effectiveDate', 'DESC']],
-        where: {effectiveDate: {[Sequelize.Op.lte]: new Date()}},
-        limit: 1,
-        required: false
-      },
-      {model: Review}
-    ],
-    where: whereClause,
-    limit: PRODUCTS_PER_PAGE,
-    offset: req.query.page ? Number(req.query.page - 1) * PRODUCTS_PER_PAGE : 0,
-    order: [['id', 'ASC']]
-  })
-    .then(dbRes => res.json(dbRes))
-    .catch(err => next(err))
 })
 
 router.get('/:productId', async (req, res, next) => {
