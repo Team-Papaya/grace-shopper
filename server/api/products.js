@@ -4,6 +4,15 @@ const Sequelize = require('sequelize')
 const Op = Sequelize.Op
 const db = require('../db')
 
+// function adminRole (req, res, next) {
+//   if (req.user.role === 'Admin') {
+//     next()
+//   } else {
+//     console.log('You are not an admin')
+//     res.redirect('/')
+//   }
+// }
+/*eslint-disable complexity*/
 const adminRole = (req, res, next) => {
   try {
     if (req.user && req.user.role === 'Admin') {
@@ -19,31 +28,30 @@ const adminRole = (req, res, next) => {
 }
 
 router.get('/', async (req, res, next) => {
+  //console.log('GET ALL PRODUCTS ATTEMPT')
   const PRODUCTS_PER_PAGE = 6
   const whereClause = {}
 
   if (req.query.name && req.query.name.length)
-    whereClause.name = {[Op.like]: '%' + req.query.name + '%'}
+    whereClause.name = {[Op.iLike]: '%' + req.query.name + '%'}
   if (req.query.cat && req.query.cat[0] && req.query.cat[0].length) {
-    const queryString = `SELECT "productId", "categoryId" from "productCategory" where "categoryId" in (${req.query.cat
+    /*const queryString = `SELECT "productId", "categoryId" from "productCategory" where "categoryId" in (${req.query.cat
       .map(catId => Number(catId))
-      .join()})`
-    const productIds = await db.query(queryString).then(([dbRes]) => {
-      let merged = dbRes.reduce((acc, curr) => {
-        if (acc[curr.productId]) {
-          return {...acc, [curr.productId]: acc[curr.productId] + 1}
-        }
-        return {...acc, [curr.productId]: 1}
-      }, {})
-      return Object.keys(merged).filter(
-        key => merged[key] === req.query.cat.length
-      )
-    })
+      .join()})`*/
+    const queryString = `SELECT count("categoryId") as matches, "productId"
+          FROM "productCategory"
+          WHERE "categoryId" IN (${req.query.cat
+            .map(catId => Number(catId))
+            .join()})
+          GROUP BY "productId"`
+    // console.log(queryString)
+    const matchedProducts = await db.query(queryString)
+    //  console.log(matchedProducts);
     whereClause.id = {
-      [Sequelize.Op.in]: productIds
+      [Sequelize.Op.in]: matchedProducts[0].map(prod => prod.productId)
     }
   }
-
+  if (!req.user || req.user.role != 'Admin') whereClause.isAvailable = true
   Product.findAll({
     include: [
       {model: Category},
