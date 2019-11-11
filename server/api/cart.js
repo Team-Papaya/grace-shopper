@@ -9,7 +9,7 @@ const {
   PurchaseProfile
 } = require('../db/models')
 
-const orderIncludes = [
+/*const orderIncludes = [
   {
     model: PurchaseProfile
   },
@@ -28,13 +28,34 @@ const orderIncludes = [
       }
     ]
   }
-]
+]*/
 
 router.get('/', async (req, res, next) => {
   try {
     console.log(req.user)
     if (req.user) {
-      const userCart = await req.user.getOrder({include: orderIncludes})
+      const userCart = await req.user.getOrder({
+        include: [
+          {
+            model: PurchaseProfile
+          },
+          {
+            model: Product,
+            include: [
+              {
+                model: PricingHistory,
+                where: {
+                  effectiveDate: {
+                    [Op.lt]: new Date()
+                  }
+                },
+                order: [['effectiveDate', 'DESC']],
+                limit: 1
+              }
+            ]
+          }
+        ]
+      })
       //console.log(userCart)
       if (userCart) {
         return res.json(userCart)
