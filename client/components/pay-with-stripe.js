@@ -18,23 +18,18 @@ const PayWithStripe = props => {
 
   const handleToken = async token => {
     try {
-      const {data} = await axios.post(`/api/checkout/${order.id}/pay/stripe`, {
+      await axios.post(`/api/checkout/${order.id}/pay/stripe`, {
         token,
         order,
         orderTotal
       })
 
-      const {status} = data
-      if (status === 'success') {
-        await axios.put(`/api/orders/${order.id}/status`, {status: 'purchased'})
-        toast('Success! Check email for details', {type: 'success'})
-        props.history.push('/order/confirm/') // Refactor later to include order summary
-      } else {
-        toast('Something went wrong', {type: 'error'})
-        props.history.push('/cart')
-      }
+      toast('Success! Check email for details', {type: 'success'})
+      props.history.push('/order/confirm/') // Refactor later to include order summary
     } catch (err) {
       console.error(err)
+      toast('Something went wrong', {type: 'error'})
+      props.history.push('/cart')
     }
   }
 

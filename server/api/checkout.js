@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 const router = require('express').Router()
-const stripe = require('stripe')('sk_test_1EAXLzv6vjyxBw2vIPxUJ2h600W2IvfCJ7')
+const stripe = require('stripe')(process.env.STRIPE_SECRET)
 const {Order, PurchaseProfile} = require('../db/models')
 module.exports = router
 
@@ -21,9 +21,6 @@ router.post('/:orderId/existingProfile/:profileId', (req, res, next) => {
 })
 
 router.post('/:orderId/pay/stripe', async (req, res, next) => {
-  let status
-  let error
-
   try {
     const {token, order, orderTotal} = req.body
     const {
@@ -50,8 +47,12 @@ router.post('/:orderId/pay/stripe', async (req, res, next) => {
     })
 
     // Idempotency key is used to prevent duplicate purchase on same order.
-    const uuid = require('uuid/v4')
-    const idempotency_key = uuid()
+    const idempotency_key =
+      '' +
+      order.id +
+      order.products.reduce((acc, product) => {
+        return acc + 'PID' + product.id + 'QTY' + product.orderProduct.quantity
+      }, '')
 
     const charge = await stripe.charges.create(
       {
@@ -71,12 +72,12 @@ router.post('/:orderId/pay/stripe', async (req, res, next) => {
     )
 
     console.log('Charge: ', {charge})
-    status = 'success'
+
+    const orderToUpdate = await Order.findByPk(req.params.orderId)
+    await orderToUpdate.update({status: 'purchased'})
   } catch (err) {
-    status = 'failure'
-    error = err
     next(err)
   }
 
-  res.json({error, status})
+  res.sendStatus(200)
 })
