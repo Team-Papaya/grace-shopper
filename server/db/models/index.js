@@ -31,13 +31,13 @@ Session model and relationship
 
 User.hasMany(PurchaseProfile)
 PurchaseProfile.belongsTo(User, {foreignKey: 'userId'})
-//Review.belongsTo(User);
+Review.belongsTo(User)
 User.hasMany(Review)
 Order.belongsTo(PurchaseProfile)
 PurchaseProfile.hasMany(Order)
 Product.belongsToMany(Order, {through: OrderProduct})
 Order.belongsToMany(Product, {through: OrderProduct})
-//Review.belongsTo(Product);
+Review.belongsTo(Product)
 Product.hasMany(Review)
 //Category.belongsToMany(Product, { through: 'productCategory' });
 Product.belongsToMany(Category, {through: 'productCategory'})

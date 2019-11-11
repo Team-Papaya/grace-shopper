@@ -189,15 +189,27 @@ async function seed() {
     User.create({email: 'cody@email.com', password: '123', username: 'MrCody'}),
     User.create({email: 'murphy@email.com', password: '123', username: 'dude'})
   ])
+
+  for (let i = 0; i < 30; i++) {
+    const first = faker.name.firstName()
+    const last = faker.name.lastName()
+    users.push(
+      await User.create({
+        firstname: first,
+        lastname: last,
+        email: `${first}${i * 3}@email.com`,
+        username: `${first[0]}${last}${i * 3}`,
+        password: '123'
+      })
+    )
+  }
+
   const categories = await Promise.all([
     Category.create({name: 'Food'}),
     Category.create({name: 'Transport'}),
     Category.create({name: 'Animals'}),
     Category.create({name: 'Technology'})
   ])
-  // for (let i = 0; i < 100; i++) {
-  //   pricingHistories.push(await PricingHistory.create(new Price()))
-  // }
 
   const products = []
 
@@ -235,29 +247,7 @@ async function seed() {
       })
     )
   }
-  // products.forEach(async function(product) {
-  //   console.log(product)
-  //   // console.log(pricingHistories[randomNum(pricingHistories.length - 1)])
-  //   await product.addPricingHistory(
-  //     pricingHistories[randomNum(pricingHistories.length - 1)]
-  //   )
-  // })
 
-  const reviews = await Promise.all([
-    Review.create({
-      rating: 7
-    }),
-    Review.create({
-      rating: 7
-    }),
-    Review.create({
-      rating: 8
-    }),
-    Review.create({
-      rating: 9,
-      content: 'The best product ever made'
-    })
-  ])
   const orders = await Promise.all([
     Order.create({status: 'pending'}),
     Order.create({status: 'purchased'})
@@ -285,11 +275,23 @@ async function seed() {
       shipToPostalCode: '60666'
     })
   ])
+  const reviews = []
+  for (let i = 0; i < 250; i++) {
+    reviews.push(
+      await Review.create({
+        productId: randomNum(products.length),
+        rating: randomNum(10),
+        content: `${faker.lorem.sentence(randomNum(15))} ${faker.lorem.sentence(
+          randomNum(15)
+        )} ${faker.lorem.sentence(randomNum(15))}`
+      }).then(rev => {
+        rev.setUser(users[randomInd(users.length)])
+      })
+    )
+  }
 
   //Arbitrary Associations
   await Promise.all([
-    users[0].addReview(reviews[0]),
-    users[1].addReview(reviews[3]),
     users[0].addPurchaseProfile(purchaseProfiles[0]),
     users[0].addPurchaseProfile(purchaseProfiles[1]),
     users[0].addPurchaseProfile(purchaseProfiles[2]),
