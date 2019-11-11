@@ -20,9 +20,13 @@ class NewProductForm extends React.Component {
   componentDidMount() {}
 
   handleChange(event) {
-    this.setState({
-      [event.target.name]: event.target.value
-    })
+    if (event.target.id && event.target.id === 'isAvailable') {
+      this.setState({isAvailable: !this.state.isAvailable})
+    } else {
+      this.setState({
+        [event.target.name]: event.target.value
+      })
+    }
   }
   handleSubmit(event) {
     event.preventDefault()
@@ -90,10 +94,11 @@ class NewProductForm extends React.Component {
                 onChange={this.handleChange}
               />
             </Form.Group> */}
-            <Form.Input
+            <Form.Checkbox
               label="isAvailable"
               name="isAvailable"
-              value={this.state.isAvailable}
+              id="isAvailable"
+              checked={this.state.isAvailable}
               onChange={this.handleChange}
             />
             <br />

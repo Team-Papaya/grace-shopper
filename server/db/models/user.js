@@ -2,65 +2,84 @@ const crypto = require('crypto')
 const Sequelize = require('sequelize')
 const db = require('../db')
 
-const User = db.define('user', {
-  email: {
-    type: Sequelize.STRING,
-    unique: true,
-    allowNull: false,
-    validate: {isEmail: true}
-  },
-  password: {
-    type: Sequelize.STRING,
-    allowNull: false,
-    // Making `.password` act like a func hides it when serializing to JSON.
-    // This is a hack to get around Sequelize's lack of a "private" option.
-    get() {
-      return () => this.getDataValue('password')
+const User = db.define(
+  'user',
+  {
+    email: {
+      type: Sequelize.STRING,
+      unique: true,
+      allowNull: false,
+      validate: {isEmail: true}
+    },
+    password: {
+      type: Sequelize.STRING,
+      allowNull: true,
+      validate: {
+        notEmpty: true
+      },
+      // Making `.password` act like a func hides it when serializing to JSON.
+      // This is a hack to get around Sequelize's lack of a "private" option.
+      get() {
+        return () => this.getDataValue('password')
+      }
+    },
+    passwordExpiry: {
+      type: Sequelize.DATE,
+      defaultValue: new Date(
+        new Date().setFullYear(new Date().getFullYear() + 1)
+      )
+    },
+    salt: {
+      type: Sequelize.STRING,
+      // Making `.salt` act like a function hides it when serializing to JSON.
+      // This is a hack to get around Sequelize's lack of a "private" option.
+      get() {
+        return () => this.getDataValue('salt')
+      }
+    },
+    googleId: {
+      type: Sequelize.STRING,
+      unique: true
+    },
+    facebookId: {
+      type: Sequelize.STRING,
+      unique: true
+    },
+    role: {
+      type: Sequelize.ENUM('Normal', 'Admin', 'Inactive'),
+      defaultValue: 'Normal'
+    },
+    username: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true
+      }
+    },
+    firstname: {
+      type: Sequelize.STRING
+    },
+    lastname: {
+      type: Sequelize.STRING
+    },
+    profilePicture: {
+      type: Sequelize.STRING,
+      defaultValue:
+        'http://www.racemph.com/wp-content/uploads/2016/09/profile-image-placeholder.png'
     }
   },
-  passwordExpiry: {
-    type: Sequelize.DATE,
-    defaultValue: new Date(new Date().setFullYear(new Date().getFullYear() + 1))
-  },
-  salt: {
-    type: Sequelize.STRING,
-    // Making `.salt` act like a function hides it when serializing to JSON.
-    // This is a hack to get around Sequelize's lack of a "private" option.
-    get() {
-      return () => this.getDataValue('salt')
-    }
-  },
-  googleId: {
-    type: Sequelize.STRING,
-    unique: true
-  },
-  facebookId: {
-    type: Sequelize.STRING,
-    unique: true
-  },
-  role: {
-    type: Sequelize.ENUM('Normal', 'Admin', 'Inactive'),
-    defaultValue: 'Normal'
-  },
-  username: {
-    type: Sequelize.STRING,
-    allowNull: false,
+  {
     validate: {
-      notEmpty: true
+      customValidator() {
+        if (this.googleId === null && this.password === null) {
+          throw new Error(
+            'Sequelize validation failed: must have a google id through oauth or a password'
+          )
+        }
+      }
     }
-  },
-  firstname: {
-    type: Sequelize.STRING
-  },
-  lastname: {
-    type: Sequelize.STRING
-  },
-  profilePicture: {
-    type: Sequelize.STRING,
-    defaultValue:
-      'http://www.racemph.com/wp-content/uploads/2016/09/profile-image-placeholder.png'
   }
-})
+)
 
 User.beforeValidate(userInstance => {
   if (!userInstance.username) {
