@@ -54,6 +54,11 @@ const User = db.define('user', {
   },
   lastname: {
     type: Sequelize.STRING
+  },
+  profilePicture: {
+    type: Sequelize.STRING,
+    defaultValue:
+      'http://www.racemph.com/wp-content/uploads/2016/09/profile-image-placeholder.png'
   }
 })
 

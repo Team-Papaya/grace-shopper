@@ -18,6 +18,7 @@ import {
 } from './components'
 import {me} from './store'
 import {getCartThunk} from './store/cart.js'
+import UserProfile from './components/user-profile'
 
 /**
  * COMPONENT
@@ -32,6 +33,7 @@ class Routes extends Component {
     return (
       <Switch>
         {/* Routes placed here are available to all visitors */}
+        <Route path="/profile" component={UserProfile} />
         <Route exact path="/cart" component={Cart} />
         <Route
           exact

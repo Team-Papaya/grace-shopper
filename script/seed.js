@@ -194,28 +194,29 @@ async function seed() {
     }),
     User.create({email: 'murphy@email.com', password: '123', username: 'dude'})
   ])
+
+  for (let i = 0; i < 30; i++) {
+    const first = faker.name.firstName()
+    const last = faker.name.lastName()
+    users.push(
+      await User.create({
+        firstname: first,
+        lastname: last,
+        email: `${first}${i * 3}@email.com`,
+        username: `${first[0]}${last}${i * 3}`,
+        password: '123'
+      })
+    )
+  }
+
   const categories = await Promise.all([
     Category.create({name: 'Food'}),
     Category.create({name: 'Transport'}),
     Category.create({name: 'Animals'}),
     Category.create({name: 'Technology'})
   ])
-  // for (let i = 0; i < 100; i++) {
-  //   pricingHistories.push(await PricingHistory.create(new Price()))
-  // }
 
-  const products = await Promise.all([
-    Product.create({
-      name: 'Chair',
-      description: 'fantastic place to take a good old fashioned seat',
-      quantity: 4
-    }),
-    Product.create({
-      name: 'Table',
-      description: 'use with chair for best effect',
-      quantity: 1
-    })
-  ])
+  const products = []
 
   for (let i = 0; i < 30; i++) {
     products.push(
@@ -251,29 +252,7 @@ async function seed() {
       })
     )
   }
-  // products.forEach(async function(product) {
-  //   console.log(product)
-  //   // console.log(pricingHistories[randomNum(pricingHistories.length - 1)])
-  //   await product.addPricingHistory(
-  //     pricingHistories[randomNum(pricingHistories.length - 1)]
-  //   )
-  // })
 
-  const reviews = await Promise.all([
-    Review.create({
-      rating: 7
-    }),
-    Review.create({
-      rating: 7
-    }),
-    Review.create({
-      rating: 8
-    }),
-    Review.create({
-      rating: 9,
-      content: 'The best product ever made'
-    })
-  ])
   const orders = await Promise.all([
     Order.create({status: 'pending'}),
     Order.create({status: 'purchased'})
@@ -301,19 +280,29 @@ async function seed() {
       shipToPostalCode: '60666'
     })
   ])
+  const reviews = []
+  for (let i = 0; i < 250; i++) {
+    reviews.push(
+      await Review.create({
+        productId: randomNum(products.length),
+        rating: randomNum(10),
+        content: `${faker.lorem.sentence(randomNum(15))} ${faker.lorem.sentence(
+          randomNum(15)
+        )} ${faker.lorem.sentence(randomNum(15))}`
+      }).then(rev => {
+        rev.setUser(users[randomInd(users.length)])
+      })
+    )
+  }
 
   //Arbitrary Associations
   await Promise.all([
-    users[0].addReview(reviews[0]),
-    users[1].addReview(reviews[3]),
     users[0].addPurchaseProfile(purchaseProfiles[0]),
     users[0].addPurchaseProfile(purchaseProfiles[1]),
     users[0].addPurchaseProfile(purchaseProfiles[2]),
     purchaseProfiles[0].addOrder(orders[0]),
     orders[0].addProduct(products[1], {through: {quantity: 3}}),
-    orders[0].addProduct(products[2], {through: {quantity: 1}}),
-    products[0].addReview(reviews[3]),
-    products[0].addCategory(categories[2])
+    orders[0].addProduct(products[2], {through: {quantity: 1}})
 
     //products[2].addCategory(categories)
   ])

@@ -10,8 +10,7 @@ const AllReviews = props => {
       <div>
         {reviews.map(review => {
           return (
-            <li key={review.id}>
-              {/* reviewer's username should be listed */}
+            <div key={review.id}>
               <h4>
                 <Rating
                   defaultRating={review.rating}
@@ -20,7 +19,8 @@ const AllReviews = props => {
                 />
               </h4>
               {review.content}
-            </li>
+              <hr />
+            </div>
           )
         })}
       </div>
