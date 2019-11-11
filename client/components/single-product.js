@@ -2,9 +2,11 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {getProductThunk} from '../store/singleProduct'
 import {getCategoriesThunk} from '../store/categories'
+import {addToCartThunk, makeCartThunk} from '../store/cart'
 import {NavLink} from 'react-router-dom'
 import AllReviews from './all-reviews'
 import {SidebarComponent, NewReviewForm} from './'
+
 import {
   Image,
   Container,
@@ -31,14 +33,20 @@ class SingleProduct extends React.Component {
           <Segment>
             <Grid columns="one">
               <Grid.Column>
-                <NavLink to="/cart">
-                  <Button animated="vertical" color="green">
-                    <Button.Content hidden>
-                      <Icon name="shop" />
-                    </Button.Content>
-                    <Button.Content visible>Add to Cart</Button.Content>
-                  </Button>
-                </NavLink>
+                {/*<NavLink to="/cart">*/}
+                <Button
+                  animated="vertical"
+                  color="green"
+                  onClick={() =>
+                    this.props.addToCart(product, 1, this.props.cartId)
+                  }
+                >
+                  <Button.Content hidden>
+                    <Icon name="shop" />
+                  </Button.Content>
+                  <Button.Content visible>Add to Cart</Button.Content>
+                </Button>
+                {/*</NavLink>*/}
                 <NavLink to="/products/add">
                   <Button color="red">Add a Product</Button>
                 </NavLink>
@@ -87,13 +95,19 @@ class SingleProduct extends React.Component {
 const mapStateToProps = state => {
   return {
     product: state.product,
-    user: state.singleUser
+    user: state.singleUser,
+    cartId: state.cart.id
     //pricingHistory: state.pricingHistory
   }
 }
 const mapDispatchToProps = dispatch => ({
   getProductThunk: id => dispatch(getProductThunk(id)),
-  getCategory: categoryTag => dispatch(getCategoriesThunk(categoryTag))
+  getCategory: categoryTag => dispatch(getCategoriesThunk(categoryTag)),
+  addToCart: (productId, quantity, cartId) => {
+    cartId
+      ? dispatch(addToCartThunk(productId, cartId, quantity))
+      : dispatch(makeCartThunk(productId, quantity))
+  }
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(SingleProduct)
