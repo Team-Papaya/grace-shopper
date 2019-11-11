@@ -2,10 +2,9 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {getProductThunk} from '../store/singleProduct'
 import {getCategoriesThunk} from '../store/categories'
-//import {getReviewsThunk} from '../store/reviews'
 import {NavLink} from 'react-router-dom'
 import AllReviews from './all-reviews'
-import {SidebarComponent} from './'
+import {SidebarComponent, NewReviewForm} from './'
 import {
   Image,
   Container,
@@ -17,19 +16,14 @@ import {
 } from 'semantic-ui-react'
 
 class SingleProduct extends React.Component {
-  // constructor(props) {
-  //   super(props)
-  // }
-
   componentDidMount() {
-    this.props.fetchSingleProduct(this.props.match.params.id)
+    this.props.getProductThunk(this.props.match.params.id)
   }
 
   render() {
     const {product} = this.props
     if (!product) return 'No Product!'
     const categories = product.categories
-    console.log('product: ', product)
     return (
       <div>
         <SidebarComponent />
@@ -78,6 +72,12 @@ class SingleProduct extends React.Component {
               </Grid.Column>
             </Grid>
           </Segment>
+          <Segment>
+            <NewReviewForm
+              productId={product.id}
+              username={this.props.user.username}
+            />
+          </Segment>
         </Container>
       </div>
     )
@@ -87,12 +87,12 @@ class SingleProduct extends React.Component {
 const mapStateToProps = state => {
   return {
     product: state.product,
-    user: state.user
+    user: state.singleUser
     //pricingHistory: state.pricingHistory
   }
 }
 const mapDispatchToProps = dispatch => ({
-  fetchSingleProduct: id => dispatch(getProductThunk(id)),
+  getProductThunk: id => dispatch(getProductThunk(id)),
   getCategory: categoryTag => dispatch(getCategoriesThunk(categoryTag))
 })
 
