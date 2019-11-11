@@ -197,9 +197,20 @@ async function seed() {
       email: 'cody@email.com',
       password: '123',
       username: 'MrCody',
-      role: 'Admin'
+      role: 'Admin',
+      firstname: 'Cody',
+      lastname: 'NotAPug',
+      profilePicture: 'https://robohash.org/cody?set=set4'
     }),
-    User.create({email: 'murphy@email.com', password: '123', username: 'dude'})
+    User.create({
+      email: 'murphy@email.com',
+      password: '123',
+      username: 'dude',
+      role: 'Admin',
+      firstname: 'Murphy',
+      lastname: 'Dude',
+      profilePicture: 'https://robohash.org/murphy?set=set2'
+    })
   ])
 
   for (let i = 0; i < 30; i++) {
@@ -318,6 +329,15 @@ async function seed() {
       })
     )
   }
+  for (let i = 0; i < 20; i++) {
+    const orderProducts = await Promise.all([
+      OrderProduct.create({
+        productId: randomNum(products.length),
+        orderId: randomNum(orders.length),
+        quantity: randomNum(12)
+      })
+    ])
+  }
   for (let i = 0; i < 45; i++) {
     orders.push(
       await Order.create({
@@ -356,12 +376,11 @@ async function seed() {
     users[0].addPurchaseProfile(purchaseProfiles[1]),
     users[0].addPurchaseProfile(purchaseProfiles[2])
     // purchaseProfiles[0].addOrder(orders[0]),
-    // orders[0].addProduct(products[1], {through: {quantity: 3}}),
-    // orders[0].addProduct(products[2], {through: {quantity: 1}})
+    //orders[0].addProduct(products[1], {through: {quantity: 3}}),
+    //orders[0].addProduct(products[2], {through: {quantity: 1}})
 
     //products[2].addCategory(categories)
   ])
-
   console.log(`seeded successfully`)
 }
 

@@ -15,6 +15,7 @@ class AllOrders extends React.Component {
   handleChange = event => {
     this.setState({})
   }
+
   render() {
     const {orders} = this.props
     return (
@@ -47,27 +48,35 @@ class AllOrders extends React.Component {
                             order.purchaseProfile.user.lastname
                           }`}
                           <br />
-                          Email:
-                          {order.purchaseProfile.user.email}
+                          Email: {order.purchaseProfile.user.email}
                           <br />
-                          Address: {order.purchaseProfile.shipToAddress1}
-                          {order.purchaseProfile.shipToAddress2}
-                          <br />
+                          <List.Item>
+                            Address: {order.purchaseProfile.shipToAddress1}{' '}
+                            {order.purchaseProfile.shipToAddress2}{' '}
+                            {order.purchaseProfile.shipToCity}
+                            {', '}
+                            {order.purchaseProfile.shipToState}{' '}
+                            {order.purchaseProfile.shipToPostalCode} <br />
+                          </List.Item>
                           {/* Total: ${order.total} */}
                           <br />
                           Status: {order.status}
                           <br />
-                          This Order's Products:
-                          {order.products.map(product => {
-                            return (
-                              <NavLink
-                                key={product.id}
-                                to={`products/${product.id}`}
-                              >
-                                <li>{product.name}</li>
-                              </NavLink>
-                            )
-                          })}
+                          <Segment>
+                            This Order's Products:{' '}
+                            {order.products.map(product => {
+                              return (
+                                <NavLink
+                                  key={product.id}
+                                  to={`products/${product.id}`}
+                                >
+                                  <li>
+                                    {product.name}: {product.quantity}
+                                  </li>
+                                </NavLink>
+                              )
+                            })}
+                          </Segment>
                         </List>
                       </Container>
                     </Container>
