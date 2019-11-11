@@ -102,7 +102,7 @@ class Food {
     this.name = randomAdj(dinnerAdj) + typeString
     this.description = '' //bacon text for food? yeee
     this.quantity = randomNum(20)
-    this.isAvailable = true
+    this.isAvailable = false
     this.imageUrl = [
       `http://lorempixel.com/256/256/food/${mealInd[randomInd(mealInd.length)]}`
     ]
@@ -122,7 +122,7 @@ class Transport {
     this.description =
       'Great way of getting around. Not too expensive and wonderfully made'
     this.quantity = randomNum(5)
-    this.isAvailable = true
+    this.isAvailable = false
     this.imageUrl = [
       `http://lorempixel.com/256/256/transport/${
         transInd[randomInd(transInd.length)]
@@ -145,7 +145,7 @@ class Animal {
     this.name = randomAdj(anmlAdj) + typeString
     this.description = ''
     this.quantity = 1
-    this.isAvailable = true
+    this.isAvailable = false
     this.imageUrl = [
       `http://lorempixel.com/256/256/animals/${
         anmlInd[randomInd(anmlInd.length)]
@@ -171,7 +171,7 @@ class Tech {
     this.description =
       'Great way of getting around. Not too expensive and wonderfully made'
     this.quantity = randomNum(5)
-    this.isAvailable = true
+    this.isAvailable = false
     this.imageUrl = [
       `http://lorempixel.com/256/256/technics/${
         techInd[randomInd(techInd.length)]
@@ -183,7 +183,7 @@ class Tech {
 class Price {
   constructor() {
     this.price = randomNum(1000)
-    this.effectiveDate = Date.now() + randomNum(10000, 9999)
+    this.effectiveDate = Date.now() + randomNum(300, 100)
   }
 }
 
@@ -264,40 +264,39 @@ async function seed() {
     products.push(
       await Product.create(
         new Food(foodStrings[randomNum(foodStrings.length - 1)])
-      ).then(prod => {
+      ).then(async prod => {
         prod.addCategory(categories[0])
-        prod.createPricingHistory(new Price(1000))
+        await prod.createPricingHistory(new Price(1000))
+        prod.update({isAvailable: true})
       })
     )
     products.push(
       await Product.create(
         new Transport(transStrings[randomNum(transStrings.length - 1)])
-      ).then(prod => {
+      ).then(async prod => {
         prod.addCategory(categories[1])
-        prod.createPricingHistory(new Price(1000))
+        await prod.createPricingHistory(new Price(1000))
+        prod.update({isAvailable: true})
       })
     )
     products.push(
       await Product.create(
         new Tech(techStrings[randomNum(techStrings.length - 1)])
-      ).then(prod => {
+      ).then(async prod => {
         prod.addCategory(categories[2])
-        prod.createPricingHistory(new Price(1000))
+        await prod.createPricingHistory(new Price(1000))
+        prod.update({isAvailable: true})
       })
     )
     products.push(
       await Product.create(
         new Animal(anmlStrings[randomNum(anmlStrings.length - 1)])
-      ).then(prod => {
+      ).then(async prod => {
         prod.addCategory(categories[3])
-        prod.createPricingHistory(new Price(1000))
+        await prod.createPricingHistory(new Price(1000))
+        prod.update({isAvailable: true})
       })
     )
-  }
-  for (let i = 0; i < products.length; i++) {
-    if (i % 10 === 1) {
-      products.isAvailable = !products.isAvailable
-    }
   }
 
   const orders = []
@@ -321,7 +320,8 @@ async function seed() {
     orders.push(
       await Order.create({
         purchaseProfileId: randomNum(purchaseProfiles.length),
-        purchasedAt: Date.now() + randomNum(5000, 1000),
+        purchasedAt: Date.now() + 1000,
+        fulfilledAt: Date.now() + 300000000,
         status: 'fulfilled'
       }).then(order => {
         order.addProduct(products[randomNum(products.length)], {
