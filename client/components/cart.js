@@ -2,8 +2,8 @@ import React from 'react'
 import {getCartThunk} from '../store/cart'
 import {connect} from 'react-redux'
 import {NavLink} from 'react-router-dom'
-import {PurchaseProfile} from './'
-import {Container, Segment, Grid, Button, Header} from 'semantic-ui-react'
+import {PurchaseProfile, PayWithStripe} from './'
+import {Container, Segment, Grid, Button} from 'semantic-ui-react'
 
 export class Cart extends React.Component {
   componentDidMount() {
@@ -80,12 +80,7 @@ export class Cart extends React.Component {
                     <h3>Total Amount: ${total}</h3>
                   </div>
                   {cart.purchaseProfile ? (
-                    // YO! The below route won't exist until we add Stripe checkout!
-                    <NavLink to="/cart/checkout/payment">
-                      <Button type="button" color="green">
-                        Confirm & Pay
-                      </Button>
-                    </NavLink>
+                    <PayWithStripe order={cart} />
                   ) : (
                     <div />
                   )}
