@@ -11,7 +11,7 @@ class NewProductForm extends React.Component {
       imageUrl: '',
       description: '',
       quantity: '',
-      //price: '',
+      price: '',
       isAvailable: false
     }
     this.handleChange = this.handleChange.bind(this)
@@ -20,9 +20,13 @@ class NewProductForm extends React.Component {
   componentDidMount() {}
 
   handleChange(event) {
-    this.setState({
-      [event.target.name]: event.target.value
-    })
+    if (event.target.id && event.target.id === 'isAvailable') {
+      this.setState({isAvailable: !this.state.isAvailable})
+    } else {
+      this.setState({
+        [event.target.name]: event.target.value
+      })
+    }
   }
   handleSubmit(event) {
     event.preventDefault()
@@ -35,7 +39,7 @@ class NewProductForm extends React.Component {
       imageUrl: [],
       description: '',
       quantity: '',
-      //price: '',
+      price: '',
       isAvailable: false
     })
     //this.props.history.push('/products')
@@ -82,20 +86,27 @@ class NewProductForm extends React.Component {
             />
             {/* Price */}
             <br />
-            {/* <Form.Group>
+            <Form.Input
+              label="Price"
+              placeholder="Price"
+              name="price"
+              value={this.state.price}
+              onChange={this.handleChange}
+            />
+            <Form.Group>
               <Form.Checkbox
                 label="isAvailable"
                 name="isAvailable"
                 value={this.state.isAvailable}
                 onChange={this.handleChange}
               />
-            </Form.Group> */}
-            <Form.Input
+            </Form.Group>
+            {/*<Form.Input
               label="isAvailable"
               name="isAvailable"
               value={this.state.isAvailable}
               onChange={this.handleChange}
-            />
+            />*/}
             <br />
             <span>
               <Form.Button type="submit">Submit</Form.Button>
