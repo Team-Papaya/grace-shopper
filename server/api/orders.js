@@ -1,7 +1,50 @@
 const router = require('express').Router()
-const {Order, Product, OrderProduct, PricingHistory} = require('../db/models')
+const {
+  Order,
+  Product,
+  OrderProduct,
+  PricingHistory,
+  PurchaseProfile,
+  User
+} = require('../db/models')
 const Sequelize = require('sequelize')
 module.exports = router
+
+router.get('/', async (req, res, next) => {
+  try {
+    const orders = await Order.findAll({
+      include: [
+        {
+          model: Product,
+          include: [
+            {
+              model: PricingHistory,
+              where: {
+                effectiveDate: {
+                  [Sequelize.Op.lt]: new Date()
+                }
+              },
+              order: [['effectiveDate', 'DESC']],
+              limit: 1
+            }
+          ]
+        },
+        {
+          model: PurchaseProfile,
+          include: [
+            {
+              model: User
+            }
+          ]
+        }
+      ]
+    })
+
+    res.json(orders)
+  } catch (err) {
+    next(err)
+  }
+})
 
 router.post('/', async (req, res, next) => {
   try {
