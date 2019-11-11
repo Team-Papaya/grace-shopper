@@ -41,7 +41,6 @@ router.post('/', async (req, res, next) => {
 })
 
 router.put('/:id/contents', async (req, res, next) => {
-  console.log('REQUEST BODY IS ', req.body)
   try {
     const added = await OrderProduct.findOrCreate({
       where: {

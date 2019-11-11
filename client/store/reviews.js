@@ -27,11 +27,12 @@ export const getReviewsThunk = (queryString = '') => async dispatch => {
   }
 }
 
-export const addReviewThunk = (form, productId) => async dispatch => {
+export const addReviewThunk = (form, productId, username) => async dispatch => {
   try {
     const response = await axios.post('/api/reviews/add', {
       ...form,
-      productId: productId
+      productId: productId,
+      username: username
     })
     dispatch(addReview(response.data))
   } catch (err) {
