@@ -25,7 +25,7 @@ router.post('/:orderId/pay/stripe', async (req, res, next) => {
   let error
 
   try {
-    const {order, token} = req.body
+    const {token, order, orderTotal} = req.body
     const {
       shipToAddress1,
       shipToAddress2,
@@ -55,7 +55,7 @@ router.post('/:orderId/pay/stripe', async (req, res, next) => {
 
     const charge = await stripe.charges.create(
       {
-        amount: 51,
+        amount: orderTotal,
         currency: 'usd',
         customer: customer.id,
         receipt_email: token.email,

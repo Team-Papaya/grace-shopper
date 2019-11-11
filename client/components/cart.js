@@ -110,8 +110,8 @@ const mapDispatchToProps = dispatch => {
   return {
     //!!!!!!!!!!!!!!userId should come out of the api route and the thunk as soon as Chris and I have the same code on master!!!!!!!!!!!!!
     fetchCart: () => dispatch(getCartThunk()),
-    removeFromCart: (cartId, orderId) =>
-      dispatch(removeFromCartThunk(cartId, orderId))
+    removeFromCart: (cartId, productId) =>
+      dispatch(removeFromCartThunk(cartId, productId))
   }
 }
 
