@@ -342,7 +342,8 @@ async function seed() {
     orders.push(
       await Order.create({
         purchaseProfileId: randomNum(purchaseProfiles.length),
-        purchasedAt: Date.now() + randomNum(5000, 1000),
+        purchasedAt: Date.now() + 1000,
+        fulfilledAt: Date.now() + 300000000,
         status: 'fulfilled'
       }).then(order => {
         order.addProduct(products[randomNum(products.length)], {

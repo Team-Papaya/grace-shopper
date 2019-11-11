@@ -1,13 +1,34 @@
 const router = require('express').Router()
 const User = require('../db/models/user')
 const Review = require('../db/models/review')
+const Order = require('../db/models/order')
+const PurchaseProfile = require('../db/models/purchaseProfile')
+const Sequelize = require('sequelize')
+const Op = Sequelize.Op
 module.exports = router
 
 router.post('/login', async (req, res, next) => {
   try {
     const user = await User.findOne({
       where: {email: req.body.email},
-      include: [Review]
+      include: [
+        {
+          model: Review
+        },
+        {
+          model: PurchaseProfile,
+          include: [
+            {
+              model: Order,
+              where: {
+                status: {
+                  [Op.or]: ['purchased', 'cancelled', 'fulfilled']
+                }
+              }
+            }
+          ]
+        }
+      ]
     })
     console.log(user)
     if (!user) {
