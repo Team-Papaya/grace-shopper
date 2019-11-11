@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {Container, Segment, Grid, Header} from 'semantic-ui-react'
+import UserReviews from './user-reviews'
 
 export class UserProfile extends Component {
   render() {
@@ -37,19 +38,17 @@ export class UserProfile extends Component {
           </Grid>
         </Segment>
         <Segment>
-          <Grid rows={Array.isArray(user.reviews) ? user.reviews.length : 0}>
-            {Array.isArray(user.reviews) && user.reviews.length > 0
-              ? user.reviews.map(review => {
-                  return (
-                    <Grid.Row key={review.id}>
-                      Rating: {review.rating}
-                      <br />
-                      Text: {review.content}
-                    </Grid.Row>
-                  )
-                })
-              : 'No reviews'}
-          </Grid>
+          <Header as="h1">Your Reviews</Header>
+          <Segment>
+            <Grid rows={Array.isArray(user.reviews) ? user.reviews.length : 0}>
+              {Array.isArray(user.reviews) && user.reviews.length > 0
+                ? user.reviews.map(review => {
+                    console.log(review)
+                    return <UserReviews key={review.id} review={review} />
+                  })
+                : 'No reviews'}
+            </Grid>
+          </Segment>
         </Segment>
       </Container>
     )
