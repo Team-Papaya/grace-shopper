@@ -11,6 +11,7 @@ const AllReviews = props => {
         {reviews.map(review => {
           return (
             <li key={review.id}>
+              {/* reviewer's username should be listed */}
               <h4>
                 <Rating
                   defaultRating={review.rating}

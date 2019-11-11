@@ -1,6 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {withRouter} from 'react-router'
+import {NavLink} from 'react-router-dom'
 import {PurchaseProfile} from './'
 import {getPurchaseProfilesThunk} from '../store/purchaseProfiles'
 import {Container, Segment, Grid, Header, Form} from 'semantic-ui-react'
@@ -28,29 +29,39 @@ class SelectPurchaseProfile extends React.Component {
       })
     }
   }
-  handleSubmit(event) {
-    if (this.state.selected) {
-      /*
-          if this.state.selected, we must be using an existing purchase profile
-
-
-      */
-      try {
-        Axios.post(
-          `/api/checkout/${this.props.cartId}/existingProfile/${
-            this.state.selected
-          }`
-        )
-      } catch (err) {
-        console.error(err)
-      }
-    } else {
-      try {
-        Axios.put(`/api/checkout/${this.props.cartId}/newProfile`, this.state)
-      } catch (err) {
-        console.error(err)
+  handleSubmit() {
+    const applyPurchaseProfile = async () => {
+      if (this.state.selected) {
+        /*
+            if this.state.selected, we must be using an existing purchase profile
+        */
+        try {
+          await Axios.post(
+            `/api/checkout/${this.props.cartId}/existingProfile/${
+              this.state.selected
+            }`
+          )
+          this.props.history.push('/cart')
+        } catch (err) {
+          console.error(err)
+        }
+      } else {
+        /*
+            ...otherwise, we must create a new purchase profile and apply it to the cart
+        */
+        try {
+          await Axios.put(
+            `/api/checkout/${this.props.cartId}/newProfile`,
+            this.state
+          )
+          this.props.history.push('/cart')
+        } catch (err) {
+          console.error(err)
+        }
       }
     }
+
+    applyPurchaseProfile()
   }
 
   render() {
@@ -154,8 +165,7 @@ class SelectPurchaseProfile extends React.Component {
         ) : (
           <div />
         )}
-
-        <button type="submit">Proceed to Checkout</button>
+        <button type="submit">Use This Address</button>
       </form>
     )
   }

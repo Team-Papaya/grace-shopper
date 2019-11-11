@@ -2,7 +2,12 @@
 const router = require('express').Router()
 const Sequelize = require('sequelize')
 const Op = Sequelize.Op
-const {Order, PricingHistory, Product} = require('../db/models')
+const {
+  Order,
+  PricingHistory,
+  Product,
+  PurchaseProfile
+} = require('../db/models')
 
 router.get('/', async (req, res, next) => {
   try {
@@ -12,6 +17,9 @@ router.get('/', async (req, res, next) => {
         sessionId: req.session.id
       },
       include: [
+        {
+          model: PurchaseProfile
+        },
         {
           model: Product,
           include: [

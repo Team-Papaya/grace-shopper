@@ -30,10 +30,24 @@ export const me = () => async dispatch => {
   }
 }
 
-export const auth = (email, password, method) => async dispatch => {
+export const auth = (user, method) => async dispatch => {
   let res
   try {
-    res = await axios.post(`/auth/${method}`, {email, password})
+    if (method === 'signup') {
+      res = await axios.post(`/auth/${method}`, {
+        email: user.email,
+        password: user.password,
+        role: 'Normal',
+        username: user.username,
+        firstname: user.firstname,
+        lastname: user.lastname
+      })
+    } else {
+      res = await axios.post(`/auth/${method}`, {
+        email: user.email,
+        password: user.password
+      })
+    }
   } catch (authError) {
     return dispatch(getUser({error: authError}))
   }
@@ -50,7 +64,7 @@ export const logout = () => async dispatch => {
   try {
     await axios.post('/auth/logout')
     dispatch(removeUser())
-    history.push('/login')
+    history.push('/home')
   } catch (err) {
     console.error(err)
   }

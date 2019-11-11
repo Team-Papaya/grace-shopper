@@ -1,43 +1,41 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
-import {Link} from 'react-router-dom'
+import {NavLink} from 'react-router-dom'
 import {logout} from '../store'
 import {Menu, Container, Grid} from 'semantic-ui-react'
 
-const Navbar = ({handleClick, isLoggedIn}) => (
+const Navbar = ({handleClick, isLoggedIn, userName}) => (
   <div>
     <Menu>
-      <Container>
-        <h1>TEAM PAPA</h1>
+      <Container id="nav-container">
+        <NavLink to="/home">
+          <h1>PAPA'S ATTIC</h1>
+        </NavLink>
         <nav>
-          {isLoggedIn ? (
-            <div>
-              {/* The navbar will show these links after you log in */}
-              <Link to="/home">Home</Link>
-              {/* <a href="#" onClick={handleClick}>
-              Logout
-            </a> */}
-              <Menu.Item onClick={handleClick}>Logout</Menu.Item>
-            </div>
-          ) : (
-            <div>
-              {/* The navbar will show these links before you log in */}
-              <Grid>
-                <Menu.Item as={Link} to="/login">
-                  Login
+          <Grid id="nav-grid" centered columns={isLoggedIn ? 3 : 4}>
+            <Menu.Item>
+              Welcome{isLoggedIn
+                ? ` back, ${userName || 'friend'}!`
+                : ', friend!'}
+            </Menu.Item>
+            {isLoggedIn ? (
+              <Menu.Item onClick={handleClick}>Log Out</Menu.Item>
+            ) : (
+              <React.Fragment>
+                <Menu.Item as={NavLink} to="/login">
+                  Log In
                 </Menu.Item>
-                <Menu.Item as={Link} to="/signup">
+                <Menu.Item as={NavLink} to="/signup">
                   Sign Up
                 </Menu.Item>
-              </Grid>
-            </div>
-          )}
+              </React.Fragment>
+            )}
+            <Menu.Item as={NavLink} to="/cart">
+              Cart
+            </Menu.Item>
+          </Grid>
         </nav>
-        <Menu.Item as={Link} to="/cart">
-          Cart
-        </Menu.Item>
-        <hr />
       </Container>
     </Menu>
   </div>
@@ -48,6 +46,7 @@ const Navbar = ({handleClick, isLoggedIn}) => (
  */
 const mapState = state => {
   return {
+    userName: state.user.firstname,
     isLoggedIn: !!state.user.id
   }
 }

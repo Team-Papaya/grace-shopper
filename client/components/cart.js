@@ -2,6 +2,7 @@ import React from 'react'
 import {getCartThunk, removeFromCartThunk} from '../store/cart'
 import {connect} from 'react-redux'
 import {NavLink} from 'react-router-dom'
+import {PurchaseProfile} from './'
 import {Container, Segment, Grid, Button, Header} from 'semantic-ui-react'
 
 export class Cart extends React.Component {
@@ -18,24 +19,44 @@ export class Cart extends React.Component {
     }
     return (
       <div>
+        <br />
         <Container>
           <Segment>
             <div className="cart-topbar">
               <div>
-                <h1>Cart</h1>
+                <h1>Review Your Order</h1>
               </div>
+            </div>
+            <br />
+            {cart.purchaseProfile ? (
               <div>
-                <h3>
-                  {Array.isArray(cart.products) ? cart.products.length : '0'}{' '}
-                  Items in Cart
-                </h3>
+                <PurchaseProfile purchaseProfile={cart.purchaseProfile} />
+                <NavLink to="/cart/checkout/shipping">
+                  <Button type="button" color="blue">
+                    Change Shipping Info
+                  </Button>
+                </NavLink>
               </div>
+            ) : (
+              <div>
+                <NavLink to="/cart/checkout/shipping">
+                  <Button type="button" color="red">
+                    Select Shipping Info
+                  </Button>
+                </NavLink>
+              </div>
+            )}
+
+            <br />
+            <div>
+              <h3>
+                {Array.isArray(cart.products) ? cart.products.length : '0'}{' '}
+                Items in Cart
+              </h3>
             </div>
             <Segment>
               <Grid row={cart.products.length}>
                 {cart.products.map(product => {
-                  console.log('Prices in map: ', prices)
-                  console.log('Product in map: ', product)
                   prices[product.name] = product.pricingHistories[0].price
                   total += product.orderProduct.quantity * prices[product.name]
                   return (
@@ -59,16 +80,24 @@ export class Cart extends React.Component {
                 })}
               </Grid>
             </Segment>
+            <br />
             <div className="cart-checkout-panel">
               <Grid>
-                <div>
-                  <h3>Total Amount: ${total}</h3>
-                </div>
-                <div>
-                  <NavLink to="/cart/checkout/shipping">
-                    <Button type="button">Select Shipping Info</Button>
-                  </NavLink>
-                </div>
+                <Grid.Row>
+                  <div>
+                    <h3>Total Amount: ${total}</h3>
+                  </div>
+                  {cart.purchaseProfile ? (
+                    // YO! The below route won't exist until we add Stripe checkout!
+                    <NavLink to="/cart/checkout/payment">
+                      <Button type="button" color="green">
+                        Confirm & Pay
+                      </Button>
+                    </NavLink>
+                  ) : (
+                    <div />
+                  )}
+                </Grid.Row>
               </Grid>
             </div>
           </Segment>
