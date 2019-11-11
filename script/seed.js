@@ -8,7 +8,8 @@ const {
   Category,
   PricingHistory,
   Product,
-  Review
+  Review,
+  OrderProduct
 } = require('../server/db/models/index')
 const faker = require('faker')
 

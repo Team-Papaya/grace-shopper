@@ -2,7 +2,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {getOrdersThunk} from '../store/orders'
 import {NavLink} from 'react-router-dom'
-import {Header, Container, Image} from 'semantic-ui-react'
+import {Header, Container, Image, Segment, List} from 'semantic-ui-react'
 
 class AllOrders extends React.Component {
   constructor() {
@@ -12,56 +12,72 @@ class AllOrders extends React.Component {
   async componentDidMount() {
     await this.props.getOrdersThunk()
   }
+  handleChange = event => {
+    this.setState({})
+  }
   render() {
     const {orders} = this.props
     return (
       <div>
-        <Header>All Orders</Header>
-        {orders &&
-          orders.length &&
-          orders.map(order => {
-            return (
-              <li key={order.id}>
-                {order.purchaseProfile && order.purchaseProfile.user ? (
-                  <Container>
-                    <Image
-                      size="small"
-                      src={order.purchaseProfile.user.imageUrl}
-                    />
+        <Container>
+          <Header>All Orders</Header>
+          <h2>Filter by status:</h2>
+          <select onChange={this.handleChange}>
+            <option value="All Orders">All Orders</option>
+            <option value="Pending">Pending</option>
+            <option value="Purchased">Purchased</option>
+            <option value="Cancelled">Cancelled</option>
+            <option value="Fulfilled">Fulfilled</option>
+          </select>
+          {orders &&
+            orders.length &&
+            orders.map(order => {
+              return (
+                <Segment key={order.id}>
+                  {order.purchaseProfile && order.purchaseProfile.user ? (
                     <Container>
-                      <h3>
-                        <Header>User:</Header>
-                        {`${order.purchaseProfile.user.firstname} ${
-                          order.purchaseProfile.user.lastname
-                        }`}
-                      </h3>
-                      Email:{' '}
-                      {order.purchaseProfile && order.purchaseProfile.user
-                        ? order.purchaseProfile.user.email
-                        : 'Order has no purchase profile'}
-                      <br />
-                      Address: {order.purchaseProfile.shipToAddress1}
-                      <br />
-                      {/* Total: {`$${order.total}`} */}
-                      <br />
-                      {/* Status: {order.status} */}
-                      <br />
-                      Products in Order:
-                      {/* {order.products.map(product => {
-                    return (
-                      <NavLink key={product.id} to={`products/${product.id}`}>
-                        <li>{product.name}</li>
-                      </NavLink>
-                    )
-                  })} */}
+                      <Image
+                        size="small"
+                        src={order.purchaseProfile.user.imageUrl}
+                      />
+                      <Container>
+                        <Header>This Order's User:</Header>
+                        <List>
+                          {`${order.purchaseProfile.user.firstname} ${
+                            order.purchaseProfile.user.lastname
+                          }`}
+                          <br />
+                          Email:
+                          {order.purchaseProfile.user.email}
+                          <br />
+                          Address: {order.purchaseProfile.shipToAddress1}
+                          {order.purchaseProfile.shipToAddress2}
+                          <br />
+                          {/* Total: ${order.total} */}
+                          <br />
+                          Status: {order.status}
+                          <br />
+                          This Order's Products:
+                          {order.products.map(product => {
+                            return (
+                              <NavLink
+                                key={product.id}
+                                to={`products/${product.id}`}
+                              >
+                                <li>{product.name}</li>
+                              </NavLink>
+                            )
+                          })}
+                        </List>
+                      </Container>
                     </Container>
-                  </Container>
-                ) : (
-                  'Order has no purchase profile'
-                )}
-              </li>
-            )
-          })}
+                  ) : (
+                    'This order has no purchase profile'
+                  )}
+                </Segment>
+              )
+            })}
+        </Container>
       </div>
     )
   }
