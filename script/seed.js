@@ -329,15 +329,7 @@ async function seed() {
       })
     )
   }
-  for (let i = 0; i < 20; i++) {
-    const orderProducts = await Promise.all([
-      OrderProduct.create({
-        productId: randomNum(products.length),
-        orderId: randomNum(orders.length),
-        quantity: randomNum(12)
-      })
-    ])
-  }
+
   for (let i = 0; i < 45; i++) {
     orders.push(
       await Order.create({
@@ -354,6 +346,15 @@ async function seed() {
         })
       })
     )
+  }
+  for (let i = 1; i < 61; i++) {
+    const orderProducts = await Promise.all([
+      OrderProduct.create({
+        productId: randomNum(products.length),
+        orderId: i,
+        quantity: randomNum(12)
+      })
+    ])
   }
 
   const reviews = []

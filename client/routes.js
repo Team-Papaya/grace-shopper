@@ -15,7 +15,8 @@ import {
   SelectPurchaseProfile,
   AllUsers,
   SingleUser,
-  AllOrders
+  AllOrders,
+  SingleOrder
 } from './components'
 import {me} from './store'
 import {getCartThunk} from './store/cart.js'
@@ -53,6 +54,7 @@ class Routes extends Component {
         <Route exact path="/products" component={AllProducts} />
         <Route exact path="/reviews" component={AllReviews} />
         <Route exact path="/orders" component={AllOrders} />
+        <Route exact path="/orders/:id" component={SingleOrder} />
         <Route path="/sidebar" component={SidebarComponent} />
         <Route exact path="/users" component={AllUsers} />
         <Route exact path="/users/:id" component={SingleUser} />

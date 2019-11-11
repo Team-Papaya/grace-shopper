@@ -1,89 +1,73 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {getOrdersThunk} from '../store/orders'
+import {SingleOrder} from './'
 import {NavLink} from 'react-router-dom'
-import {Header, Container, Image, Segment, List} from 'semantic-ui-react'
+import {Header, Container, Segment} from 'semantic-ui-react'
 
 class AllOrders extends React.Component {
   constructor() {
     super()
-    this.state = {}
+    this.state = {
+      chosenOption: 'all orders'
+    }
   }
-  async componentDidMount() {
-    await this.props.getOrdersThunk()
+  componentDidMount() {
+    this.props.getOrdersThunk()
   }
   handleChange = event => {
-    this.setState({})
+    this.setState({
+      chosenOption: event.target.value
+    })
   }
+  handleOrderStatus = (allOrders, status) => {
+    const orderStatus = allOrders.filter(order => {
+      if (status === 'all orders') {
+        return allOrders
+      }
+      return order.status === status
+    })
+    return orderStatus.filter(order => {
+      return order.user !== null
+    })
+  }
+
+  // handleOrderStatus = orders => {
+  //   const purchasedStatus = orders.filter(order => {
+  //     return order.status === 'purchased'
+  //   })
+  //   const fulfilledStatus = orders.filter(order => {
+  //     return order.status === 'fulfilled'
+  //   })
+  // }
 
   render() {
     const {orders} = this.props
+    const ordersWithStatus = this.handleOrderStatus(
+      orders,
+      this.state.chosenOption
+    )
     return (
       <div>
         <Container>
           <Header>All Orders</Header>
-          <h2>Filter by status:</h2>
+          <h3>Order status:</h3>
           <select onChange={this.handleChange}>
-            <option value="All Orders">All Orders</option>
-            <option value="Pending">Pending</option>
-            <option value="Purchased">Purchased</option>
-            <option value="Cancelled">Cancelled</option>
-            <option value="Fulfilled">Fulfilled</option>
+            <option value="all orders">All Orders</option>
+            <option value="pending">Pending</option>
+            <option value="purchased">Purchased</option>
+            <option value="cancelled">Cancelled</option>
+            <option value="fulfilled">Fulfilled</option>
           </select>
-          {orders &&
-            orders.length &&
-            orders.map(order => {
+          {ordersWithStatus &&
+            ordersWithStatus.length &&
+            ordersWithStatus.map(order => {
               return (
-                <Segment key={order.id}>
-                  {order.purchaseProfile && order.purchaseProfile.user ? (
-                    <Container>
-                      <Image
-                        size="small"
-                        src={order.purchaseProfile.user.imageUrl}
-                      />
-                      <Container>
-                        <Header>This Order's User:</Header>
-                        <List>
-                          {`${order.purchaseProfile.user.firstname} ${
-                            order.purchaseProfile.user.lastname
-                          }`}
-                          <br />
-                          Email: {order.purchaseProfile.user.email}
-                          <br />
-                          <List.Item>
-                            Address: {order.purchaseProfile.shipToAddress1}{' '}
-                            {order.purchaseProfile.shipToAddress2}{' '}
-                            {order.purchaseProfile.shipToCity}
-                            {', '}
-                            {order.purchaseProfile.shipToState}{' '}
-                            {order.purchaseProfile.shipToPostalCode} <br />
-                          </List.Item>
-                          {/* Total: ${order.total} */}
-                          <br />
-                          Status: {order.status}
-                          <br />
-                          <Segment>
-                            This Order's Products:{' '}
-                            {order.products.map(product => {
-                              return (
-                                <NavLink
-                                  key={product.id}
-                                  to={`products/${product.id}`}
-                                >
-                                  <li>
-                                    {product.name}: {product.quantity}
-                                  </li>
-                                </NavLink>
-                              )
-                            })}
-                          </Segment>
-                        </List>
-                      </Container>
-                    </Container>
-                  ) : (
-                    'This order has no purchase profile'
-                  )}
-                </Segment>
+                <NavLink key={order.id} to={`orders/${order.id}`}>
+                  <div>
+                    <SingleOrder order={order} />
+                  </div>
+                </NavLink>
               )
             })}
         </Container>
@@ -93,7 +77,6 @@ class AllOrders extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  //order: state.order,
   orders: state.orders
 })
 
