@@ -1,3 +1,5 @@
+/* eslint-disable complexity */
+/* eslint-disable max-statements */
 'use strict'
 
 const db = require('../server/db')
@@ -213,6 +215,43 @@ async function seed() {
     )
   }
 
+  const purchaseProfiles = await Promise.all([
+    PurchaseProfile.create({
+      shipToName: 'me',
+      shipToAddress1: '404 W Superior',
+      shipToCity: 'Chicago',
+      shipToState: 'IL',
+      shipToPostalCode: '60666'
+    }),
+    PurchaseProfile.create({
+      shipToName: 'definitely not me',
+      shipToAddress1: '100 Sketchy Back Alley',
+      shipToCity: 'Chicago',
+      shipToState: 'IL',
+      shipToPostalCode: '60666'
+    }),
+    PurchaseProfile.create({
+      shipToName: 'Ma',
+      shipToAddress1: '403 W Superior',
+      shipToCity: 'Chicago',
+      shipToState: 'IL',
+      shipToPostalCode: '60666'
+    })
+  ])
+
+  for (let i = 0; i < users.length; i++) {
+    const newProfile = {
+      email: users[i].email,
+      shipToName: users[i].firstname + ' ' + users[i].lastname,
+      shipToAddress1: faker.address.streetAddress('###'),
+      shipToCity: faker.address.city(),
+      shipToState: faker.address.stateAbbr(),
+      shipToPostalCode: faker.address.zipCode('#####')
+    }
+    await users[i].createPurchaseProfile(newProfile)
+    purchaseProfiles.push(newProfile)
+  }
+
   const categories = await Promise.all([
     Category.create({name: 'Food'}),
     Category.create({name: 'Transport'}),
@@ -221,7 +260,6 @@ async function seed() {
   ])
 
   const products = []
-
   for (let i = 0; i < 30; i++) {
     products.push(
       await Product.create(
@@ -262,33 +300,40 @@ async function seed() {
     }
   }
 
-  const orders = await Promise.all([
-    Order.create({status: 'pending'}),
-    Order.create({status: 'purchased'})
-  ])
-  const purchaseProfiles = await Promise.all([
-    PurchaseProfile.create({
-      shipToName: 'me',
-      shipToAddress1: '404 W Superior',
-      shipToCity: 'Chicago',
-      shipToState: 'IL',
-      shipToPostalCode: '60666'
-    }),
-    PurchaseProfile.create({
-      shipToName: 'definitely not me',
-      shipToAddress1: '100 Sketchy Back Alley',
-      shipToCity: 'Chicago',
-      shipToState: 'IL',
-      shipToPostalCode: '60666'
-    }),
-    PurchaseProfile.create({
-      shipToName: 'Ma',
-      shipToAddress1: '403 W Superior',
-      shipToCity: 'Chicago',
-      shipToState: 'IL',
-      shipToPostalCode: '60666'
-    })
-  ])
+  const orders = []
+  for (let i = 0; i < 15; i++) {
+    orders.push(
+      await Order.create({
+        purchaseProfileId: randomNum(purchaseProfiles.length),
+        purchasedAt: Date.now() + randomNum(5000, 1000),
+        status: 'purchased'
+      }).then(order => {
+        order.addProduct(products[randomNum(products.length)], {
+          through: {quantity: randomNum(4)}
+        })
+        order.addProduct(products[randomNum(products.length)], {
+          through: {quantity: randomNum(4)}
+        })
+      })
+    )
+  }
+  for (let i = 0; i < 45; i++) {
+    orders.push(
+      await Order.create({
+        purchaseProfileId: randomNum(purchaseProfiles.length),
+        purchasedAt: Date.now() + randomNum(5000, 1000),
+        status: 'fulfilled'
+      }).then(order => {
+        order.addProduct(products[randomNum(products.length)], {
+          through: {quantity: randomNum(4)}
+        })
+        order.addProduct(products[randomNum(products.length)], {
+          through: {quantity: randomNum(4)}
+        })
+      })
+    )
+  }
+
   const reviews = []
   for (let i = 0; i < 150; i++) {
     reviews.push(
@@ -308,16 +353,14 @@ async function seed() {
   await Promise.all([
     users[0].addPurchaseProfile(purchaseProfiles[0]),
     users[0].addPurchaseProfile(purchaseProfiles[1]),
-    users[0].addPurchaseProfile(purchaseProfiles[2]),
-    purchaseProfiles[0].addOrder(orders[0]),
-    orders[0].addProduct(products[1], {through: {quantity: 3}}),
-    orders[0].addProduct(products[2], {through: {quantity: 1}})
+    users[0].addPurchaseProfile(purchaseProfiles[2])
+    // purchaseProfiles[0].addOrder(orders[0]),
+    // orders[0].addProduct(products[1], {through: {quantity: 3}}),
+    // orders[0].addProduct(products[2], {through: {quantity: 1}})
 
     //products[2].addCategory(categories)
   ])
 
-  console.log(`seeded ${users.length} users`)
-  console.log(`seeded ${products.length} products`)
   console.log(`seeded successfully`)
 }
 
