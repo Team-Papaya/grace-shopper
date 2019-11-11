@@ -100,6 +100,7 @@ class Food {
     this.name = randomAdj(dinnerAdj) + typeString
     this.description = '' //bacon text for food? yeee
     this.quantity = randomNum(20)
+    this.isAvailable = true
     this.imageUrl = [
       `http://lorempixel.com/256/256/food/${mealInd[randomInd(mealInd.length)]}`
     ]
@@ -119,6 +120,7 @@ class Transport {
     this.description =
       'Great way of getting around. Not too expensive and wonderfully made'
     this.quantity = randomNum(5)
+    this.isAvailable = true
     this.imageUrl = [
       `http://lorempixel.com/256/256/transport/${
         transInd[randomInd(transInd.length)]
@@ -141,6 +143,7 @@ class Animal {
     this.name = randomAdj(anmlAdj) + typeString
     this.description = ''
     this.quantity = 1
+    this.isAvailable = true
     this.imageUrl = [
       `http://lorempixel.com/256/256/animals/${
         anmlInd[randomInd(anmlInd.length)]
@@ -166,6 +169,7 @@ class Tech {
     this.description =
       'Great way of getting around. Not too expensive and wonderfully made'
     this.quantity = randomNum(5)
+    this.isAvailable = true
     this.imageUrl = [
       `http://lorempixel.com/256/256/technics/${
         techInd[randomInd(techInd.length)]
@@ -252,6 +256,11 @@ async function seed() {
       })
     )
   }
+  for (let i = 0; i < products.length; i++) {
+    if (i % 10 === 1) {
+      products.isAvailable = !products.isAvailable
+    }
+  }
 
   const orders = await Promise.all([
     Order.create({status: 'pending'}),
@@ -281,7 +290,7 @@ async function seed() {
     })
   ])
   const reviews = []
-  for (let i = 0; i < 250; i++) {
+  for (let i = 0; i < 150; i++) {
     reviews.push(
       await Review.create({
         productId: randomNum(products.length),
