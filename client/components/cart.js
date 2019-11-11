@@ -1,5 +1,5 @@
 import React from 'react'
-import {getCartThunk} from '../store/cart'
+import {getCartThunk, removeFromCartThunk} from '../store/cart'
 import {connect} from 'react-redux'
 import {NavLink} from 'react-router-dom'
 import {Container, Segment, Grid, Button, Header} from 'semantic-ui-react'
@@ -46,6 +46,14 @@ export class Cart extends React.Component {
                         Price: ${product.orderProduct.quantity *
                           prices[product.name]}
                       </h5>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          this.props.removeFromCart(cart.id, product.id)
+                        }
+                      >
+                        Remove From Cart{' '}
+                      </button>
                     </Grid.Row>
                   )
                 })}
@@ -77,7 +85,9 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     //!!!!!!!!!!!!!!userId should come out of the api route and the thunk as soon as Chris and I have the same code on master!!!!!!!!!!!!!
-    fetchCart: () => dispatch(getCartThunk())
+    fetchCart: () => dispatch(getCartThunk()),
+    removeFromCart: (cartId, orderId) =>
+      dispatch(removeFromCartThunk(cartId, orderId))
   }
 }
 

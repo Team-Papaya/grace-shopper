@@ -41,6 +41,15 @@ export const makeCartThunk = (productId, quantity) => {
       .post('/api/orders/', {productId, qty: quantity})
       .then(res => dispatch(getCart(res.data)))
 }
+const REMOVE_FROM_CART = 'REMOVE_FROM_CART'
+const removeFromCart = productId => ({type: REMOVE_FROM_CART, productId})
+
+export const removeFromCartThunk = (cartId, productId) => {
+  return dispatch =>
+    axios
+      .delete(`/api/orders/${cartId}/products/${productId}`)
+      .then(() => dispatch(removeFromCart(productId)))
+}
 
 const cartReducer = (state = {}, action) => {
   switch (action.type) {
@@ -48,6 +57,11 @@ const cartReducer = (state = {}, action) => {
       return action.cart
     case ADD_TO_CART:
       return {...state, products: [...state.products, action.relation]}
+    case REMOVE_FROM_CART:
+      return {
+        ...state,
+        products: state.products.filter(prod => prod.id != action.productId)
+      }
     default:
       return state
   }
