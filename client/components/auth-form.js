@@ -2,16 +2,21 @@ import React from 'react'
 import {connect} from 'react-redux'
 import PropTypes from 'prop-types'
 import {auth} from '../store'
+import {Form, Button} from 'semantic-ui-react'
 
 /**
- * COMPONENT
+ * COMPONENT FOR LOGIN AND SIGNUP
  */
 const AuthForm = props => {
-  const {name, displayName, handleSubmit, error} = props
+  const {name, displayName, handleLogin, handleSignup, error} = props
 
   return (
     <div>
-      <form onSubmit={handleSubmit} name={name}>
+      <Form
+        className="SignupForm"
+        onSubmit={name === 'login' ? handleLogin : handleSignup}
+        name={name}
+      >
         <div>
           <label htmlFor="email">
             <small>Email</small>
@@ -24,11 +29,33 @@ const AuthForm = props => {
           </label>
           <input name="password" type="password" />
         </div>
+        {name === 'signup' && (
+          <div>
+            <div>
+              <label htmlFor="firstname">
+                <small>First Name</small>
+              </label>
+              <input className="Signup" name="firstname" type="text" required />
+            </div>
+            <div>
+              <label htmlFor="lastname">
+                <small>Last Name</small>
+              </label>
+              <input className="signup" name="lastname" type="text" />
+            </div>
+            <div>
+              <label htmlFor="username">
+                <small>Username</small>
+              </label>
+              <input className="signup" name="username" type="text" />
+            </div>
+          </div>
+        )}
         <div>
-          <button type="submit">{displayName}</button>
+          <Button type="submit">{displayName}</Button>
         </div>
         {error && error.response && <div> {error.response.data} </div>}
-      </form>
+      </Form>
       <a href="/auth/google">{displayName} with Google</a>
     </div>
   )
@@ -59,12 +86,22 @@ const mapSignup = state => {
 
 const mapDispatch = dispatch => {
   return {
-    handleSubmit(evt) {
+    handleLogin(evt) {
       evt.preventDefault()
       const formName = evt.target.name
       const email = evt.target.email.value
       const password = evt.target.password.value
-      dispatch(auth(email, password, formName))
+      dispatch(auth({email, password}, formName))
+    },
+    handleSignup(evt) {
+      evt.preventDefault()
+      const formName = evt.target.name
+      const email = evt.target.email.value
+      const password = evt.target.password.value
+      const firstname = evt.target.firstname.value
+      const lastname = evt.target.lastname.value
+      const username = evt.target.username.value
+      dispatch(auth({email, password, firstname, lastname, username}, formName))
     }
   }
 }
@@ -78,6 +115,7 @@ export const Signup = connect(mapSignup, mapDispatch)(AuthForm)
 AuthForm.propTypes = {
   name: PropTypes.string.isRequired,
   displayName: PropTypes.string.isRequired,
-  handleSubmit: PropTypes.func.isRequired,
+  handleLogin: PropTypes.func.isRequired,
+  handleSignup: PropTypes.func.isRequired,
   error: PropTypes.object
 }
