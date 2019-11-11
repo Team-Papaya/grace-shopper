@@ -8,7 +8,8 @@ router.post('/', async (req, res, next) => {
     const {productId, qty} = req.body
 
     const order = await Order.create({
-      sessionId: req.session.id
+      sessionId: req.session.id,
+      userId: req.user ? req.user.id : null
     })
 
     const product = await Product.findByPk(Number(productId))

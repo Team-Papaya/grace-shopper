@@ -15,6 +15,7 @@ const addProduct = product => ({
 
 export const getProductsThunk = (queryString = '') => async dispatch => {
   try {
+    console.log('IN GETPRODUCTS THUNK: , ', queryString)
     const response = await axios.get(`/api/products` + queryString)
     const products = response.data
     dispatch(getProducts(products))
