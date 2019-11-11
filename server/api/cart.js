@@ -32,9 +32,10 @@ const orderIncludes = [
 
 router.get('/', async (req, res, next) => {
   try {
+    console.log(req.user)
     if (req.user) {
       const userCart = await req.user.getOrder({include: orderIncludes})
-      console.log(userCart)
+      //console.log(userCart)
       if (userCart) {
         return res.json(userCart)
       } else {
@@ -59,7 +60,7 @@ router.get('/', async (req, res, next) => {
         */
         const vPP = await Order.findOne({
           where: {
-            status: 'Pending'
+            status: 'pending'
           },
           include: [
             {
