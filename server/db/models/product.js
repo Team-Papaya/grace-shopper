@@ -40,7 +40,6 @@ const Product = db.define(
     validate: {
       async customValidation() {
         const ph = await this.getPricingHistories()
-        console.log(ph)
         if (
           this.isAvailable &&
           (!ph.length ||
