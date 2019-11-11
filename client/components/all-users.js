@@ -13,6 +13,7 @@ class AllUsers extends React.Component {
     this.props.removeUserThunk(id)
     //this.props.history.push('/users')
   }
+
   render() {
     const {users} = this.props
     return (

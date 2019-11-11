@@ -19,8 +19,7 @@ class UpdateProductForm extends React.Component {
   }
 
   /*
-   this updateProductForm is non-functional atm. It's not properly fetching the product info when componentDidMount. Probably I should look into how the .get fetches the info and somehow put that info into local state.
-  But this part of the proj is being benched to work on other goals for code review.
+   I'm not certain if the isAvailable toggle is doing anything.
   */
 
   componentDidMount() {

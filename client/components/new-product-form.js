@@ -1,8 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {addProductThunk} from '../store/products'
-//import {updateProduct, updateProductThunk} from '../store/singleProduct'
-//import {getProductThunk} from '../store/singleProduct'
 import {Form, Container, Header} from 'semantic-ui-react'
 
 class NewProductForm extends React.Component {
@@ -109,12 +107,10 @@ class NewProductForm extends React.Component {
   }
 }
 const mapStateToProps = state => ({
-  //product: state.product
   products: state.products
 })
 
 const mapDispatchToProps = dispatch => ({
-  //updateInputField: product => dispatch(updateProduct(product)),
   submitAddProduct: product => dispatch(addProductThunk(product))
 })
 export default connect(mapStateToProps, mapDispatchToProps)(NewProductForm)

@@ -4,14 +4,19 @@ const Sequelize = require('sequelize')
 const Op = Sequelize.Op
 const db = require('../db')
 
-// function adminRole (req, res, next) {
-//   if (req.user.role === 'Admin') {
-//     next()
-//   } else {
-//     console.log('You are not an admin')
-//     res.redirect('/')
-//   }
-// }
+const adminRole = (req, res, next) => {
+  try {
+    if (req.user && req.user.role === 'Admin') {
+      next()
+    } else {
+      const error = new Error('You are not an admin')
+      throw error
+      //res.redirect('/')
+    }
+  } catch (error) {
+    next(error)
+  }
+}
 
 router.get('/', async (req, res, next) => {
   const PRODUCTS_PER_PAGE = 6
@@ -88,55 +93,46 @@ router.get('/:productId', async (req, res, next) => {
   }
 })
 
-router.post(
-  '/add',
-  //  adminRole,
-  async (req, res, next) => {
-    try {
-      const product = await Product.create(req.body)
-      res.json(product)
-    } catch (err) {
-      next(err)
-    }
+router.post('/add', adminRole, async (req, res, next) => {
+  try {
+    const product = await Product.create(req.body)
+    res.json(product)
+  } catch (err) {
+    next(err)
   }
-)
+})
 
-router.put(
-  '/:productId',
-  //  adminRole,
-  async (req, res, next) => {
-    try {
-      console.log('REQUEST BODY: ', req.body)
-      const updatedProduct = await Product.findByPk(
-        Number(req.params.productId),
-        {
-          include: [
-            {
-              model: PricingHistory,
-              order: [['effectiveDate', 'DESC']],
-              where: {effectiveDate: {[Sequelize.Op.lte]: new Date()}},
-              limit: 1,
-              required: false
-            }
-          ]
-        }
-      )
-      const product = await updatedProduct.update(req.body)
-      if (
-        req.body.price &&
-        (!updatedProduct.pricingHistories.length ||
-          updatedProduct.pricingHistories[0] != req.body.price)
-      ) {
-        updatedProduct.createPricingHistory({
-          price: req.body.price,
-          effectiveDate: req.body.effectiveDate || Date.now() + 100
-        })
+router.put('/:productId', adminRole, async (req, res, next) => {
+  try {
+    const updatedProduct = await Product.findByPk(
+      Number(req.params.productId),
+      {
+        include: [
+          {
+            model: PricingHistory,
+            order: [['effectiveDate', 'DESC']],
+            where: {effectiveDate: {[Sequelize.Op.lte]: new Date()}},
+            limit: 1,
+            required: false
+          }
+        ]
       }
-      res.json(product)
-    } catch (err) {
-      next(err)
+    )
+    const product = await updatedProduct.update(req.body)
+    if (
+      req.body.price &&
+      (!updatedProduct.pricingHistories.length ||
+        updatedProduct.pricingHistories[0] != req.body.price)
+    ) {
+      updatedProduct.createPricingHistory({
+        price: req.body.price,
+        effectiveDate: req.body.effectiveDate || Date.now() + 100
+      })
     }
+    res.json(product)
+  } catch (err) {
+    next(err)
   }
-)
+})
 
 module.exports = router
