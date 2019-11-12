@@ -10,7 +10,22 @@ const {
 const Sequelize = require('sequelize')
 module.exports = router
 
-router.get('/', async (req, res, next) => {
+const adminRole = (req, res, next) => {
+  try {
+    if (req.user && req.user.role === 'Admin') {
+      next()
+    } else {
+      const error = new Error('You are not an admin')
+      throw error
+      //res.redirect('/')
+    }
+  } catch (error) {
+    next(error)
+  }
+}
+
+router.get('/', adminRole, async (req, res, next) => {
+  //Chris wrote part of this route. adminRole middleware might break something??
   try {
     const orders = await Order.findAll({
       include: [
@@ -105,7 +120,7 @@ router.put('/:id/contents', async (req, res, next) => {
   }
 })
 
-router.put('/:id/status', async (req, res, next) => {
+router.put('/:id/status', adminRole, async (req, res, next) => {
   try {
     const order = await Order.findByPk(req.params.id)
     const updatedOrder = await order.update(
