@@ -12,8 +12,15 @@ const AllReviews = props => {
         {reviews.map(review => {
           return (
             <div key={review.id}>
-              <Image src={review.user.profilePicture} size="tiny" />
-              <Header>{review.user.username}</Header>
+              {review.user && review.user.username ? (
+                <React.Fragment>
+                  <Image src={review.user.profilePicture} size="tiny" />
+                  <Header>{review.user.username}</Header>
+                </React.Fragment>
+              ) : (
+                <div />
+              )}
+
               <h4>
                 <Rating
                   defaultRating={review.rating}
