@@ -1,7 +1,49 @@
 const router = require('express').Router()
-const {Order, Product, OrderProduct, PricingHistory} = require('../db/models')
+const {
+  Order,
+  Product,
+  OrderProduct,
+  PricingHistory,
+  PurchaseProfile,
+  User
+} = require('../db/models')
 const Sequelize = require('sequelize')
 module.exports = router
+
+router.get('/', async (req, res, next) => {
+  try {
+    const orders = await Order.findAll({
+      include: [
+        {
+          model: Product,
+          include: [
+            {
+              model: PricingHistory,
+              where: {
+                effectiveDate: {
+                  [Sequelize.Op.lt]: new Date()
+                }
+              },
+              order: [['effectiveDate', 'DESC']],
+              limit: 1
+            }
+          ]
+        },
+        {
+          model: PurchaseProfile,
+          include: [
+            {
+              model: User
+            }
+          ]
+        }
+      ]
+    })
+    res.json(orders)
+  } catch (err) {
+    next(err)
+  }
+})
 
 router.post('/', async (req, res, next) => {
   try {
@@ -62,12 +104,26 @@ router.put('/:id/contents', async (req, res, next) => {
     next(err)
   }
 })
-router.put('/:id/status', (req, res, next) => {
-  Order.findByPk(req.params.id)
-    .then(dbRes => dbRes.update({status: req.body.status}))
-    .then(final => res.json(final))
-    .catch(err => next(err))
+
+router.put('/:id/status', async (req, res, next) => {
+  console.log('IN PUT ROUTE ______')
+  try {
+    const order = await Order.findByPk(req.params.id)
+    const updatedOrder = order.update({
+      status: req.body.status
+    })
+    res.json(updatedOrder)
+  } catch (err) {
+    next(err)
+  }
 })
+// router.put('/:id/status', (req, res, next) => {
+//   Order.findByPk(req.params.id)
+//     .then(dbRes => dbRes.update({status: req.body.status}))
+//     .then(final => res.json(final))
+//     .catch(err => next(err))
+// })
+
 router.delete('/:orderId/products/:productId', (req, res, next) => {
   OrderProduct.findOne({
     where: {

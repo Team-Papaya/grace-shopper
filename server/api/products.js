@@ -1,5 +1,11 @@
 const router = require('express').Router()
-const {Product, Category, PricingHistory, Review} = require('../db/models')
+const {
+  Product,
+  Category,
+  PricingHistory,
+  Review,
+  User
+} = require('../db/models')
 const Sequelize = require('sequelize')
 const Op = Sequelize.Op
 const db = require('../db')
@@ -62,7 +68,9 @@ router.get('/', async (req, res, next) => {
         limit: 1,
         required: false
       },
-      {model: Review}
+      {
+        model: Review
+      }
     ],
     where: whereClause,
     limit: PRODUCTS_PER_PAGE,
@@ -77,7 +85,7 @@ router.get('/:productId', async (req, res, next) => {
   try {
     const product = await Product.findByPk(Number(req.params.productId), {
       include: [
-        {model: Review},
+        {model: Review, include: [{model: User}]},
         {
           model: PricingHistory,
           order: [['effectiveDate', 'DESC']],
