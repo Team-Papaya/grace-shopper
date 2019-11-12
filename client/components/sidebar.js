@@ -54,7 +54,7 @@ class SidebarComponent extends React.Component {
   }
   render() {
     return (
-      <Sidebar as={Menu} icon="labeled" vertical visible width="thin">
+      <Sidebar as={Menu} inverted icon="labeled" vertical visible width="thin">
         <Menu.Item as={NavLink} to="/products">
           <Icon name="home" />
           Home
