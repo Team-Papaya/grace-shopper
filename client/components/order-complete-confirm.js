@@ -13,6 +13,7 @@ const OrderCompleteConfirm = props => {
               <h1>Purchase successful- check your email for confirmation!</h1>
             </div>
           </div>
+          <br />
           <NavLink to="/home">
             <Button type="button" color="blue">
               Browse All Products
