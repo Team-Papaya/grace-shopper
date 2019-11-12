@@ -11,7 +11,7 @@ class NewProductForm extends React.Component {
       imageUrl: '',
       description: '',
       quantity: '',
-      //price: '',
+      price: '',
       isAvailable: false
     }
     this.handleChange = this.handleChange.bind(this)
@@ -39,7 +39,7 @@ class NewProductForm extends React.Component {
       imageUrl: [],
       description: '',
       quantity: '',
-      //price: '',
+      price: '',
       isAvailable: false
     })
     //this.props.history.push('/products')
@@ -86,21 +86,28 @@ class NewProductForm extends React.Component {
             />
             {/* Price */}
             <br />
-            {/* <Form.Group>
+            <Form.Input
+              label="Price"
+              placeholder="Price"
+              name="price"
+              value={this.state.price}
+              onChange={this.handleChange}
+            />
+            <Form.Group>
               <Form.Checkbox
                 label="isAvailable"
                 name="isAvailable"
                 value={this.state.isAvailable}
                 onChange={this.handleChange}
               />
-            </Form.Group> */}
-            <Form.Checkbox
+            </Form.Group>
+            {/*<Form.Input
               label="isAvailable"
               name="isAvailable"
               id="isAvailable"
               checked={this.state.isAvailable}
               onChange={this.handleChange}
-            />
+            />*/}
             <br />
             <span>
               <Form.Button type="submit">Submit</Form.Button>
