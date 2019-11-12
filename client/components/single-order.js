@@ -2,8 +2,6 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {getOrdersThunk, updateOrderThunk} from '../store/orders'
 import {NavLink} from 'react-router-dom'
-//import {updateOrderThunk} from '../store/singleOrder'
-
 import {
   Header,
   Container,

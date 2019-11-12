@@ -3,7 +3,7 @@ import {connect} from 'react-redux'
 import {getOrdersThunk} from '../store/orders'
 import {SingleOrder} from './'
 import {NavLink} from 'react-router-dom'
-import {Header, Container, Segment} from 'semantic-ui-react'
+import {Header, Container, Form} from 'semantic-ui-react'
 
 class AllOrders extends React.Component {
   constructor() {
@@ -20,27 +20,14 @@ class AllOrders extends React.Component {
       chosenOption: event.target.value
     })
   }
-  handleOrderStatus = (allOrders, status) => {
-    const orderStatus = allOrders.filter(order => {
+  handleOrderStatus = (orders, status) => {
+    return orders.filter(order => {
       if (status === 'all orders') {
-        return allOrders
+        return order.user !== null
       }
-      return order.status === status
-    })
-    return orderStatus.filter(order => {
-      return order.user !== null
+      return order.status === status && order.user !== null
     })
   }
-
-  // handleOrderStatus = orders => {
-  //   const purchasedStatus = orders.filter(order => {
-  //     return order.status === 'purchased'
-  //   })
-  //   const fulfilledStatus = orders.filter(order => {
-  //     return order.status === 'fulfilled'
-  //   })
-  // }
-
   render() {
     const {orders} = this.props
     const ordersWithStatus = this.handleOrderStatus(
@@ -52,13 +39,15 @@ class AllOrders extends React.Component {
         <Container>
           <Header>All Orders</Header>
           <h3>Order status:</h3>
-          <select onChange={this.handleChange}>
-            <option value="all orders">All Orders</option>
-            <option value="pending">Pending</option>
-            <option value="purchased">Purchased</option>
-            <option value="cancelled">Cancelled</option>
-            <option value="fulfilled">Fulfilled</option>
-          </select>
+          <Form>
+            <select onChange={this.handleChange}>
+              <option value="all orders">All Orders</option>
+              <option value="pending">Pending</option>
+              <option value="purchased">Purchased</option>
+              <option value="cancelled">Cancelled</option>
+              <option value="fulfilled">Fulfilled</option>
+            </select>
+          </Form>
           {ordersWithStatus &&
             ordersWithStatus.length &&
             ordersWithStatus.map(order => {
