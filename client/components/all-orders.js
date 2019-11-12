@@ -63,11 +63,11 @@ class AllOrders extends React.Component {
             ordersWithStatus.length &&
             ordersWithStatus.map(order => {
               return (
-                <NavLink key={order.id} to={`orders/${order.id}`}>
-                  <div>
-                    <SingleOrder order={order} />
-                  </div>
-                </NavLink>
+                // <NavLink key={order.id} to={`orders/${order.id}`}>
+                <div key={order.id} to={`orders/${order.id}`}>
+                  <SingleOrder order={order} />
+                  {/* </NavLink> */}
+                </div>
               )
             })}
         </Container>

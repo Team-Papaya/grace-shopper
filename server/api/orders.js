@@ -39,7 +39,6 @@ router.get('/', async (req, res, next) => {
         }
       ]
     })
-
     res.json(orders)
   } catch (err) {
     next(err)
@@ -104,6 +103,7 @@ router.put('/:id/contents', async (req, res, next) => {
     next(err)
   }
 })
+
 router.put('/:id/status', (req, res, next) => {
   Order.findByPk(req.params.id)
     .then(dbRes => dbRes.update({status: req.body.status}))

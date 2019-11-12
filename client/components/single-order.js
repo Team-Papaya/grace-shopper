@@ -2,13 +2,36 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {getOrdersThunk} from '../store/orders'
 import {NavLink} from 'react-router-dom'
-import {Header, Container, Image, Segment, List} from 'semantic-ui-react'
+import {updateOrderThunk} from '../store/singleOrder'
+import {
+  Header,
+  Container,
+  Image,
+  Segment,
+  List,
+  Button,
+  Form
+} from 'semantic-ui-react'
 
 class SingleOrder extends React.Component {
   constructor() {
     super()
-    this.state = {}
+    this.state = {
+      status: ''
+    }
   }
+
+  handleChange = event => {
+    this.setState({
+      status: event.target.value
+    })
+  }
+  handleSubmit = () => {
+    event.preventDefault()
+    updateOrderThunk(this.state.status)
+  }
+  //handleChangeOrderStatus = () => {}
+
   render() {
     const {order} = this.props
     return (
@@ -36,7 +59,17 @@ class SingleOrder extends React.Component {
                   </List.Item>
                   {/* Total: ${order.total} */}
                   <br />
-                  Status: {order.status}
+                  <Form onSubmit={this.handleSubmit}>
+                    Status: {order.status} <h4>change status:</h4>
+                    <select onChange={this.handleChange}>
+                      <option value="no change">No Change</option>
+                      <option value="pending">Pending</option>
+                      <option value="purchased">Purchased</option>
+                      <option value="cancelled">Cancelled</option>
+                      <option value="fulfilled">Fulfilled</option>
+                    </select>
+                    <Button type="submit">Change Status</Button>
+                  </Form>
                   <br />
                   <Segment>
                     This Order's Products:{' '}
@@ -67,7 +100,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  getOrdersThunk: () => dispatch(getOrdersThunk())
+  getOrdersThunk: () => dispatch(getOrdersThunk()),
+  updateOrderThunk: () => dispatch(updateOrderThunk())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(SingleOrder)
