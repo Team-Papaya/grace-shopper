@@ -106,17 +106,20 @@ router.put('/:id/contents', async (req, res, next) => {
 })
 
 router.put('/:id/status', async (req, res, next) => {
-  console.log('IN PUT ROUTE ______')
   try {
     const order = await Order.findByPk(req.params.id)
-    const updatedOrder = order.update({
-      status: req.body.status
-    })
+    const updatedOrder = await order.update(
+      // req.body
+      {
+        status: req.body.status
+      }
+    )
     res.json(updatedOrder)
   } catch (err) {
     next(err)
   }
 })
+
 // router.put('/:id/status', (req, res, next) => {
 //   Order.findByPk(req.params.id)
 //     .then(dbRes => dbRes.update({status: req.body.status}))

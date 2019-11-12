@@ -1,8 +1,9 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {getOrdersThunk} from '../store/orders'
+import {getOrdersThunk, updateOrderThunk} from '../store/orders'
 import {NavLink} from 'react-router-dom'
-import {getOrderThunk, updateOrderThunk} from '../store/singleOrder'
+//import {updateOrderThunk} from '../store/singleOrder'
+
 import {
   Header,
   Container,
@@ -22,17 +23,13 @@ class SingleOrder extends React.Component {
   }
 
   handleChange = event => {
-    event.persist()
-    console.log(event)
     this.setState({
       status: event.target.value
     })
   }
   handleSubmit = async event => {
     event.preventDefault()
-    await this.props.updateOrderThunk(this.state, this.props.order.id)
-    console.log(updateOrderThunk)
-    //await updateOrderThunk(event.target.value, order)
+    await this.props.updateOrderThunk(this.state.status, this.props.order.id)
   }
 
   render() {
@@ -62,19 +59,8 @@ class SingleOrder extends React.Component {
                   </List.Item>
                   {/* Total: ${order.total} */}
                   <br />
-                  {/* <Form onSubmit={this.handleSubmit}>
-                    Status: {order.status} <h4>change status:</h4>
-                    <select onChange={this.handleChange}>
-                      <option value="no change">No Change</option>
-                      <option value="pending">Pending</option>
-                      <option value="purchased">Purchased</option>
-                      <option value="cancelled">Cancelled</option>
-                      <option value="fulfilled">Fulfilled</option>
-                    </select>
-                    <Button type="submit">Change Status</Button>
-                  </Form> */}
                   Status: {order.status}
-                  <form onSubmit={this.handleSubmit}>
+                  <Form onSubmit={this.handleSubmit}>
                     <select onChange={this.handleChange}>
                       <option value="no change">No Change</option>
                       <option value="pending">Pending</option>
@@ -83,7 +69,7 @@ class SingleOrder extends React.Component {
                       <option value="fulfilled">Fulfilled</option>
                     </select>
                     <Button type="submit">Change Status</Button>
-                  </form>
+                  </Form>
                   <br />
                   <Segment>
                     This Order's Products:{' '}
@@ -111,13 +97,11 @@ class SingleOrder extends React.Component {
 
 const mapStateToProps = state => ({
   orders: state.orders
-  //order: state.order
 })
 
 const mapDispatchToProps = dispatch => ({
   getOrdersThunk: () => dispatch(getOrdersThunk()),
   updateOrderThunk: (value, order) => dispatch(updateOrderThunk(value, order))
-  //getOrderThunk: () => dispatch(getOrderThunk())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(SingleOrder)
