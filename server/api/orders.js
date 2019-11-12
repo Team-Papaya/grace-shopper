@@ -18,7 +18,8 @@ router.post('/', async (req, res, next) => {
     const {productId, qty} = req.body
 
     const order = await Order.create({
-      sessionId: req.session.id
+      sessionId: req.session.id,
+      userId: req.user ? req.user.id : null
     })
 
     const product = await Product.findByPk(Number(productId))
@@ -76,4 +77,15 @@ router.put('/:id/status', (req, res, next) => {
     .then(dbRes => dbRes.update({status: req.body.status}))
     .then(final => res.json(final))
     .catch(err => next(err))
+})
+router.delete('/:orderId/products/:productId', (req, res, next) => {
+  OrderProduct.findOne({
+    where: {
+      orderId: Number(req.params.orderId),
+      productId: Number(req.params.productId)
+    }
+  })
+    .then(dbRes => dbRes.destroy())
+    .then(() => res.sendStatus(204))
+    .catch(next)
 })

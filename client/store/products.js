@@ -15,6 +15,7 @@ const addProduct = product => ({
 
 export const getProductsThunk = (queryString = '') => async dispatch => {
   try {
+    console.log('IN GETPRODUCTS THUNK: , ', queryString)
     const response = await axios.get(`/api/products` + queryString)
     const products = response.data
     dispatch(getProducts(products))
@@ -26,7 +27,7 @@ export const getProductsThunk = (queryString = '') => async dispatch => {
 export const addProductThunk = product => async dispatch => {
   try {
     const response = await axios.post('/api/products/add', product)
-    dispatch(addProduct(product))
+    dispatch(addProduct(response.data))
     //dispatch(addProduct(response.data))
     //consider a .get here
   } catch (err) {

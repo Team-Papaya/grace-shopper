@@ -1,9 +1,9 @@
 import React from 'react'
-import {getCartThunk} from '../store/cart'
+import {getCartThunk, removeFromCartThunk} from '../store/cart'
 import {connect} from 'react-redux'
 import {NavLink} from 'react-router-dom'
-import {PurchaseProfile} from './'
-import {Container, Segment, Grid, Button, Header} from 'semantic-ui-react'
+import {PurchaseProfile, PayWithStripe} from './'
+import {Container, Segment, Grid, Button} from 'semantic-ui-react'
 
 export class Cart extends React.Component {
   componentDidMount() {
@@ -67,6 +67,14 @@ export class Cart extends React.Component {
                         Price: ${product.orderProduct.quantity *
                           prices[product.name]}
                       </h5>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          this.props.removeFromCart(cart.id, product.id)
+                        }
+                      >
+                        Remove From Cart{' '}
+                      </button>
                     </Grid.Row>
                   )
                 })}
@@ -80,12 +88,7 @@ export class Cart extends React.Component {
                     <h3>Total Amount: ${total}</h3>
                   </div>
                   {cart.purchaseProfile ? (
-                    // YO! The below route won't exist until we add Stripe checkout!
-                    <NavLink to="/cart/checkout/payment">
-                      <Button type="button" color="green">
-                        Confirm & Pay
-                      </Button>
-                    </NavLink>
+                    <PayWithStripe order={cart} />
                   ) : (
                     <div />
                   )}
@@ -106,7 +109,9 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     //!!!!!!!!!!!!!!userId should come out of the api route and the thunk as soon as Chris and I have the same code on master!!!!!!!!!!!!!
-    fetchCart: () => dispatch(getCartThunk())
+    fetchCart: () => dispatch(getCartThunk()),
+    removeFromCart: (cartId, productId) =>
+      dispatch(removeFromCartThunk(cartId, productId))
   }
 }
 

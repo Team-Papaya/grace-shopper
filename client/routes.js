@@ -14,7 +14,8 @@ import {
   Cart,
   SelectPurchaseProfile,
   AllUsers,
-  SingleUser
+  SingleUser,
+  OrderCompleteConfirm
 } from './components'
 import {me} from './store'
 import {getCartThunk} from './store/cart.js'
@@ -43,6 +44,7 @@ class Routes extends Component {
             <SelectPurchaseProfile key={isLoggedIn} {...renderProps} />
           )}
         />
+        <Route exact path="/order/confirm" component={OrderCompleteConfirm} />
         <Route exact path="/products/add" component={NewProductForm} />
         <Route exact path="/products/:id" component={SingleProduct} />
         <Route
