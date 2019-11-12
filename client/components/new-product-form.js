@@ -104,7 +104,8 @@ class NewProductForm extends React.Component {
             {/*<Form.Input
               label="isAvailable"
               name="isAvailable"
-              value={this.state.isAvailable}
+              id="isAvailable"
+              checked={this.state.isAvailable}
               onChange={this.handleChange}
             />*/}
             <br />

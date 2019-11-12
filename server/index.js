@@ -1,5 +1,7 @@
 const path = require('path')
 const express = require('express')
+const Sequelize = require('sequelize')
+const Op = Sequelize.Op
 const morgan = require('morgan')
 const compression = require('compression')
 const session = require('express-session')
@@ -7,6 +9,8 @@ const passport = require('passport')
 const SequelizeStore = require('connect-session-sequelize')(session.Store)
 const db = require('./db')
 const Review = require('./db/models/review')
+const PurchaseProfile = require('./db/models/purchaseProfile')
+const Order = require('./db/models/order')
 const sessionStore = new SequelizeStore({db})
 const PORT = process.env.PORT || 8080
 const app = express()
@@ -34,7 +38,26 @@ passport.serializeUser((user, done) => done(null, user.id))
 
 passport.deserializeUser(async (id, done) => {
   try {
-    const user = await db.models.user.findByPk(id, {include: [Review]})
+    const user = await db.models.user.findByPk(id, {
+      include: [
+        {
+          model: Review
+        },
+        {
+          model: PurchaseProfile,
+          include: [
+            {
+              model: Order,
+              where: {
+                status: {
+                  [Op.or]: ['purchased', 'cancelled', 'fulfilled']
+                }
+              }
+            }
+          ]
+        }
+      ]
+    })
     done(null, user)
   } catch (err) {
     done(err)
