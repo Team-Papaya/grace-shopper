@@ -106,6 +106,7 @@ router.put('/:id/contents', async (req, res, next) => {
 })
 
 router.put('/:id/status', async (req, res, next) => {
+  console.log('IN PUT ROUTE ______')
   try {
     const order = await Order.findByPk(req.params.id)
     const updatedOrder = order.update({

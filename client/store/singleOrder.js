@@ -23,8 +23,10 @@ export const getOrderThunk = id => async dispatch => {
 }
 
 export const updateOrderThunk = (value, order) => async dispatch => {
+  console.log('value: ', value)
+  console.log('order: ', order)
   try {
-    const {data} = await axios.put(`/api/orders/${order.id}/status`, {
+    const {data} = await axios.put(`/api/orders/${order}/status`, {
       status: value
     })
     dispatch(updateOrder(data))

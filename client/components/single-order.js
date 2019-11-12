@@ -22,13 +22,15 @@ class SingleOrder extends React.Component {
   }
 
   handleChange = event => {
+    event.persist()
+    console.log(event)
     this.setState({
       status: event.target.value
     })
   }
   handleSubmit = async event => {
     event.preventDefault()
-    await updateOrderThunk(this.state, this.props.order.id)
+    await this.props.updateOrderThunk(this.state, this.props.order.id)
     console.log(updateOrderThunk)
     //await updateOrderThunk(event.target.value, order)
   }
@@ -73,7 +75,7 @@ class SingleOrder extends React.Component {
                   </Form> */}
                   Status: {order.status}
                   <form onSubmit={this.handleSubmit}>
-                    <select>
+                    <select onChange={this.handleChange}>
                       <option value="no change">No Change</option>
                       <option value="pending">Pending</option>
                       <option value="purchased">Purchased</option>
