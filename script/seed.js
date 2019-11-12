@@ -199,7 +199,7 @@ async function seed() {
       username: 'MrCody',
       role: 'Admin',
       firstname: 'Cody',
-      lastname: 'NotAPug',
+      lastname: 'Not-A-Pug',
       profilePicture: 'https://robohash.org/cody?set=set4'
     }),
     User.create({
@@ -295,7 +295,7 @@ async function seed() {
       await Product.create(
         new Tech(techStrings[randomNum(techStrings.length - 1)])
       ).then(async prod => {
-        prod.addCategory(categories[2])
+        prod.addCategory(categories[3])
         await prod.createPricingHistory(new Price(1000))
         prod.update({isAvailable: true})
       })
@@ -304,7 +304,7 @@ async function seed() {
       await Product.create(
         new Animal(anmlStrings[randomNum(anmlStrings.length - 1)])
       ).then(async prod => {
-        prod.addCategory(categories[3])
+        prod.addCategory(categories[2])
         await prod.createPricingHistory(new Price(1000))
         prod.update({isAvailable: true})
       })

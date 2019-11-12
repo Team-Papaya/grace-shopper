@@ -54,7 +54,7 @@ class SidebarComponent extends React.Component {
   }
   render() {
     return (
-      <Sidebar as={Menu} icon="labeled" vertical visible width="thin">
+      <Sidebar as={Menu} inverted icon="labeled" vertical visible width="thin">
         <Menu.Item as={NavLink} to="/products">
           <Icon name="home" />
           Home
@@ -62,6 +62,7 @@ class SidebarComponent extends React.Component {
         <Form onSubmit={this.handleSubmit} onChange={this.handleChange}>
           <input
             name="searchstring"
+            placeholder="Search"
             type="text"
             value={this.state.searchstring}
           />
@@ -74,6 +75,7 @@ class SidebarComponent extends React.Component {
           <Menu.Item>
             <Icon name="tags" />
             Select Categories:
+            <hr />
             {this.props.categories.map(cat => (
               <React.Fragment key={cat.id}>
                 <label htmlFor={`category${cat.id}`}>{cat.name}</label>
