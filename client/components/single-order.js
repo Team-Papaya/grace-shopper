@@ -1,8 +1,9 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {getOrdersThunk} from '../store/orders'
+import {getOrdersThunk, updateOrderThunk} from '../store/orders'
 import {NavLink} from 'react-router-dom'
-import {getOrderThunk, updateOrderThunk} from '../store/singleOrder'
+//import {updateOrderThunk} from '../store/singleOrder'
+
 import {
   Header,
   Container,
@@ -96,13 +97,11 @@ class SingleOrder extends React.Component {
 
 const mapStateToProps = state => ({
   orders: state.orders
-  //order: state.order
 })
 
 const mapDispatchToProps = dispatch => ({
   getOrdersThunk: () => dispatch(getOrdersThunk()),
   updateOrderThunk: (value, order) => dispatch(updateOrderThunk(value, order))
-  //getOrderThunk: () => dispatch(getOrderThunk())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(SingleOrder)
