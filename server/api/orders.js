@@ -59,7 +59,6 @@ router.get('/', adminRole, async (req, res, next) => {
     next(err)
   }
 })
-
 router.post('/', async (req, res, next) => {
   try {
     const {productId, qty} = req.body
