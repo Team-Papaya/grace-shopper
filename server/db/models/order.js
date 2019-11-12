@@ -14,15 +14,11 @@ const Order = db.define(
     fulfilledAt: Sequelize.DATE
   },
   {
-    hooks: {
-      afterUpdate: orderInstance => {
-        console.log('orderInstance: ', orderInstance)
-        if (
-          orderInstance.status === 'purchased' &&
-          orderInstance.purchasedAt === null
-        )
-          return orderInstance.update({purchasedAt: new Date()})
-        return orderInstance
+    beforeValidate: {
+      enforcePathUQ() {
+        if (this.purchaseProfileId) {
+          this.userId = null
+        }
       }
     }
   }

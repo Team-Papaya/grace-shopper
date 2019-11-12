@@ -104,6 +104,12 @@ router.get('/:productId', async (req, res, next) => {
 router.post('/add', adminRole, async (req, res, next) => {
   try {
     const product = await Product.create(req.body)
+    if (req.body.price) {
+      product.createPricingHistory({
+        price: req.body.price,
+        effectiveDate: req.body.effectiveDate || Date.now() + 100
+      })
+    }
     res.json(product)
   } catch (err) {
     next(err)
