@@ -3,7 +3,7 @@ import {getCartThunk, removeFromCartThunk} from '../store/cart'
 import {connect} from 'react-redux'
 import {NavLink} from 'react-router-dom'
 import {PurchaseProfile, PayWithStripe} from './'
-import {Container, Segment, Grid, Button} from 'semantic-ui-react'
+import {Container, Segment, Grid, Button, Image} from 'semantic-ui-react'
 
 export class Cart extends React.Component {
   componentDidMount() {
@@ -51,7 +51,11 @@ export class Cart extends React.Component {
                   <div>
                     <PurchaseProfile purchaseProfile={cart.purchaseProfile} />
                     <NavLink to="/cart/checkout/shipping">
-                      <Button type="button" color="blue">
+                      <Button
+                        style={{marginTop: 10}}
+                        type="button"
+                        color="blue"
+                      >
                         Change Shipping Info
                       </Button>
                     </NavLink>
@@ -79,26 +83,39 @@ export class Cart extends React.Component {
                       total +=
                         product.orderProduct.quantity * prices[product.name]
                       return (
-                        <Grid.Row key={product.id}>
-                          <h3>{product.name}</h3>
-                          <h5>Qty: {product.orderProduct.quantity}</h5>{' '}
-                          <h5>
-                            Price: ${product.orderProduct.quantity *
-                              prices[product.name]}
-                          </h5>
-                          <button
-                            type="button"
-                            onClick={() =>
-                              this.props.removeFromCart(cart.id, product.id)
-                            }
-                          >
-                            Remove From Cart{' '}
-                          </button>
-                        </Grid.Row>
+                        <Container>
+                          <Grid.Row key={product.id}>
+                            <Segment style={{marginTop: 10, marginBottom: 10}}>
+                              <div>
+                                <Image size="small" src={product.imageUrl} />
+                              </div>
+                              <div>
+                                <h3>{product.name}</h3>
+                                <h5>
+                                  Qty: {product.orderProduct.quantity}
+                                </h5>{' '}
+                                <h5>
+                                  Price: $
+                                  {product.orderProduct.quantity *
+                                    prices[product.name]}
+                                </h5>
+                              </div>
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  this.props.removeFromCart(cart.id, product.id)
+                                }
+                              >
+                                Remove From Cart{' '}
+                              </button>
+                            </Segment>
+                          </Grid.Row>
+                        </Container>
                       )
                     })}
                   </Grid>
                 </Segment>
+
                 <br />
                 <div className="cart-checkout-panel">
                   <Grid>
