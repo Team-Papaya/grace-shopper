@@ -3,9 +3,9 @@ import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {NavLink} from 'react-router-dom'
 import {logout} from '../store'
-import {Menu, Container, Grid} from 'semantic-ui-react'
+import {Menu, Container, Grid, Dropdown} from 'semantic-ui-react'
 
-const Navbar = ({handleClick, isLoggedIn, userName}) => (
+const Navbar = ({handleClick, isLoggedIn, userName, role}) => (
   <div>
     <Menu>
       <Container id="nav-container">
@@ -15,9 +15,29 @@ const Navbar = ({handleClick, isLoggedIn, userName}) => (
         <nav>
           <Grid id="nav-grid" centered columns={4}>
             <Menu.Item>
-              Welcome{isLoggedIn
-                ? ` back, ${userName || 'friend'}!`
-                : ', friend!'}
+              Welcome
+              {isLoggedIn ? ` back, ${userName || 'friend'}!` : ', friend!'}
+            </Menu.Item>
+            <Menu.Item>
+              {role === 'Admin' ? (
+                <React.Fragment>
+                  <Dropdown text="Admin">
+                    <Dropdown.Menu>
+                      <Dropdown.Item as={NavLink} to="/products/add">
+                        Add New Product
+                      </Dropdown.Item>
+                      <Dropdown.Item as={NavLink} to="/users">
+                        All Users
+                      </Dropdown.Item>
+                      <Dropdown.Item as={NavLink} to="/orders">
+                        Orders
+                      </Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </React.Fragment>
+              ) : (
+                <div />
+              )}
             </Menu.Item>
             {isLoggedIn ? (
               <React.Fragment>
@@ -58,7 +78,8 @@ const Navbar = ({handleClick, isLoggedIn, userName}) => (
 const mapState = state => {
   return {
     userName: state.user.firstname,
-    isLoggedIn: !!state.user.id
+    isLoggedIn: !!state.user.id,
+    role: state.user.role
   }
 }
 
@@ -77,5 +98,6 @@ export default connect(mapState, mapDispatch)(Navbar)
  */
 Navbar.propTypes = {
   handleClick: PropTypes.func.isRequired,
-  isLoggedIn: PropTypes.bool.isRequired
+  isLoggedIn: PropTypes.bool.isRequired,
+  role: PropTypes.string
 }
