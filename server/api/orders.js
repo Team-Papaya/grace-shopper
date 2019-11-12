@@ -122,6 +122,9 @@ router.put('/:id/contents', async (req, res, next) => {
 
 router.put('/:id/status', adminRole, async (req, res, next) => {
   try {
+    if (req.body.status === 'pending') {
+      throw new Error(401)
+    }
     const order = await Order.findByPk(req.params.id)
     const updatedOrder = await order.update(
       // req.body
