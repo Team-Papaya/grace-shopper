@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 const router = require('express').Router()
 const stripe = require('stripe')(process.env.STRIPE_SECRET)
-const {Order, PurchaseProfile} = require('../db/models')
+const {Order, PurchaseProfile, OrderProduct} = require('../db/models')
 const sgMail = require('@sendgrid/mail')
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 module.exports = router
@@ -77,7 +77,33 @@ router.post('/:orderId/pay/stripe', async (req, res, next) => {
     console.log('Charge: ', {charge})
 
     const orderToUpdate = await Order.findByPk(req.params.orderId)
-    await orderToUpdate.update({status: 'purchased'})
+    await orderToUpdate.update({
+      status: 'purchased',
+      totalPriceAtPurchase: orderTotal
+    })
+
+    const orderProducts = await OrderProduct.findAll({
+      where: {
+        orderId: order.id
+      }
+    })
+
+    const opPricingHelper = req.body.order.products.reduce((acc, product) => {
+      return {
+        ...acc,
+        [product.id]: product.pricingHistories[0].price
+      }
+    }, {})
+
+    await Promise.all(
+      orderProducts.map(oP => {
+        return oP.update({
+          unitPriceAtPurchase: opPricingHelper[oP.productId],
+          totalPriceAtPurchase: opPricingHelper[oP.productId] * oP.quantity
+        })
+      })
+    )
+
     try {
       const msg = {
         to: email,

@@ -11,7 +11,8 @@ const Order = db.define(
     sessionId: Sequelize.STRING,
     purchasedAt: Sequelize.DATE,
     cancelledAt: Sequelize.DATE,
-    fulfilledAt: Sequelize.DATE
+    fulfilledAt: Sequelize.DATE,
+    totalPriceAtPurchase: Sequelize.INTEGER
   },
   {
     hooks: {

@@ -8,7 +8,9 @@ const OrderProduct = db.define('orderProduct', {
     validate: {
       min: 0
     }
-  }
+  },
+  unitPriceAtPurchase: Sequelize.INTEGER,
+  totalPriceAtPurchase: Sequelize.INTEGER
 })
 
 module.exports = OrderProduct
