@@ -25,7 +25,7 @@ class AllUsers extends React.Component {
               <li key={user.id}>
                 <NavLink to={`users/${user.id}`}>
                   <List>
-                    <Image src={user.imageUrl} />
+                    <Image size="small" src={user.profilePicture} />
                     <List.Item>Email: {user.email}</List.Item>
                     <List.Item>Username: {user.username}</List.Item>
                     <List.Item>First Name: {user.firstname}</List.Item>

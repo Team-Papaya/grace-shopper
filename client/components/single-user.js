@@ -20,7 +20,7 @@ class SingleUser extends React.Component {
       <div>
         <Header>User</Header>
         <List>
-          <Image src={user.imageUrl} />
+          <Image size="large" src={user.profilePicture} />
           <List.Item>Email: {user.email}</List.Item>
           <List.Item>Username: {user.username}</List.Item>
           <List.Item>First Name: {user.firstname}</List.Item>
