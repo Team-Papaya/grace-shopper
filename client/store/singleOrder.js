@@ -1,5 +1,4 @@
 import axios from 'axios'
-import {runInNewContext} from 'vm'
 
 const GET_ORDER = 'GET_ORDER'
 
@@ -29,3 +28,5 @@ const singleOrderReducer = (state = initialState, action) => {
       return state
   }
 }
+
+export default singleOrderReducer
