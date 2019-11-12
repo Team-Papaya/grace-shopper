@@ -76,6 +76,7 @@ export class UserProfile extends Component {
           <Segment>
             {Array.isArray(user.purchaseProfiles) ? (
               <UserOrders
+                user={user}
                 allOrders={allOrders}
                 purchasedOrders={purchasedOrders}
                 fulfilledOrders={fulfilledOrders}

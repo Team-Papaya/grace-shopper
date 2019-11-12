@@ -1,5 +1,6 @@
 import React from 'react'
 import {Grid} from 'semantic-ui-react'
+import {NavLink} from 'react-router-dom'
 
 const UserOrders = props => {
   console.log('rendering')
@@ -8,35 +9,37 @@ const UserOrders = props => {
     <Grid rows={allOrders.length}>
       {purchasedOrders.map(order => {
         return (
-          <Grid.Row
-            key={order.id}
-            style={{
-              margin: 20,
-              border: '1px solid gray',
-              padding: 10,
-              borderRadius: 10
-            }}
-          >
-            Status: {order.status} <hr />
-            Purchased: {order.purchasedAt.slice(0, 10)} <hr />
-          </Grid.Row>
+          <NavLink to={`/orders/${order.id}`} key={order.id}>
+            <Grid.Row
+              style={{
+                margin: 20,
+                border: '1px solid gray',
+                padding: 10,
+                borderRadius: 10
+              }}
+            >
+              Status: {order.status} <hr />
+              Purchased: {order.purchasedAt.slice(0, 10)} <hr />
+            </Grid.Row>
+          </NavLink>
         )
       })}
       {fulfilledOrders.map(order => {
         return (
-          <Grid.Row
-            key={order.id}
-            style={{
-              margin: 20,
-              border: '1px solid gray',
-              padding: 10,
-              borderRadius: 10
-            }}
-          >
-            {' '}
-            Status: {order.status} <hr />
-            Fulfilled: {order.fulfilledAt.slice(0, 10)} <hr />
-          </Grid.Row>
+          <NavLink to={`/orders/${order.id}`} key={order.id}>
+            <Grid.Row
+              style={{
+                margin: 20,
+                border: '1px solid gray',
+                padding: 10,
+                borderRadius: 10
+              }}
+            >
+              {' '}
+              Status: {order.status} <hr />
+              Fulfilled: {order.fulfilledAt.slice(0, 10)} <hr />
+            </Grid.Row>
+          </NavLink>
         )
       })}
     </Grid>
