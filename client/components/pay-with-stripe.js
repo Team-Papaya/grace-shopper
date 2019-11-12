@@ -26,7 +26,6 @@ const PayWithStripe = props => {
         orderTotal
       })
 
-      toast('Success! Check email for details', {type: 'success'})
       clearCart()
       props.history.push('/order/confirm/') // Refactor later to include order summary
     } catch (err) {
