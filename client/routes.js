@@ -16,7 +16,7 @@ import {
   AllUsers,
   SingleUser,
   AllOrders,
-  SingleOrder,
+  SingleUserOrder,
   OrderCompleteConfirm
 } from './components'
 import {me} from './store'
@@ -37,7 +37,6 @@ class Routes extends Component {
       <Switch>
         {/* Routes placed here are available to all visitors */}
         <Route path="/profile" component={UserProfile} />
-        <Route exact path="/orders/:id" />
         <Route exact path="/cart" component={Cart} />
         <Route
           exact
@@ -57,7 +56,7 @@ class Routes extends Component {
         <Route exact path="/products" component={AllProducts} />
         <Route exact path="/reviews" component={AllReviews} />
         <Route exact path="/orders" component={AllOrders} />
-        <Route exact path="/orders/:id" component={SingleOrder} />
+        <Route exact path="/orders/:id" component={SingleUserOrder} />
         <Route path="/sidebar" component={SidebarComponent} />
         <Route exact path="/users" component={AllUsers} />
         <Route exact path="/users/:id" component={SingleUser} />
