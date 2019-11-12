@@ -63,7 +63,7 @@ class SingleOrder extends React.Component {
                   <Form onSubmit={this.handleSubmit}>
                     <select onChange={this.handleChange}>
                       <option value="no change">No Change</option>
-                      <option value="pending">Pending</option>
+                      {/* <option value="pending">Pending</option> */}
                       <option value="purchased">Purchased</option>
                       <option value="cancelled">Cancelled</option>
                       <option value="fulfilled">Fulfilled</option>
