@@ -1,5 +1,7 @@
 /* eslint-disable camelcase */
 import React from 'react'
+import {connect} from 'react-redux'
+import {removeCart} from '../store/cart'
 import StripeCheckout from 'react-stripe-checkout'
 import axios from 'axios'
 import {withRouter} from 'react-router-dom'
@@ -8,7 +10,7 @@ import {toast} from 'react-toastify'
 toast.configure()
 
 const PayWithStripe = props => {
-  const {order} = props
+  const {order, clearCart} = props
 
   const orderTotal = order.products.reduce((acc, product) => {
     return (
@@ -25,6 +27,7 @@ const PayWithStripe = props => {
       })
 
       toast('Success! Check email for details', {type: 'success'})
+      clearCart()
       props.history.push('/order/confirm/') // Refactor later to include order summary
     } catch (err) {
       console.error(err)
@@ -46,4 +49,10 @@ const PayWithStripe = props => {
   )
 }
 
-export default withRouter(PayWithStripe)
+const mapDispatch = dispatch => {
+  return {
+    clearCart: () => dispatch(removeCart())
+  }
+}
+
+export default withRouter(connect(null, mapDispatch)(PayWithStripe))

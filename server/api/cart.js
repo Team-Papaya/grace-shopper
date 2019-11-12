@@ -32,7 +32,7 @@ const {
 
 router.get('/', async (req, res, next) => {
   try {
-    console.log(req.user)
+    // console.log(req.user)
     if (req.user) {
       const userCart = await req.user.getOrder({
         include: [
@@ -117,7 +117,26 @@ router.get('/', async (req, res, next) => {
         status: 'pending',
         sessionId: req.session.id
       },
-      include: orderIncludes
+      include: [
+        {
+          model: PurchaseProfile
+        },
+        {
+          model: Product,
+          include: [
+            {
+              model: PricingHistory,
+              where: {
+                effectiveDate: {
+                  [Op.lt]: new Date()
+                }
+              },
+              order: [['effectiveDate', 'DESC']],
+              limit: 1
+            }
+          ]
+        }
+      ]
     })
     if (!cart) res.json({})
     else res.json(cart)

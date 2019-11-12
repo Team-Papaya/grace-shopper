@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 const GET_CART = 'GET_CART'
+const REMOVE_CART = 'REMOVE_CART'
 
 export const getCart = cart => {
   return {
@@ -51,6 +52,10 @@ export const removeFromCartThunk = (cartId, productId) => {
       .then(() => dispatch(removeFromCart(productId)))
 }
 
+export const removeCart = () => {
+  return {type: REMOVE_CART}
+}
+
 const cartReducer = (state = {}, action) => {
   switch (action.type) {
     case GET_CART:
@@ -62,6 +67,8 @@ const cartReducer = (state = {}, action) => {
         ...state,
         products: state.products.filter(prod => prod.id != action.productId)
       }
+    case REMOVE_CART:
+      return {}
     default:
       return state
   }

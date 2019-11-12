@@ -51,6 +51,7 @@ router.post('/:orderId/pay/stripe', async (req, res, next) => {
     // Idempotency key is used to prevent duplicate purchase on same order.
     const idempotency_key =
       '' +
+      order.createdAt +
       order.id +
       order.products.reduce((acc, product) => {
         return acc + 'PID' + product.id + 'QTY' + product.orderProduct.quantity
