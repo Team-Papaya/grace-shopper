@@ -5,7 +5,6 @@ import {Segment, Container, Grid} from 'semantic-ui-react'
 
 class SingleUserOrder extends React.Component {
   render() {
-    console.log(this.props)
     const {user} = this.props
     const purchaseProfiles = user.purchaseProfiles
     let allOrders = []
@@ -13,50 +12,46 @@ class SingleUserOrder extends React.Component {
       return <div />
     }
     if (Array.isArray(purchaseProfiles) && purchaseProfiles.length > 0) {
-      if (Array.isArray(purchaseProfiles) && purchaseProfiles.length > 0) {
-        purchaseProfiles.forEach(profile => {
-          allOrders = [...allOrders, ...profile.orders]
-        })
-      }
-      console.log(allOrders)
+      purchaseProfiles.forEach(profile => {
+        allOrders = [...allOrders, ...profile.orders]
+      })
       const selectedOrder = allOrders.filter(order => {
         return order.id === Number(this.props.match.params.id)
       })[0]
       if (!selectedOrder) {
         return <div />
       }
-      console.log(purchaseProfiles)
       const pProfile = purchaseProfiles.filter(profile => {
         return profile.id === selectedOrder.purchaseProfileId
       })[0]
       if (!pProfile) {
         return <div />
       }
-      console.log(selectedOrder)
-      console.log(pProfile)
       return (
         <Container>
           <Segment>
             <Grid rows={2}>
               <Grid.Row>
                 <div>
-                  <div>Order #{selectedOrder.id * 3333}</div>
+                  <div>Order #{selectedOrder.id}</div>
                   <div>
                     Order purchased: {selectedOrder.purchasedAt.slice(0, 10)}
                   </div>
                   <div>Status: {selectedOrder.status}</div>
                 </div>
                 <Segment>
+                  Shipping Information:
+                  <br />
                   {pProfile.shipToName}
-                  {'\n'}
+                  <br />
                   {pProfile.shipToAddress1}
-                  {'\n'}
+                  <br />
                   {pProfile.shipToCity}
-                  {'\n'}
+                  <br />
                   {pProfile.shipToState}
-                  {'\n'}
+                  <br />
                   {pProfile.shipToPostalCode}
-                  {'\n'}
+                  <br />
                 </Segment>
               </Grid.Row>
               <Segment>
