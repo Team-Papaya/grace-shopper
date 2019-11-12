@@ -3,6 +3,16 @@ const {Order, Product, OrderProduct, PricingHistory} = require('../db/models')
 const Sequelize = require('sequelize')
 module.exports = router
 
+router.get('/:id', async (req, res, next) => {
+  try {
+    const order = await Order.findByPk(req.params.id, {
+      include: [Product]
+    })
+  } catch (err) {
+    console.log(err)
+  }
+})
+
 router.post('/', async (req, res, next) => {
   try {
     const {productId, qty} = req.body
