@@ -25,6 +25,7 @@ const adminRole = (req, res, next) => {
 }
 
 router.get('/', adminRole, async (req, res, next) => {
+  //Chris wrote part of this route. adminRole middleware might break something??
   try {
     const orders = await Order.findAll({
       include: [
