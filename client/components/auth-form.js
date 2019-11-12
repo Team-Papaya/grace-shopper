@@ -3,6 +3,7 @@ import {connect} from 'react-redux'
 import PropTypes from 'prop-types'
 import {auth} from '../store'
 import {Form, Button} from 'semantic-ui-react'
+import {getCartThunk} from '../store/cart'
 
 /**
  * COMPONENT FOR LOGIN AND SIGNUP
@@ -91,7 +92,9 @@ const mapDispatch = dispatch => {
       const formName = evt.target.name
       const email = evt.target.email.value
       const password = evt.target.password.value
-      dispatch(auth({email, password}, formName))
+      dispatch(auth({email, password}, formName)).then(() =>
+        dispatch(getCartThunk())
+      )
     },
     handleSignup(evt) {
       evt.preventDefault()

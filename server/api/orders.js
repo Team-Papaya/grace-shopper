@@ -50,7 +50,8 @@ router.post('/', async (req, res, next) => {
     const {productId, qty} = req.body
 
     const order = await Order.create({
-      sessionId: req.session.id
+      sessionId: req.session.id,
+      userId: req.user ? req.user.id : null
     })
 
     const product = await Product.findByPk(Number(productId))
@@ -104,7 +105,7 @@ router.put('/:id/contents', async (req, res, next) => {
   }
 })
 
-router.put('/:id', async (req, res, next) => {
+router.put('/:id/status', async (req, res, next) => {
   try {
     const order = await Order.findByPk(req.params.id)
     const updatedOrder = order.update({

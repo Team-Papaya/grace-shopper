@@ -22,15 +22,18 @@ export const getOrderThunk = id => async dispatch => {
   }
 }
 
-export const updateOrderThunk = (order, status) => async dispatch => {
+export const updateOrderThunk = (value, order) => async dispatch => {
   try {
-    const response = await axios.put(`/api/orders/${order.id}/`, status)
-    dispatch(updateOrder(response.status))
+    const {data} = await axios.put(`/api/orders/${order.id}/status`, {
+      status: value
+    })
+    dispatch(updateOrder(data))
     //consider get orders
   } catch (err) {
     console.error(err)
   }
 }
+
 // export const updateOrderThunk = (order, status) => async dispatch => {
 //   try {
 //     const response = await axios.put(`/api/orders/${order.id}/status`, status)

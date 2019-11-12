@@ -12,6 +12,7 @@ import categories from './categories'
 import purchaseProfiles from './purchaseProfiles'
 import reviews from './reviews'
 import orders from './orders'
+import order from './singleOrder'
 
 const reducer = combineReducers({
   user: user,
@@ -23,7 +24,8 @@ const reducer = combineReducers({
   categories: categories,
   purchaseProfiles: purchaseProfiles,
   reviews: reviews,
-  orders: orders
+  orders: orders,
+  order: order
 })
 const middleware = composeWithDevTools(
   applyMiddleware(thunkMiddleware, createLogger({collapsed: true}))
