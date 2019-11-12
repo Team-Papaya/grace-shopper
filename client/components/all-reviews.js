@@ -1,9 +1,10 @@
 //client/components/allReviews
 import React from 'react'
-import {Header, Rating} from 'semantic-ui-react'
+import {Header, Rating, Image} from 'semantic-ui-react'
 
 const AllReviews = props => {
   const {reviews} = props
+  console.log(reviews)
   return (
     <div>
       <Header as="h3">Reviews</Header>
@@ -11,6 +12,15 @@ const AllReviews = props => {
         {reviews.map(review => {
           return (
             <div key={review.id}>
+              {review.user && review.user.username ? (
+                <React.Fragment>
+                  <Image src={review.user.profilePicture} size="tiny" />
+                  <Header>{review.user.username}</Header>
+                </React.Fragment>
+              ) : (
+                <div />
+              )}
+
               <h4>
                 <Rating
                   defaultRating={review.rating}

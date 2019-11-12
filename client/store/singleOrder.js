@@ -1,15 +1,19 @@
 import axios from 'axios'
 
 const GET_ORDER = 'GET_ORDER'
+//const UPDATE_ORDER = 'UPDATE_ORDER'
 
-export const getOrder = order => {
-  return {
-    type: GET_ORDER,
-    order
-  }
-}
+const getOrder = order => ({
+  type: GET_ORDER,
+  order
+})
 
-export const getProductThunk = id => async dispatch => {
+// const updateOrder = order => ({
+//   type: UPDATE_ORDER,
+//   order
+// })
+
+export const getOrderThunk = id => async dispatch => {
   try {
     const response = await axios.get(`/api/orders/${id}`)
     dispatch(getOrder(response.data))
@@ -18,15 +22,26 @@ export const getProductThunk = id => async dispatch => {
   }
 }
 
-const initialState = {}
+// export const updateOrderThunk = (value, order) => async dispatch => {
+//   try {
+//     const response = await axios.put(`/api/orders/${order}/status`, {
+//       status: value
+//     })
+//     dispatch(updateOrder(response.data))
+//   } catch (err) {
+//     console.error(err)
+//   }
+// }
 
-const singleOrderReducer = (state = initialState, action) => {
+const orderReducer = (state = {}, action) => {
   switch (action.type) {
     case GET_ORDER:
       return action.order
+    // case UPDATE_ORDER:
+    //   return {...state, ...action.order}
     default:
       return state
   }
 }
 
-export default singleOrderReducer
+export default orderReducer
