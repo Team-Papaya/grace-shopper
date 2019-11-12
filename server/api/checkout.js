@@ -2,6 +2,8 @@
 const router = require('express').Router()
 const stripe = require('stripe')(process.env.STRIPE_SECRET)
 const {Order, PurchaseProfile} = require('../db/models')
+const sgMail = require('@sendgrid/mail')
+sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 module.exports = router
 
 router.put('/:orderId/newProfile', async (req, res, next) => {
@@ -75,6 +77,19 @@ router.post('/:orderId/pay/stripe', async (req, res, next) => {
 
     const orderToUpdate = await Order.findByPk(req.params.orderId)
     await orderToUpdate.update({status: 'purchased'})
+    try {
+      const msg = {
+        to: email,
+        from: 'no-reply@grace-shopper.com',
+        subject: `Your order (ID # ${order.id}) has been purchased`,
+        text:
+          'If you have an account with us, you can view the order details from your profile page'
+        // html: '<strong>and easy to do anywhere, even with Node.js</strong>'
+      }
+      await sgMail.send(msg)
+    } catch (err) {
+      console.log(err)
+    }
   } catch (err) {
     next(err)
   }
