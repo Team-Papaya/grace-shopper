@@ -104,12 +104,24 @@ router.put('/:id/contents', async (req, res, next) => {
   }
 })
 
-router.put('/:id/status', (req, res, next) => {
-  Order.findByPk(req.params.id)
-    .then(dbRes => dbRes.update({status: req.body.status}))
-    .then(final => res.json(final))
-    .catch(err => next(err))
+router.put('/:id', async (req, res, next) => {
+  try {
+    const order = await Order.findByPk(req.params.id)
+    const updatedOrder = order.update({
+      status: req.body.status
+    })
+    res.json(updatedOrder)
+  } catch (err) {
+    next(err)
+  }
 })
+// router.put('/:id/status', (req, res, next) => {
+//   Order.findByPk(req.params.id)
+//     .then(dbRes => dbRes.update({status: req.body.status}))
+//     .then(final => res.json(final))
+//     .catch(err => next(err))
+// })
+
 router.delete('/:orderId/products/:productId', (req, res, next) => {
   OrderProduct.findOne({
     where: {

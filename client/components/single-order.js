@@ -26,11 +26,11 @@ class SingleOrder extends React.Component {
       status: event.target.value
     })
   }
-  handleSubmit = () => {
+  handleSubmit = (event, order) => {
     event.preventDefault()
-    updateOrderThunk(this.state.status)
+    updateOrderThunk(order, this.state)
+    console.log(this.state)
   }
-  //handleChangeOrderStatus = () => {}
 
   render() {
     const {order} = this.props
@@ -101,7 +101,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   getOrdersThunk: () => dispatch(getOrdersThunk()),
-  updateOrderThunk: () => dispatch(updateOrderThunk())
+  updateOrderThunk: (order, status) => dispatch(updateOrderThunk(order, status))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(SingleOrder)
