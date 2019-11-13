@@ -8,13 +8,13 @@ const {
   Order,
   PurchaseProfile,
   Category,
-  PricingHistory,
   Product,
   Review,
   OrderProduct
 } = require('../server/db/models/index')
 const faker = require('faker')
 
+//-------------Helper Functions------------//
 const randomInd = num => {
   return Math.floor(Math.random() * num)
 }
@@ -24,8 +24,9 @@ const randomNum = (num, min = 0) => {
 const randomAdj = adjs => {
   return adjs[randomInd(adjs.length)]
 }
-const mealInd = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
+//--------------Food--------------//
+const mealInd = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 const dinnerAdj = [
   'Hearty ',
   'Delicous ',
@@ -46,6 +47,21 @@ const dinnerAdj = [
   'Surprisingly tasty ',
   "Russell's "
 ]
+const foodStrings = ['meal', 'snack', 'dinner', 'lunch', 'breakfast']
+class Food {
+  constructor(typeString) {
+    this.name = randomAdj(dinnerAdj) + typeString
+    this.description =
+      'Spicy jalapeno bacon ipsum dolor amet hamburger sausage pastrami strip steak capicola chuck, ball tip shoulder t-bone alcatra pig fatback andouille drumstick beef.'
+    this.quantity = randomNum(20)
+    this.isAvailable = false
+    this.imageUrl = [
+      `http://lorempixel.com/256/256/food/${mealInd[randomInd(mealInd.length)]}`
+    ]
+  }
+}
+
+//---------------Transport--------------//
 const transInd = [1, 2, 3, 4, 5, 6, 8, 9, 10]
 const transportAdj = [
   'Deluxe ',
@@ -66,50 +82,6 @@ const transportAdj = [
   'Military-grade ',
   'Rusty '
 ]
-const anmlInd = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-const anmlAdj = [
-  'Fluffy ',
-  'Genuine ',
-  'Recently groomed ',
-  'Recently rescued ',
-  'Hairy ',
-  'Mini ',
-  'Large ',
-  'Loving ',
-  'Good ',
-  'Cool '
-]
-
-const techInd = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-const techAdj = [
-  'Ancient ',
-  'Cybernetic ',
-  'State of the Art ',
-  'Really sick ',
-  'Dope ',
-  'Really old ',
-  'Cool smart ',
-  'Great awesome ',
-  'Yung ',
-  'Unbelievably functional ',
-  'New ',
-  'High-quality ',
-  'Wearable ',
-  'Educational '
-]
-
-const foodStrings = ['meal', 'snack', 'dinner', 'lunch', 'breakfast']
-class Food {
-  constructor(typeString) {
-    this.name = randomAdj(dinnerAdj) + typeString
-    this.description = '' //bacon text for food? yeee
-    this.quantity = randomNum(20)
-    this.isAvailable = false
-    this.imageUrl = [
-      `http://lorempixel.com/256/256/food/${mealInd[randomInd(mealInd.length)]}`
-    ]
-  }
-}
 const transStrings = [
   'carrier',
   'vehicle',
@@ -133,6 +105,20 @@ class Transport {
   }
 }
 
+//---------------Animals-----------------//
+const anmlInd = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+const anmlAdj = [
+  'Fluffy ',
+  'Genuine ',
+  'Recently groomed ',
+  'Recently rescued ',
+  'Hairy ',
+  'Mini ',
+  'Large ',
+  'Loving ',
+  'Good ',
+  'Cool '
+]
 const anmlStrings = [
   '4-legger',
   'mammal',
@@ -155,6 +141,25 @@ class Animal {
     ]
   }
 }
+
+//-------------------Tech-------------------//
+const techInd = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+const techAdj = [
+  'Ancient ',
+  'Cybernetic ',
+  'State of the Art ',
+  'Really sick ',
+  'Dope ',
+  'Really old ',
+  'Cool smart ',
+  'Great awesome ',
+  'Yung ',
+  'Unbelievably functional ',
+  'New ',
+  'High-quality ',
+  'Wearable ',
+  'Educational '
+]
 
 const techStrings = [
   'tech',
@@ -181,7 +186,6 @@ class Tech {
     ]
   }
 }
-
 class Price {
   constructor() {
     this.price = randomNum(1000)
@@ -193,6 +197,7 @@ async function seed() {
   await db.sync({force: true})
   console.log('db synced!')
 
+  //------------USERS-----------//
   const users = await Promise.all([
     User.create({
       email: 'cody@email.com',
@@ -228,6 +233,7 @@ async function seed() {
     )
   }
 
+  //-----------PURCHASE PROFILES------------//
   const purchaseProfiles = await Promise.all([
     PurchaseProfile.create({
       shipToName: 'me',
@@ -252,6 +258,7 @@ async function seed() {
     })
   ])
 
+  //--------associate PP to user--------//
   for (let i = 0; i < users.length; i++) {
     const newProfile = {
       email: users[i].email,
@@ -265,6 +272,7 @@ async function seed() {
     purchaseProfiles.push(newProfile)
   }
 
+  //---------CATEGORIES--------//
   const categories = await Promise.all([
     Category.create({name: 'Food'}),
     Category.create({name: 'Transport'}),
@@ -272,6 +280,7 @@ async function seed() {
     Category.create({name: 'Technology'})
   ])
 
+  //-----------PRODUCTS and associations-----------//
   const products = []
   for (let i = 0; i < 30; i++) {
     products.push(
@@ -312,6 +321,7 @@ async function seed() {
     )
   }
 
+  //--------ORDERS--------//
   const orders = []
   for (let i = 0; i < 15; i++) {
     orders.push(
@@ -329,7 +339,6 @@ async function seed() {
       })
     )
   }
-
   for (let i = 0; i < 45; i++) {
     orders.push(
       await Order.create({
@@ -347,16 +356,16 @@ async function seed() {
       })
     )
   }
+
   for (let i = 1; i < 61; i++) {
-    const orderProducts = await Promise.all([
-      OrderProduct.create({
-        productId: randomNum(products.length),
-        orderId: i,
-        quantity: randomNum(12)
-      })
-    ])
+    await OrderProduct.create({
+      productId: randomNum(products.length),
+      orderId: i,
+      quantity: randomNum(12)
+    })
   }
 
+  //-------REVIEWS-------//
   const reviews = []
   for (let i = 0; i < 150; i++) {
     reviews.push(
