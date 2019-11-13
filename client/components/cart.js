@@ -83,8 +83,8 @@ export class Cart extends React.Component {
                       total +=
                         product.orderProduct.quantity * prices[product.name]
                       return (
-                        <Container>
-                          <Grid.Row key={product.id}>
+                        <Container key={product.id}>
+                          <Grid.Row>
                             <Segment style={{marginTop: 10, marginBottom: 10}}>
                               <div>
                                 <Image size="small" src={product.imageUrl} />
@@ -121,7 +121,9 @@ export class Cart extends React.Component {
                   <Grid>
                     <Grid.Row>
                       <div>
-                        <h3>Total Amount: ${total}</h3>
+                        <h3 style={{marginRight: 10}}>
+                          Total Amount: ${total}
+                        </h3>
                       </div>
                       {cart.purchaseProfile ? (
                         <PayWithStripe order={cart} />
