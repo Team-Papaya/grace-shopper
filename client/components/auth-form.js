@@ -30,6 +30,7 @@ const AuthForm = props => {
           </label>
           <input name="password" type="password" />
         </div>
+
         {name === 'signup' && (
           <div>
             <div>
@@ -54,6 +55,10 @@ const AuthForm = props => {
         )}
         <div>
           <Button type="submit">{displayName}</Button>
+        </div>
+        <div>
+          Check out Admin functionality by logging in as: <b> cody@email.com</b>{' '}
+          and password: <b>123</b>
         </div>
         {error && error.response && <div> {error.response.data} </div>}
       </Form>
